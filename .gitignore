@@ -10,8 +10,11 @@
 *.userosscache
 *.sln.docstates
 
+<<<<<<< HEAD
 .mailmap
 
+=======
+>>>>>>> f1c8ee35f484c5a9677fd9a6e948e3ac1c588bda
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
@@ -31,7 +34,10 @@ x86/
 bld/
 [Bb]in/
 [Oo]bj/
+<<<<<<< HEAD
 [Oo]ut/
+=======
+>>>>>>> f1c8ee35f484c5a9677fd9a6e948e3ac1c588bda
 [Ll]og/
 [Ll]ogs/
 
@@ -362,4 +368,8 @@ MigrationBackup/
 .ionide/
 
 # Fody - auto-generated XML schema
+<<<<<<< HEAD
 FodyWeavers.xsd
+=======
+FodyWeavers.xsd
+>>>>>>> f1c8ee35f484c5a9677fd9a6e948e3ac1c588bda
