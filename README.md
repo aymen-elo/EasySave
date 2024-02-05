@@ -4,7 +4,7 @@ Dans le cadre du projet du module Programmation Système, il nous est demandé de 
 # Outils utilisés ou requis
 TODO: Logiciels, dépendances et processus d'installation
 - Visual Studio 2019 - Azure DevOps - Git - ArgoUML
-- Langage C# - .NET Core (Version ?)
+- Langage C# - .NET Core 5.0
 
 # Auteurs
 Perujan KOKILATHASAN
