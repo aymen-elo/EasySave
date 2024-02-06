@@ -27,7 +27,7 @@ namespace EasySave.Library
         }
         public bool begin(string name, string source, string target, int type)
         {
-            return 1; // si pas erreur lors lancement, renvoyé 1
+            return true; // si pas erreur lors lancement, renvoyé 1
         }
         public int getState(int id)
         {
