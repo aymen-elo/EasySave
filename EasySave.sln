@@ -5,6 +5,11 @@ VisualStudioVersion = 16.0.34407.143
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EasySave", "EasySave.csproj", "{8B268A1A-2A03-4522-85A4-2E38A7B0BE77}"
 EndProject
+<<<<<<< Updated upstream
+=======
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Language_test", "..\Language_test\Language_test.csproj", "{62F6D157-ED89-474F-B027-1441E6C7EC5D}"
+EndProject
+>>>>>>> Stashed changes
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +20,13 @@ Global
 		{8B268A1A-2A03-4522-85A4-2E38A7B0BE77}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8B268A1A-2A03-4522-85A4-2E38A7B0BE77}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8B268A1A-2A03-4522-85A4-2E38A7B0BE77}.Release|Any CPU.Build.0 = Release|Any CPU
+<<<<<<< Updated upstream
+=======
+		{62F6D157-ED89-474F-B027-1441E6C7EC5D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{62F6D157-ED89-474F-B027-1441E6C7EC5D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{62F6D157-ED89-474F-B027-1441E6C7EC5D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{62F6D157-ED89-474F-B027-1441E6C7EC5D}.Release|Any CPU.Build.0 = Release|Any CPU
+>>>>>>> Stashed changes
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
