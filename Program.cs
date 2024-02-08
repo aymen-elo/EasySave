@@ -27,6 +27,7 @@ namespace Language_test
             bool continuer = true;
             while (continuer)
             {
+                Console.Clear();
                 Console.WriteLine("Menu principal :");
                 Console.WriteLine("1. Ajouter un travail de sauvegarde");
                 Console.WriteLine("2. Modifier un travail de sauvegarde");
@@ -64,7 +65,6 @@ namespace Language_test
 
         static void AjouterTravailSauvegarde(BackupController backupController)
         {
-            Console.Clear();
             // Demander à l'utilisateur de saisir les informations pour ajouter un travail de sauvegarde
             Console.Write("Nom de sauvegarde : ");
             string nom = Console.ReadLine();

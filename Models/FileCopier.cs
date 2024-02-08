@@ -42,7 +42,7 @@ public class FileCopier
             else
             {
                 string targetFilePath = Path.Combine(targetDir, Path.GetFileName(file));
-                File.Copy(file, targetFilePath, false);
+                File.Copy(file, targetFilePath, true);
                 filesCopied++;
                 Console.WriteLine($"Fichier copié avec succès vers {targetFilePath}");
             }
