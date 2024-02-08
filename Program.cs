@@ -1,4 +1,5 @@
-﻿using Language_test.Controllers;
+﻿using EasySave.Models;
+using Language_test.Controllers;
 using Language_test.Models;
 using Language_test.Views;
 using System;
@@ -55,6 +56,8 @@ namespace Language_test
                         break;
                 }
             }
+
+
         }
 
         static void AjouterTravailSauvegarde(BackupController backupController)
@@ -91,6 +94,9 @@ namespace Language_test
                 // Ajouter le travail de sauvegarde en appelant la méthode correspondante du contrôleur
                 backupController.AddBackupJob(nouveauTravailSauvegarde);
 
+                // Logger l'action effectuée
+                var logger = new Logger();
+                logger.LogAction($"Ajout du travail de sauvegarde '{nouveauTravailSauvegarde.Nom}'");
                 // Afficher la liste des travaux de sauvegarde après l'ajout
                 AfficherTravauxSauvegarde(backupController);
             }
@@ -119,6 +125,15 @@ namespace Language_test
         {
             // Implémenter la logique de suppression d'un travail de sauvegarde
             // Utiliser les méthodes du contrôleur pour supprimer un travail existant
+            Console.Write("Nom du travail de sauvegarde à supprimer : ");
+            string nomTravail = Console.ReadLine();
+
+            // Supprimer le travail de sauvegarde en appelant la méthode correspondante du contrôleur
+            backupController.DeleteBackupJob(nomTravail);
+
+            // Logger l'action effectuée
+            var logger = new Logger();
+            logger.LogAction($"Suppression du travail de sauvegarde '{nomTravail}'");
         }
     }
 }
