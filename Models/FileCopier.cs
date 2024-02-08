@@ -7,7 +7,7 @@ using System.Security.Cryptography;
 public class FileCopier
 {
     private int filesCopied = 0;
-    private Logger logger;
+    private Logger logger = new Logger();
     public int FilesCopied { get => filesCopied; }
 
     public void CopyDirectory(string jobName, string sourceDir, string targetDir, string Type)
@@ -29,12 +29,12 @@ public class FileCopier
                     File.Copy(file, targetFilePath, true);
                     filesCopied++;
                     Console.WriteLine($"Fichier copié avec succès vers {targetFilePath}");
-                    //logger.LogAction($"Copied file: {file} to {targetFilePath}");
+                    logger.LogAction($"Copied file: {file} to {targetFilePath}");
                 }
                 else
                 {
                     Console.WriteLine("Impossible de copier, déjà présent");
-                    //logger.LogAction($"Skipped copying file: {file}");
+                    logger.LogAction($"Skipped copying file: {file}");
                 }
                 DeleteAllowedHashes(jobName);
                 SaveAllowedHashes(allowedHashes, jobName);
