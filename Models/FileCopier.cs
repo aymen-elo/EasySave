@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EasySave.Models;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
@@ -6,7 +7,7 @@ using System.Security.Cryptography;
 public class FileCopier
 {
     private int filesCopied = 0;
-
+    private Logger logger;
     public int FilesCopied { get => filesCopied; }
 
     public void CopyDirectory(string jobName, string sourceDir, string targetDir, HashSet<string> allowedHashes, string Type)
@@ -23,13 +24,15 @@ public class FileCopier
                 {
                     allowedHashes.Add(sourceHash);
                     string targetFilePath = Path.Combine(targetDir, Path.GetFileName(file));
-                    File.Copy(file, targetFilePath, false);
+                    File.Copy(file, targetFilePath, true);
                     filesCopied++;
                     Console.WriteLine($"Fichier copié avec succès vers {targetFilePath}");
+                    //logger.LogAction($"Copied file: {file} to {targetFilePath}");
                 }
                 else
                 {
                     Console.WriteLine("Impossible de copier, déjà présent");
+                    //logger.LogAction($"Skipped copying file: {file}");
                 }
                 DeleteAllowedHashes(jobName);
                 SaveAllowedHashes(allowedHashes, jobName);

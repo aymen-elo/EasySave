@@ -11,6 +11,8 @@ namespace Language_test
     {
         static void Main(string[] args)
         {
+
+
             // Instanciation du modèle (Model)
             var backupManager = new BackupManager();
 
@@ -63,7 +65,7 @@ namespace Language_test
         static void AjouterTravailSauvegarde(BackupController backupController)
         {
             // Demander à l'utilisateur de saisir les informations pour ajouter un travail de sauvegarde
-            Console.Write("Nom : ");
+            Console.Write("Nom de sauvegarde : ");
             string nom = Console.ReadLine();
             Console.Write("Répertoire source : ");
             string repertoireSource = Console.ReadLine();
@@ -97,6 +99,11 @@ namespace Language_test
                 // Logger l'action effectuée
                 var logger = new Logger();
                 logger.LogAction($"Ajout du travail de sauvegarde '{nouveauTravailSauvegarde.Nom}'");
+
+                // Copier les fichiers en utilisant FileCopier
+                var fileCopier = new FileCopier();
+                fileCopier.CopyDirectory(nom, nouveauTravailSauvegarde.RepertoireSource, nouveauTravailSauvegarde.RepertoireCible, new HashSet<string>(), type);
+
                 // Afficher la liste des travaux de sauvegarde après l'ajout
                 AfficherTravauxSauvegarde(backupController);
             }
