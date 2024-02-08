@@ -11,7 +11,6 @@ namespace Language_test.Controllers
     {
         private BackupManager backupManager;
 
-        // Constructeur par défaut qui initialise backupManager
         public BackupController()
         {
             backupManager = new BackupManager();
