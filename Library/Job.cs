@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EasySave.Library
 {
-    class Job
+     class Job
     {
         private int id { get; set; } // voir fonction incrémentation auto
         private string name { get; set; }
@@ -15,7 +15,7 @@ namespace EasySave.Library
         private int type { get; set; }
         private int state { get; set; }
         private int position { get; set; }
-        public Job()
+        public Job() 
         {
             id = 0; // a modif 
             name = string.Empty;
@@ -25,15 +25,15 @@ namespace EasySave.Library
             state = 0;
             position = 0;
         }
-        public bool begin(string name, string source, string target, int type)
+        public bool begin(string name, string source, string target, int type) 
         {
             return true; // si pas erreur lors lancement, renvoyé 1
         }
-        public int getState(int id)
+        public int getState(int id) 
         {
             return state;
         }
-        public int getPosition(int id)
+        public int getPosition(int id) 
         {
             return position;
         }

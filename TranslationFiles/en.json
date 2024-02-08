@@ -1,0 +1,5 @@
+﻿{
+  "welcomeMessage": "Welcome to the CLI program!",
+  "enterLanguagePrompt": "Please enter your preferred language (en/fr): ",
+  "englishGreeting": "Hello!"
+}
