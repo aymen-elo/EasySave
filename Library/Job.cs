@@ -3,39 +3,49 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace EasySave.Library
 {
-     class Job
+
+    /* Pending = Hasn't started yet */
+    /* Paused  = Started but was paused */
+    /* Active  = Currently executing backup*/
+    enum JobState
     {
-        private int id { get; set; } // voir fonction incrémentation auto
-        private string name { get; set; }
-        private string source { get; set; }
-        private string target { get; set; }
-        private int type { get; set; }
-        private int state { get; set; }
-        private int position { get; set; }
-        public Job() 
+        Pending,
+        Active,
+        Paused
+    }
+
+    class Job
+    {
+        private static int NextId = 0;
+        private static int NextPos = 0;
+        private int Id { get; set; } // voir fonction incrémentation auto
+        private JobState State { get; set; }
+        private int Position { get; set; }
+        private int NbTotalFiles { get; set; }
+        private int NbSavedFiles { get; set; }
+
+        private Backup Backup { get; set; }
+        private TimeSpan duration { get; set; }
+        public Job(Backup b) 
         {
-            id = 0; // a modif 
-            name = string.Empty;
-            source = string.Empty;
-            target = string.Empty;
-            type = 0;
-            state = 0;
-            position = 0;
+            this.Id = NextId;
+            this.State = JobState.Pending;
+            this.Position = NextPos;
+
+            this.Backup = b;
+
+            
+
+            NextId++;
+            NextPos++;
         }
-        public bool begin(string name, string source, string target, int type) 
+        public bool Begin(string name, string source, string target, int type) 
         {
             return true; // si pas erreur lors lancement, renvoyé 1
-        }
-        public int getState(int id) 
-        {
-            return state;
-        }
-        public int getPosition(int id) 
-        {
-            return position;
         }
     }
 }
