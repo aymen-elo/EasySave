@@ -64,6 +64,7 @@ namespace Language_test
 
         static void AjouterTravailSauvegarde(BackupController backupController)
         {
+            Console.Clear();
             // Demander à l'utilisateur de saisir les informations pour ajouter un travail de sauvegarde
             Console.Write("Nom de sauvegarde : ");
             string nom = Console.ReadLine();
@@ -102,7 +103,7 @@ namespace Language_test
 
                 // Copier les fichiers en utilisant FileCopier
                 var fileCopier = new FileCopier();
-                fileCopier.CopyDirectory(nom, nouveauTravailSauvegarde.RepertoireSource, nouveauTravailSauvegarde.RepertoireCible, new HashSet<string>(), type);
+                fileCopier.CopyDirectory(nom, nouveauTravailSauvegarde.RepertoireSource, nouveauTravailSauvegarde.RepertoireCible, type);
 
                 // Afficher la liste des travaux de sauvegarde après l'ajout
                 AfficherTravauxSauvegarde(backupController);

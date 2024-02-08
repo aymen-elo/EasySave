@@ -10,19 +10,21 @@ public class FileCopier
     private Logger logger;
     public int FilesCopied { get => filesCopied; }
 
-    public void CopyDirectory(string jobName, string sourceDir, string targetDir, HashSet<string> allowedHashes, string Type)
+    public void CopyDirectory(string jobName, string sourceDir, string targetDir, string Type)
     {
         List<string> allFiles = GetAllFiles(sourceDir);
         HashSet<string> loadedHashes = LoadAllowedHashes(jobName);
+        HashSet<string> allowedHashes = new HashSet<string>();
+
 
         foreach (string file in allFiles)
         {
-            string sourceHash = CalculateMD5(file);
             if (Type == "différentiel")
             {
+                string sourceHash = CalculateMD5(file);
+                allowedHashes.Add(sourceHash);
                 if (!loadedHashes.Contains(sourceHash))
                 {
-                    allowedHashes.Add(sourceHash);
                     string targetFilePath = Path.Combine(targetDir, Path.GetFileName(file));
                     File.Copy(file, targetFilePath, true);
                     filesCopied++;
