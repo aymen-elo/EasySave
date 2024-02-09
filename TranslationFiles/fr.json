@@ -1,5 +1,16 @@
 ﻿{
-  "welcomeMessage": "Bienvenue dans le programme CLI!",
-  "enterLanguagePrompt": "Veuillez entrer votre langue préférée (en/fr): ",
-  "frenchGreeting": "Bonjour!"
+  "menu" : {
+    "principalMenu" : "Menu principal",
+    "Option" :"Option",
+    "BackupManage" : "Gestion des sauvegardes",
+    "DoBackup" : "Effectuer des sauvegardes",
+    "Quit" : "Quitter"
+  },
+  
+  
+  
+  
+  
+  
+  
 }

@@ -10,21 +10,23 @@ namespace Language_test.Models
     {
         public event EventHandler<string> FileSaved;
 
-        // Méthode pour effectuer une sauvegarde
-        public void SaveFile(string fileName)
-        {
-            // Logique de sauvegarde (simulation)
-            Console.WriteLine($"Le fichier {fileName} a été sauvegardé.");
-
-            // Déclenchement de l'événement de sauvegarde
-            FileSaved?.Invoke(this, fileName);
-        }
-
-        public List<BackupJob> BackupJobs { get; set; }
+        public List<BackupJob> BackupJobs { get; private set; }
 
         public BackupManager()
         {
             BackupJobs = new List<BackupJob>();
+        }
+
+        public void SaveFile(string fileName)
+        {
+            // Logique de sauvegarde réelle ici...
+            Console.WriteLine($"Le fichier {fileName} a été sauvegardé.");
+            OnFileSaved(fileName);
+        }
+
+        internal void AddBackupJob(BackupJob newBackupJob)
+        {
+            BackupJobs.Add(newBackupJob);
         }
 
         internal void RemoveBackupJob(BackupJob backupJobToDelete)
@@ -32,9 +34,9 @@ namespace Language_test.Models
             BackupJobs.Remove(backupJobToDelete);
         }
 
-        internal void AddBackupJob(BackupJob newBackupJob)
+        protected virtual void OnFileSaved(string fileName)
         {
-            BackupJobs.Add(newBackupJob);
+            FileSaved?.Invoke(this, fileName);
         }
     }
 }

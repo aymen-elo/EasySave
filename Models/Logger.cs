@@ -16,6 +16,11 @@ namespace EasySave.Models
             string logMessage = $"{DateTime.Now:yyyy-MM-dd HH:mm:ss} - {action}";
             File.AppendAllText(logFilePath, logMessage + Environment.NewLine);
         }
+        public void DisplayLog()
+        {
+            string logContents = File.ReadAllText(logFilePath);
+            Console.WriteLine(logContents);
+        }
     }
 }
 

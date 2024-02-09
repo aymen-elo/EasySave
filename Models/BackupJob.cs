@@ -12,6 +12,7 @@ namespace Language_test.Models
         public string RepertoireSource { get; set; }
         public string RepertoireCible { get; set; }
         public string Type { get; set; }
+
     }
 
 }

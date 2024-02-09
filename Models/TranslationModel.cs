@@ -8,9 +8,10 @@ namespace Language_test.Controllers
 {
     public class TranslationModel
     {
-        public string welcomeMessage { get; set; }
-        public string enterLanguagePrompt { get; set; }
-        public string englishGreeting { get; set; }
-        public string frenchGreeting { get; set; }
+        public string PrincipalMenu { get; set; }
+        public string Option { get; set; }
+        public string BackupManage { get; set; }
+        public string DoBackup { get; set; }
+        public string Quit { get; set; }
     }
 }

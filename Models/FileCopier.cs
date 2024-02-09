@@ -28,13 +28,12 @@ public class FileCopier
                     string targetFilePath = Path.Combine(targetDir, Path.GetFileName(file));
                     File.Copy(file, targetFilePath, true);
                     filesCopied++;
-                    Console.WriteLine($"Fichier copié avec succès vers {targetFilePath}");
                     logger.LogAction($"Copied file: {file} to {targetFilePath}");
                 }
                 else
                 {
                     Console.WriteLine("Impossible de copier, déjà présent");
-                    logger.LogAction($"Skipped copying file: {file}");
+                    logger.LogAction($"FIle already exists: {file}");
                 }
                 DeleteAllowedHashes(jobName);
                 SaveAllowedHashes(allowedHashes, jobName);
@@ -44,7 +43,7 @@ public class FileCopier
                 string targetFilePath = Path.Combine(targetDir, Path.GetFileName(file));
                 File.Copy(file, targetFilePath, false);
                 filesCopied++;
-                Console.WriteLine($"Fichier copié avec succès vers {targetFilePath}");
+                logger.LogAction($"Copied file: {file} to {targetFilePath}");
             }
         }
     }

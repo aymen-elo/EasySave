@@ -1,4 +1,5 @@
-﻿using Language_test.Models;
+﻿using EasySave.Models;
+using Language_test.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,26 +10,29 @@ namespace Language_test.Controllers
 {
     public class BackupController
     {
-        private BackupManager backupManager;
+        private  BackupManager backupManager;
+        private  Logger logger;
+        public Logger Logger { get { return logger; } }
 
-        public BackupController()
-        {
-            backupManager = new BackupManager();
-            Initialize();
-        }
 
-        public BackupController(BackupManager backupManager)
+        public BackupController(BackupManager backupManager, Logger logger)
         {
             this.backupManager = backupManager;
+            this.logger = logger;
+            Initialize();
+
+            // abonnement  à l'événement FileSaved du BackupManager
+            this.backupManager.FileSaved += HandleFileSaved;
         }
+
+        private void Initialize()
+        {
+            backupManager.FileSaved += HandleFileSaved;
+        }
+
         public List<BackupJob> GetBackupJobs()
         {
             return backupManager.BackupJobs;
-        }
-
-        public void Initialize()
-        {
-            backupManager.FileSaved += HandleFileSaved;
         }
 
         public void PerformBackup(string fileName)
@@ -38,8 +42,7 @@ namespace Language_test.Controllers
 
         private void HandleFileSaved(object sender, string fileName)
         {
-            // Logique de journalisation des sauvegardes
-            Console.WriteLine($"Le fichier {fileName} a été journalisé/sauvegardé avec succès.");
+            logger.LogAction($"Le fichier {fileName} a été sauvegardé.");
         }
 
         // Méthode pour créer un travail de sauvegarde
