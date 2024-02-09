@@ -1,4 +1,4 @@
-﻿using Language_test.Views;
+﻿using EasySave.Views;
 using System.Text.Json;
 using System.IO;
 using System;
@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Language_test.Controllers
+namespace EasySave.Controllers
 {
     public class TranslationManager
     {

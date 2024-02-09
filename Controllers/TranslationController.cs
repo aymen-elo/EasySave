@@ -1,11 +1,11 @@
-﻿using Language_test.Views;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EasySave.Views;
 
-namespace Language_test.Controllers
+namespace EasySave.Controllers
 {
     public class TranslationController
     {

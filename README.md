@@ -1,8 +1,8 @@
 # Introduction 
-Dans le cadre du projet du module Programmation Système, il nous est demandé de créer une application de sauvegarde pour ProSoft dans un cadre de travail avec .NET Core.
+Dans le cadre du projet du module Programmation SystÃ¨me, il nous est demandÃ© de crÃ©er une application de sauvegarde pour ProSoft dans un cadre de travail avec .NET Core.
 
-# Outils utilisés ou requis
-TODO: Logiciels, dépendances et processus d'installation
+# Outils utilisÃ©s ou requis
+TODO: Logiciels, dÃ©pendances et processus d'installation
 - Visual Studio 2019 - Azure DevOps - Git - ArgoUML
 - Langage C# - .NET Core 5.0
 
@@ -12,4 +12,4 @@ Theo WATTIER
 Aymen EL OUAGOUTI
 
 # Avancement
-À ses débuts...
+Ã€ ses dÃ©buts...

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Language_test.Controllers
+namespace EasySave.Controllers
 {
     public class TranslationModel
     {

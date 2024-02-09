@@ -4,13 +4,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Language_test.Models
+namespace EasySave.Models
 {
-    public class BackupManager
+    public class JobManager
     {
         public event EventHandler<string> FileSaved;
-
-        // Méthode pour effectuer une sauvegarde
+        public List<Job> Jobs { get; private set; }
+        
+        public JobManager()
+        {
+            Jobs = new List<Job>();
+        }
+        
+        // Save one file by name
         public void SaveFile(string fileName)
         {
             // Logique de sauvegarde (simulation)
@@ -20,21 +26,14 @@ namespace Language_test.Models
             FileSaved?.Invoke(this, fileName);
         }
 
-        public List<BackupJob> BackupJobs { get; set; }
-
-        public BackupManager()
+        // TODO : Exceptions
+        internal void AddJob(Job job)
         {
-            BackupJobs = new List<BackupJob>();
+            Jobs.Add(job);
         }
-
-        internal void RemoveBackupJob(BackupJob backupJobToDelete)
+        internal void RemoveJob(Job job)
         {
-            BackupJobs.Remove(backupJobToDelete);
-        }
-
-        internal void AddBackupJob(BackupJob newBackupJob)
-        {
-            BackupJobs.Add(newBackupJob);
+            Jobs.Remove(job);
         }
     }
 }
