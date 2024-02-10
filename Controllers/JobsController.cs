@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +10,8 @@ namespace EasySave.Controllers
     public class JobsController
     {
         private JobsManager _jobsManager;
+        private  Logger _logger;
+        public Logger Logger { get { return _logger; } }
 
         public JobsController()
         {
@@ -17,10 +19,16 @@ namespace EasySave.Controllers
             Initialize();
         }
 
-        public JobsController(JobsManager jobsManager)
+        public JobsController(JobsManager jobsManager, Logger logger)
         {
             this._jobsManager = jobsManager;
+            this._logger = logger;
+            Initialize();
+
+            // abonnement  à l'événement FileSaved du BackupManager
+            this._jobsManager.FileSaved += HandleFileSaved;
         }
+
         public List<Job> GetBackupJobs()
         {
             return _jobsManager.Jobs;
@@ -38,8 +46,7 @@ namespace EasySave.Controllers
 
         private void HandleFileSaved(object sender, string fileName)
         {
-            // Logique de journalisation des sauvegardes
-            Console.WriteLine($"Le fichier {fileName} a été journalisé/sauvegardé avec succès.");
+            _logger.LogAction($"Le fichier {fileName} a été sauvegardé.");
         }
 
         // Méthode pour créer un travail de sauvegarde

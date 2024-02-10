@@ -17,6 +17,11 @@ namespace EasySave.Models
 
             File.AppendAllText(logFilePath, logMessage + Environment.NewLine);
         }
+        public void DisplayLog()
+        {
+            string logContents = File.ReadAllText(logFilePath);
+            Console.WriteLine(logContents);
+        }
     }
 }
 

@@ -20,14 +20,19 @@ namespace EasySave.Controllers
 
         public void Run()
         {
-            _translationView.DisplayMessage("Please select your preferred language (en/fr): ");
+            _translationView.DisplayMessage("Please choose a language (en/fr): ");
             string lang = Console.ReadLine();
 
-            TranslationModel translation = _translationManager.LoadTranslation(lang);
+            TranslationModel translation;
+            if (lang.ToLower() == "en")
+            {
+                translation = _translationManager.LoadTranslation("en");
+            }
+            else
+            {
+                translation = _translationManager.LoadTranslation("fr");
+            }
 
-            _translationView.DisplayMessage(translation.welcomeMessage);
-            _translationView.DisplayMessage(translation.englishGreeting);
-            _translationView.DisplayMessage(translation.frenchGreeting);
         }
     }
 }

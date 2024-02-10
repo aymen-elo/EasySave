@@ -43,13 +43,12 @@ public class FileCopier
 
                     File.Copy(file, targetFilePath, true);
                     filesCopied++;
-                    Console.WriteLine($"Fichier copié avec succès vers {targetFilePath}");
                     logger.LogAction($"Copied file: {file} to {targetFilePath}");
                 }
                 else
                 {
                     Console.WriteLine("Impossible de copier, déjà présent");
-                    logger.LogAction($"Skipped copying file: {file}");
+                    logger.LogAction($"FIle already exists: {file}");
                 }
                 identity.DeleteAllowedHashes(jobName);
                 identity.SaveAllowedHashes(allowedHashes, jobName);
@@ -72,7 +71,7 @@ public class FileCopier
 
                 File.Copy(file, targetFilePath, true);
                 filesCopied++;
-                Console.WriteLine($"Fichier copié avec succès vers {targetFilePath}");
+                logger.LogAction($"Copied file: {file} to {targetFilePath}");
             }
         }
     }

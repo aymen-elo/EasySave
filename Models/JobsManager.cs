@@ -19,11 +19,9 @@ namespace EasySave.Models
         // Save one file by name
         public void SaveFile(string fileName)
         {
-            // Logique de sauvegarde (simulation)
+            // Logique de sauvegarde réelle ici...
             Console.WriteLine($"Le fichier {fileName} a été sauvegardé.");
-
-            // Déclenchement de l'événement de sauvegarde
-            FileSaved?.Invoke(this, fileName);
+            OnFileSaved(fileName);
         }
 
         // TODO : Exceptions
@@ -31,9 +29,15 @@ namespace EasySave.Models
         {
             Jobs.Add(job);
         }
+
         internal void RemoveJob(Job job)
         {
             Jobs.Remove(job);
+        }
+
+        protected virtual void OnFileSaved(string fileName)
+        {
+            FileSaved?.Invoke(this, fileName);
         }
     }
 }
