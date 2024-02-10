@@ -1,28 +1,29 @@
 ﻿using EasySave.Models;
-using Language_test.Controllers;
-using Language_test.Models;
-using Language_test.Views;
+using EasySave.Views;
 using System;
 using System.Collections.Generic;
+using EasySave.Controllers;
 
-namespace Language_test
+namespace EasySave
 {
-   class Program
+    class Program
     {
         static void Main(string[] args)
         {
-            var backupManager = new BackupManager();
+            // Instanciation du modèle (Model)
+            var backupManager = new JobManager();
             var logger = new Logger();
-            var backupController = new BackupController(backupManager, logger);
+            var jobsController = new JobsController(backupManager, logger);
             var translationController = new TranslationController();
 
-            // Récupérer la liste des travaux de sauvegarde depuis le BackupController
-            List<BackupJob> backupJobs = backupController.GetBackupJobs();
+            // Récupérer la liste des travaux de sauvegarde depuis le jobsController
+            List<Job> backupJobs = jobsController.GetBackupJobs();
 
             // Affichage du menu principal et gestion des interactions utilisateur
             bool continuer = true;
             while (continuer)
             {
+                Console.Clear();
                 Console.WriteLine("Menu :");
                 Console.WriteLine("1. Option");
                 Console.WriteLine("2. Gestion des sauvegardes");
@@ -39,7 +40,7 @@ namespace Language_test
                         break;
                     case "2":
                         // Gestion des sauvegardes
-                        BackupManagerMenu(backupController, logger);
+                        BackupManagerMenu(jobsController, logger);
                         break;
                     case "3":
                         // Ajoutez ici votre code pour l'option 3
@@ -61,7 +62,7 @@ namespace Language_test
             translationController.Run();
         }
 
-        static void BackupManagerMenu(BackupController backupController, Logger logger)
+        static void BackupManagerMenu(JobsController jobsController, Logger logger)
         {
             bool continuer = true;
             while (continuer)
@@ -79,15 +80,15 @@ namespace Language_test
                 {
                     case "1":
                         // Ajouter un travail de sauvegarde
-                        AjouterTravailSauvegarde(backupController, logger);
+                        AjouterTravailSauvegarde(jobsController, logger);
                         break;
                     case "2":
                         // Modifier un travail de sauvegarde
-                        ModifierTravailSauvegarde(backupController);
+                        ModifierTravailSauvegarde(jobsController);
                         break;
                     case "3":
                         // Supprimer un travail de sauvegarde
-                        SupprimerTravailSauvegarde(backupController, logger);
+                        SupprimerTravailSauvegarde(jobsController, logger);
                         break;
                     case "4":
                         continuer = false;
@@ -99,16 +100,16 @@ namespace Language_test
             }
         }
 
-                static void AjouterTravailSauvegarde(BackupController backupController, Logger logger)
-                {
-                    Console.Clear();
-                    // Demander à l'utilisateur de saisir les informations pour ajouter un travail de sauvegarde
-                    Console.Write("Nom de sauvegarde : ");
-                    string nom = Console.ReadLine();
-                    Console.Write("Répertoire source : ");
-                    string repertoireSource = Console.ReadLine();
-                    Console.Write("Répertoire cible : ");
-                    string repertoireCible = Console.ReadLine();
+        static void AjouterTravailSauvegarde(JobsController jobsController, Logger logger)
+        {
+            Console.Clear();
+            // Demander à l'utilisateur de saisir les informations pour ajouter un travail de sauvegarde
+            Console.Write("Nom de sauvegarde : ");
+            string nom = Console.ReadLine();
+            Console.Write("Répertoire source : ");
+            string repertoireSource = Console.ReadLine();
+            Console.Write("Répertoire cible : ");
+            string repertoireCible = Console.ReadLine();
 
                     // Demander le type de sauvegarde à l'utilisateur
                     Console.WriteLine("Type de sauvegarde :");
@@ -123,28 +124,24 @@ namespace Language_test
                     if (type != null)
                     {
                         // Créer un objet BackupJob avec les informations saisies
-                        var nouveauTravailSauvegarde = new BackupJob
-                        {
-                            Nom = nom,
-                            RepertoireSource = repertoireSource,
-                            RepertoireCible = repertoireCible,
-                            Type = type
-                        };
+                        var nouveauTravailSauvegarde = new Job( nom,
+                            BackupType.Full, repertoireSource,
+                             repertoireCible);
 
                         // Ajouter le travail de sauvegarde en appelant la méthode correspondante du contrôleur
-                        backupController.AddBackupJob(nouveauTravailSauvegarde);
+                        jobsController.AddBackupJob(nouveauTravailSauvegarde);
 
-                        // Logger l'action effectuée en utilisant l'instance de Logger stockée dans backupController
-                        logger.LogAction($"Ajout du travail de sauvegarde '{nouveauTravailSauvegarde.Nom}'");
+                        // Logger l'action effectuée en utilisant l'instance de Logger stockée dans jobsController
+                        logger.LogAction($"Ajout du travail de sauvegarde '{nouveauTravailSauvegarde.BackupName}'");
 
 
                         // Copier les fichiers en utilisant FileCopier
                         var fileCopier = new FileCopier();
-                        fileCopier.CopyDirectory(nom, nouveauTravailSauvegarde.RepertoireSource,
-                            nouveauTravailSauvegarde.RepertoireCible, type);
+                        fileCopier.CopyDirectory(nom, nouveauTravailSauvegarde.Source,
+                            nouveauTravailSauvegarde.Destination, type);
 
                         // Afficher la liste des travaux de sauvegarde après l'ajout
-                        AfficherTravauxSauvegarde(backupController);
+                        AfficherTravauxSauvegarde(jobsController);
                     }
                     else
                     {
@@ -153,23 +150,23 @@ namespace Language_test
                     }
                 }
 
-                static void AfficherTravauxSauvegarde(BackupController backupController)
+                static void AfficherTravauxSauvegarde(JobsController jobsController)
                 {
                     Console.WriteLine("Liste des travaux de sauvegarde :");
-                    foreach (var travail in backupController.GetBackupJobs())
+                    foreach (var travail in jobsController.GetBackupJobs())
                     {
                         Console.WriteLine(
-                            $"Nom : {travail.Nom}, Répertoire source : {travail.RepertoireSource}, Répertoire cible : {travail.RepertoireCible}, Type : {travail.Type}");
+                            $"Nom : {travail.BackupName}, Répertoire source : {travail.Source}, Répertoire cible : {travail.Destination}, Type : {travail.BackupType}");
                     }
                 }
 
-                static void ModifierTravailSauvegarde(BackupController backupController)
+                static void ModifierTravailSauvegarde(JobsController jobsController)
                 {
                     // Implémenter la logique de modification d'un travail de sauvegarde
                     // Utiliser les méthodes du contrôleur pour modifier un travail existant
                 }
 
-                static void SupprimerTravailSauvegarde(BackupController backupController, Logger logger)
+                static void SupprimerTravailSauvegarde(JobsController jobsController, Logger logger)
                 {
                     // Implémenter la logique de suppression d'un travail de sauvegarde
                     // Utiliser les méthodes du contrôleur pour supprimer un travail existant
@@ -177,7 +174,7 @@ namespace Language_test
                     string nomTravail = Console.ReadLine();
 
                     // Supprimer le travail de sauvegarde en appelant la méthode correspondante du contrôleur
-                    backupController.DeleteBackupJob(nomTravail);
+                    jobsController.DeleteBackupJob(nomTravail);
 
                     // Logger l'action effectuée en utilisant l'instance de Logger passée en paramètre
                     logger.LogAction($"Suppression du travail de sauvegarde '{nomTravail}'");
