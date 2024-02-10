@@ -13,7 +13,7 @@ namespace EasySave
 
 
             // Instanciation du modèle (Model)
-            var backupManager = new JobManager();
+            var backupManager = new JobsManager();
 
             // Instanciation du contrôleur (Controller) en lui passant le modèle
             var backupController = new JobsController(backupManager);

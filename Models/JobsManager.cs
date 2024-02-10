@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace EasySave.Models
 {
-    public class JobManager
+    public class JobsManager
     {
         public event EventHandler<string> FileSaved;
         public List<Job> Jobs { get; private set; }
         
-        public JobManager()
+        public JobsManager()
         {
             Jobs = new List<Job>();
         }
