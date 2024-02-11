@@ -10,9 +10,8 @@ namespace EasySave.Controllers
     public class JobsController
     {
         private JobsManager _jobsManager;
-        private  Logger _logger;
-        public Logger Logger { get { return _logger; } }
-
+        private Logger _logger;
+        
         public JobsController()
         {
             _jobsManager = new JobsManager();
@@ -29,7 +28,7 @@ namespace EasySave.Controllers
             this._jobsManager.FileSaved += HandleFileSaved;
         }
 
-        public List<Job> GetBackupJobs()
+        public List<Job> GetJobs()
         {
             return _jobsManager.Jobs;
         }
@@ -50,7 +49,7 @@ namespace EasySave.Controllers
         }
 
         // Méthode pour créer un travail de sauvegarde
-        public void CreateBackupJob(string nom, string repertoireSource, string repertoireCible, string type)
+        public void CreateJob(string nom, string repertoireSource, string repertoireCible, string type)
         {
             Job newBackupJob = new Job(nom, BackupType.Full,repertoireSource, repertoireCible);
 
@@ -58,7 +57,7 @@ namespace EasySave.Controllers
         }
 
         // Méthode pour modifier un travail de sauvegarde existant
-        public void ModifyBackupJob(string nom, string newRepertoireSource, string newRepertoireCible, BackupType type)
+        public void EditJob(string nom, string newRepertoireSource, string newRepertoireCible, BackupType type)
         {
             Job existingBackupJob = _jobsManager.Jobs.FirstOrDefault(job => job.BackupName == nom);
             if (existingBackupJob != null)
@@ -75,7 +74,7 @@ namespace EasySave.Controllers
         }
 
         // Méthode pour supprimer un travail de sauvegarde
-        public void DeleteBackupJob(string nom)
+        public void DeleteJob(string nom)
         {
             Job backupJobToDelete = _jobsManager.Jobs.FirstOrDefault(job => job.BackupName == nom);
             if (backupJobToDelete != null)
@@ -89,7 +88,7 @@ namespace EasySave.Controllers
             }
         }
 
-        internal void AddBackupJob(Job nouveauTravailSauvegarde)
+        internal void AddJob(Job nouveauTravailSauvegarde)
         {
             _jobsManager.AddJob(nouveauTravailSauvegarde);
         }
