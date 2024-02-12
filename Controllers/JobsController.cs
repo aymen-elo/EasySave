@@ -8,28 +8,30 @@ using EasySave.Models;
 namespace EasySave.Controllers
 {
     public class JobsController
-    {
-        private JobsManager _jobsManager;
+    { 
+        public List<Job> Jobs { get; private set; }
         private Logger _logger;
+        
+        public event EventHandler<string> FileSaved;
 
-        public JobsController(JobsManager jobsManager, Logger logger)
+        public JobsController( Logger logger)
         {
-            this._jobsManager = jobsManager;
+            Jobs = new List<Job>();
             this._logger = logger;
             Initialize();
 
             // abonnement  à l'événement FileSaved du BackupManager
-            this._jobsManager.FileSaved += HandleFileSaved;
+            FileSaved += HandleFileSaved;
         }
 
         public List<Job> GetJobs()
         {
-            return _jobsManager.Jobs;
+            return Jobs;
         }
 
         public void Initialize()
         {
-            _jobsManager.FileSaved += HandleFileSaved;
+            FileSaved += HandleFileSaved;
         }
 
         private void HandleFileSaved(object sender, string fileName)
@@ -38,23 +40,22 @@ namespace EasySave.Controllers
         }
 
         // Méthode pour créer un travail de sauvegarde
-        public void CreateJob(string nom, string repertoireSource, string repertoireCible, string type)
+        public void CreateJob(string nom, string source, string destination, BackupType backupType)
         {
-            Job newBackupJob = new Job(nom, BackupType.Full,repertoireSource, repertoireCible);
+            Job newBackupJob = new Job(nom, backupType,source, destination);
 
-            _jobsManager.AddJob(newBackupJob);
+            Jobs.Add(newBackupJob);
         }
 
         // Méthode pour modifier un travail de sauvegarde existant
-        public void EditJob(string nom, string newRepertoireSource, string newRepertoireCible, BackupType type)
+        public void EditJob(string nom, string source, string destination, BackupType backupType)
         {
-            Job existingBackupJob = _jobsManager.Jobs.FirstOrDefault(job => job.BackupName == nom);
-            if (existingBackupJob != null)
+            Job existingJob = Jobs.FirstOrDefault(job => job.BackupName == nom);
+            if (existingJob != null)
             {
-                existingBackupJob.Source = newRepertoireSource;
-                existingBackupJob.Destination = newRepertoireCible;
-                // FIX :
-                existingBackupJob.BackupType = BackupType.Full;
+                existingJob.Source = source;
+                existingJob.Destination = destination;
+                existingJob.BackupType = backupType;
             }
             else
             {
@@ -65,10 +66,10 @@ namespace EasySave.Controllers
         // Méthode pour supprimer un travail de sauvegarde
         public void DeleteJob(string nom)
         {
-            Job backupJobToDelete = _jobsManager.Jobs.FirstOrDefault(job => job.BackupName == nom);
+            Job backupJobToDelete = Jobs.FirstOrDefault(job => job.BackupName == nom);
             if (backupJobToDelete != null)
             {
-                _jobsManager.RemoveJob(backupJobToDelete);
+                Jobs.Remove(backupJobToDelete);
                 Console.WriteLine("Le travail de sauvegarde a été supprimé avec succès.");
             }
             else
@@ -79,7 +80,7 @@ namespace EasySave.Controllers
 
         internal void AddJob(Job nouveauTravailSauvegarde)
         {
-            _jobsManager.AddJob(nouveauTravailSauvegarde);
+            Jobs.Add(nouveauTravailSauvegarde);
         }
 
     }

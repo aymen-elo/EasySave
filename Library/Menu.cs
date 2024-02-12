@@ -17,7 +17,7 @@ namespace EasySave.Library
             translationController.Run();
         }
 
-        public void JobsManager(JobsController jobsController, Logger logger)
+        public void ManageJobs(JobsController jobsController, Logger logger)
         {
             bool continuer = true;
             while (continuer)
