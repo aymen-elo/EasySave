@@ -36,7 +36,7 @@ namespace EasySave.Controllers
 
         private void HandleFileSaved(object sender, string fileName)
         {
-            _logger.LogAction($"Le fichier {fileName} a été sauvegardé.");
+            _logger.LogAction(fileName, "", "", 0, 0);
         }
 
         // Méthode pour créer un travail de sauvegarde

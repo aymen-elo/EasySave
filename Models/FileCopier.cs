@@ -39,6 +39,7 @@ namespace EasySave.Models
 
         private void CopyDiff(Job job, List<string> allFiles, HashSet<string> allowedHashes, HashSet<string> loadedHashes)
         {
+            
             string message = "Attention, les fichiers qui diffèrent dans la destination vont être supprimés.";
             bool warningAccepted = CopyWarning(message);
             if (warningAccepted == true)
@@ -64,17 +65,23 @@ namespace EasySave.Models
                             Directory.CreateDirectory(targetFileDir);
                         }
 
+                        // Copier le fichier
                         File.Copy(file, targetFilePath, true);
                         job.NbSavedFiles++;
-                        _logger.LogAction($"Copied file: {file} to {targetFilePath}");
-                        job.State = JobState.Active;
-                        long fileSize = new System.IO.FileInfo(targetFilePath).Length;
-                        Console.WriteLine(fileSize);
 
+                        // Obtenir la taille du fichier
+                        long fileSize = new System.IO.FileInfo(targetFilePath).Length;
+
+                        // Loguer l'action
+                        _logger.LogAction(job.BackupName, file, targetFilePath, fileSize, stopWatch.Elapsed.TotalSeconds);
+
+                        job.State = JobState.Active;
+                        Console.WriteLine(fileSize);
                     }
                     else
                     {
-                        _logger.LogAction($"FIle already exists: {file}");
+                        _logger.LogAction("Existe déjà" + job.BackupName, file, "", 0, 0);
+
                     }
 
                     _identity.DeleteAllowedHashes(job.BackupName);
@@ -105,8 +112,10 @@ namespace EasySave.Models
                 {
                     string sourceHash = _identity.CalculateMD5(file);
                     allowedHashes.Add(sourceHash);
+
                     string relativePath = _fileGetter.GetRelativePath(job.Source, file);
                     string targetFilePath = Path.Combine(job.Destination, relativePath);
+
                     // Créer les sous-dossiers dans la destination si nécessaire
                     string targetFileDir = Path.GetDirectoryName(targetFilePath);
                     if (!Directory.Exists(targetFileDir))
@@ -114,15 +123,23 @@ namespace EasySave.Models
                         Directory.CreateDirectory(targetFileDir);
                     }
 
+                    // Copier le fichier
                     File.Copy(file, targetFilePath, true);
                     job.NbSavedFiles++;
-                    _logger.LogAction($"Copied file: {file} to {targetFilePath}");
-                    job.State = JobState.Active;
-                    
-                    // Taille des fichiers
+
+                    // Obtenir la taille du fichier
                     long fileSize = new System.IO.FileInfo(targetFilePath).Length;
+
+                    // Loguer l'action
+                    _logger.LogAction(job.BackupName, file, targetFilePath, fileSize, stopWatch.Elapsed.TotalSeconds);
+
+                    job.State = JobState.Active;
                 }
+
+                // Sauvegarder les hashes autorisés
                 _identity.SaveAllowedHashes(allowedHashes, job.BackupName);
+
+                // Arrêter le minuteur
                 stopWatch.Stop();
                 job.Duration = stopWatch.Elapsed;
                 Console.WriteLine(job.Duration);
