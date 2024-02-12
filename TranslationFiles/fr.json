@@ -28,5 +28,15 @@
     "DifferentialBackup": "Différentiel",
     "ContinuePrompt": "Voulez-vous continuer ? (o/n): ",
     "InvalidResponse": "Réponse invalide. Veuillez saisir 'o' pour Oui ou 'n' pour Non."
+  },
+
+  "JobsController": {
+    "AddJob": "Ajouter un travail",
+    "EditJob": "Modifier un travail",
+    "DeleteJob": "Supprimer un travail",
+    "JobAddedSuccessfully": "Le travail a été ajouté avec succès.",
+    "JobEditedSuccessfully": "Le travail a été modifié avec succès.",
+    "JobDeletedSuccessfully": "Le travail a été supprimé avec succès.",
+    "JobNotFound": "Le travail spécifié n'existe pas."
   }
 }

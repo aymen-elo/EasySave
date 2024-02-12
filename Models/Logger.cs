@@ -10,6 +10,18 @@ namespace EasySave.Models
     public class Logger
     {
         private readonly string logFilePath = @"C:\temp\log_journalier.txt";
+        private static Logger instance;
+
+        private Logger() { }
+
+        public static Logger GetInstance()
+        {
+            if (instance == null)
+            {
+                instance = new Logger();
+            }
+            return instance;
+        }
 
         public void LogAction(string name, string fileSource, string fileTarget, long fileSize, double fileTransferTime)
         {

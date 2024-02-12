@@ -39,11 +39,22 @@ namespace EasySave.Models
         public string ContinuePrompt { get; set; }
         public string InvalidResponse { get; set; }
     }
+    public class JobsControllerTranslations
+    {
+        public string AddJob { get; set; }
+        public string EditJob { get; set; }
+        public string DeleteJob { get; set; }
+        public string JobAddedSuccessfully { get; set; }
+        public string JobEditedSuccessfully { get; set; }
+        public string JobDeletedSuccessfully { get; set; }
+        public string JobNotFound { get; set; }
+    }
 
     public class TranslationModel
     {
         public MenuTranslations Menu { get; set; }
         public MessagesTranslations Messages { get; set; }
+        public JobsControllerTranslations JobsController { get; set; }
         // Ajoutez d'autres propriétés si nécessaire pour d'autres traductions
     }
 }

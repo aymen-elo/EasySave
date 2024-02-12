@@ -11,7 +11,7 @@ namespace EasySave
     {
         static void Main(string[] args)
         {
-            var logger = new Logger();
+            var logger = Logger.GetInstance();
             var jobsController = new JobsController(logger);
             var translationController = new TranslationController();
             var menu = new Menu();

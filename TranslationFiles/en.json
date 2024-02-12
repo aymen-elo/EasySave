@@ -28,5 +28,15 @@
     "DifferentialBackup": "Differential",
     "ContinuePrompt": "Do you want to continue? (y/n): ",
     "InvalidResponse": "Invalid response. Please enter 'y' for Yes or 'n' for No."
+  },
+  
+  "JobsController": {
+    "AddJob": "Add Job",
+    "EditJob": "Edit Job",
+    "DeleteJob": "Delete Job",
+    "JobAddedSuccessfully": "The job has been added successfully.",
+    "JobEditedSuccessfully": "The job has been edited successfully.",
+    "JobDeletedSuccessfully": "The job has been deleted successfully.",
+    "JobNotFound": "The specified job does not exist."
   }
 }
