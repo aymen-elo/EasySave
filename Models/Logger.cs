@@ -9,17 +9,30 @@ namespace EasySave.Models
 {
     public class Logger
     {
-        private readonly string logFilePath = @"C:\temp\log_journalier.txt";
+        private readonly string _path = Program.LogsDirectoryPath;
+
+        public Logger()
+        {
+
+            if (!Directory.Exists(_path))
+            {
+                Directory.CreateDirectory(_path);
+            }
+
+            if (!File.Exists(Path.Combine(_path, @"\log_journalier.txt")))
+            {
+                File.Create(Path.Combine(_path, @"\log_journalier.txt"));
+            }
+        }
 
         public void LogAction(string action)
         {
             string logMessage = $"{DateTime.Now:yyyy-MM-dd HH:mm:ss} - {action}";
-
-            File.AppendAllText(logFilePath, logMessage + Environment.NewLine);
+            File.AppendAllText(_path + @"\log_journalier.txt", logMessage + Environment.NewLine);
         }
         public void DisplayLog()
         {
-            string logContents = File.ReadAllText(logFilePath);
+            string logContents = File.ReadAllText(_path);
             Console.WriteLine(logContents);
         }
     }

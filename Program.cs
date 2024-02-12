@@ -2,6 +2,7 @@
 using EasySave.Views;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using EasySave.Controllers;
 using EasySave.Library;
 
@@ -9,6 +10,9 @@ namespace EasySave
 {
     class Program
     {
+        
+        // The directory where the files & hashes will be saved
+        public static string LogsDirectoryPath = @"C:\Program Files\Prosoft\EasySave\Logs";
         static void Main(string[] args)
         {
             var logger = new Logger();

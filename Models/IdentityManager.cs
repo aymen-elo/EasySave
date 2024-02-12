@@ -10,6 +10,15 @@ namespace EasySave.Models
 {
     public class IdentityManager
     {
+        private readonly string _path = Program.LogsDirectoryPath;
+        public IdentityManager()
+        {
+            if (!Directory.Exists(_path))
+            {
+                Directory.CreateDirectory(_path);
+            }
+        }
+        
         public string CalculateMD5(string filePath)
         {
             using (var md5 = MD5.Create())
@@ -23,9 +32,8 @@ namespace EasySave.Models
         }
         public HashSet<string> LoadAllowedHashes(string jobName)
         {
-            string filePath = string.Format(@"C:\temp\{0}-AlreadyCopiedHashes.json", jobName);
-
-
+            string filePath = Path.Combine(_path, string.Format( @"\{0}-AlreadyCopiedHashes.json", jobName));
+            
             // Créer un HashSet pour stocker les hachages
             HashSet<string> allowedHashes = new HashSet<string>();
 
@@ -48,8 +56,8 @@ namespace EasySave.Models
         }
         public void SaveAllowedHashes(HashSet<string> allowedHashes, string jobName)
         {
-            string filePath = string.Format(@"C:\temp\{0}-AlreadyCopiedHashes.json", jobName);
-
+            string filePath = _path + string.Format( @"\{0}-AlreadyCopiedHashes.json", jobName);
+            
             // Écrire chaque hachage dans le fichier JSON
             using (StreamWriter writer = new StreamWriter(filePath))
             {
@@ -61,7 +69,7 @@ namespace EasySave.Models
         }
         public void DeleteAllowedHashes(string jobName)
         {
-            string filePath = string.Format(@"C:\temp\{0}-AlreadyCopiedHashes.json", jobName);
+            string filePath = Path.Combine(_path, string.Format( @"\{0}-AlreadyCopiedHashes.json", jobName));
             File.Delete(filePath);
         }
     }

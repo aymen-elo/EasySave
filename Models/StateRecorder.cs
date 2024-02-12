@@ -9,12 +9,22 @@ namespace EasySave.Models
 {
     public class StateRecorder
     {
-        private readonly string stateFilePath = @"C:\temp\etat_avancement.txt";
+        private readonly string _path = Program.LogsDirectoryPath;
 
         public void RecordState(string state)
         {
             string stateMessage = $"{DateTime.Now:yyyy-MM-dd HH:mm:ss} - {state}";
-            File.WriteAllText(stateFilePath, stateMessage);
+
+            try
+            {
+                File.WriteAllText(_path + @"\etat_avancement.txt", stateMessage);
+            }
+            catch (Exception e)
+            {
+                Directory.CreateDirectory(_path);
+                File.Create(Path.Combine(_path, @"\etat_avancement.txt"));
+                File.WriteAllText(Path.Combine(_path,@"\etat_avancement.txt"), stateMessage);
+            }
         }
     }
 }
