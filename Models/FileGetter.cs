@@ -4,6 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.VisualBasic.FileIO;
+using SearchOption = System.IO.SearchOption;
 
 namespace EasySave.Models
 {
@@ -40,7 +42,7 @@ namespace EasySave.Models
                     // Supprime tous les fichiers du dossier
                     foreach (string file in files)
                     {
-                        File.Delete(file);
+                        FileSystem.DeleteFile(file, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
                     }
 
                     // Obtient tous les sous-dossiers dans le dossier
@@ -55,6 +57,7 @@ namespace EasySave.Models
             }
             catch (Exception ex)
             {
+                // TO DO : ADD LOG
                 Console.WriteLine($"Une erreur s'est produite : {ex.Message}");
             }
         }
@@ -81,14 +84,12 @@ namespace EasySave.Models
                     if (File.Exists(fullPath))
                     {
                         // Supprimer le fichier
-                        File.Delete(fullPath);
-                        Console.WriteLine($"Fichier supprimé : {fullPath}");
+                        FileSystem.DeleteFile(fullPath, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
                     }
                     else if (Directory.Exists(fullPath))
                     {
                         // Supprimer le dossier
-                        Directory.Delete(fullPath, true); // Supprimer récursivement
-                        Console.WriteLine($"Dossier supprimé : {fullPath}");
+                        FileSystem.DeleteDirectory(fullPath, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
                     }
                 }
             }

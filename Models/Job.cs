@@ -12,7 +12,7 @@ namespace EasySave.Models
     /* Pending = Hasn't started yet */
     /* Paused  = Started but was paused */
     /* Active  = Currently executing backup*/
-    public enum JobState { Pending, Active, Paused }
+    public enum JobState { Pending, Active, Paused , Finished}
     public enum BackupType{ Full, Diff }
 
     public class Job
@@ -27,12 +27,14 @@ namespace EasySave.Models
         public string Source { get; set; }
         public string Destination { get; set; }
         private int Position { get; set; }
-        private JobState State { get; set; }
+        public JobState State { get; set; }
     
-        private int NbTotalFiles { get; set; }
+        public int NbTotalFiles { get; set; }
         public int NbSavedFiles { get; set; }
-        private TimeSpan Duration { get; set; }
-        private DateTime BackupTime { get; set; }
+        public TimeSpan Duration { get; set; }
+        public DateTime StartTime { get; set; }
+        public DateTime EndTime { get; set; }
+        
 
         public Job(string backupName, BackupType type, string src, string dest) 
         {
