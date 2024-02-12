@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EasySave.Controllers
+namespace EasySave.Models
 {
     public class TranslationManager
     {
