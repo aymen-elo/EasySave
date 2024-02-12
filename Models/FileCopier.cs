@@ -42,6 +42,12 @@ namespace EasySave.Models
             
             string message = "Attention, les fichiers qui diffèrent dans la destination vont être supprimés.";
             bool warningAccepted = CopyWarning(message);
+            long savedFileSize = 0;
+            
+            // Calcul Taille Dir
+            DirectoryInfo diSource = new DirectoryInfo(job.Source);
+            Console.WriteLine(_fileGetter.DirSize(diSource));
+
             if (warningAccepted == true)
             {
                 // Démarre minuteur
