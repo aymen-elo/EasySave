@@ -13,15 +13,19 @@ namespace EasySave.Models
     {
         public TranslationModel LoadTranslation(string lang)
         {
+            
             string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "TranslationFiles", $"{lang}.json");
 
             if (!File.Exists(filePath))
             {
                 throw new FileNotFoundException($"File not found: {filePath}");
             }
-
+            
             string jsonContent = File.ReadAllText(filePath);
             return JsonSerializer.Deserialize<TranslationModel>(jsonContent);
+            
         }
+        
+        
     }
 }

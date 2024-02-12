@@ -17,17 +17,22 @@ namespace EasySave
             var jobsController = new JobsController(jobsManager, logger);
             var translationController = new TranslationController();
             var menu = new Menu();
+            var translationManager = new TranslationManager();
+            // Charger les traductions
+            TranslationModel translation = translationManager.LoadTranslation("en");
+            
+            
 
             // Affichage du menu principal et gestion des interactions utilisateur
             bool continuer = true;
             while (continuer)
             {
                 Console.Clear();
-                Console.WriteLine("Menu :");
-                Console.WriteLine("1. Option");
-                Console.WriteLine("2. Gestion des sauvegardes");
-                Console.WriteLine("3. Effectuer des sauvegardes");
-                Console.WriteLine("4. Quitter");
+                Console.WriteLine(translation.Menu.PrincipalMenu);
+                Console.WriteLine($"1. {translation.Menu.Option}");
+                Console.WriteLine($"2. {translation.Menu.BackupManage}");
+                Console.WriteLine($"3. {translation.Menu.DoBackup}");
+                Console.WriteLine($"4. {translation.Menu.Quit}");
 
                 Console.Write("Choix : ");
                 string choice = Console.ReadLine();
@@ -51,6 +56,7 @@ namespace EasySave
                         Console.WriteLine("Choix invalide. Veuillez réessayer.");
                         break;
                 }
+                
             }
             // Afficher le contenu du fichier journal dans la console à la fin de l'exécution
             logger.DisplayLog();
