@@ -4,12 +4,29 @@
     "Option": "Option",
     "BackupManage": "Gestion des sauvegardes",
     "DoBackup": "Effectuer des sauvegardes",
-    "Quit": "Quitter"
+    "Quit": "Quitter",
+    "AddBackupJob": "Ajouter un travail de sauvegarde",
+    "EditBackupJob": "Modifier un travail de sauvegarde",
+    "DeleteBackupJob": "Supprimer un travail de sauvegarde",
+    "ReturnToMainMenu": "Retour au Menu Principal",
+    "ChooseOption": "Choisir une option: "
   },
 
-  "messages": {
+  "Messages": {
     "fileSaved": "Le fichier {0} a été sauvegardé.",
     "backupDeleted": "Le travail de sauvegarde a été supprimé avec succès.",
-    "backupNotFound": "Le travail de sauvegarde spécifié n'existe pas."
+    "backupNotFound": "Le travail de sauvegarde spécifié n'existe pas.",
+    "FileSaved": "Le fichier {0} a été sauvegardé.",
+    "BackupDeleted": "Le travail de sauvegarde a été supprimé avec succès.",
+    "InvalidChoice": "Choix invalide. Veuillez réessayer.",
+    "InvalidTypeChoice": "Choix de type invalide. Veuillez saisir '1' pour complet ou '2' pour différentiel.",
+    "EnterBackupName": "Nom de sauvegarde : ",
+    "EnterSourceDirectory": "Répertoire source : ",
+    "EnterTargetDirectory": "Répertoire cible : ",
+    "ChooseBackupType": "Type de sauvegarde :",
+    "CompleteBackup": "Complet",
+    "DifferentialBackup": "Différentiel",
+    "ContinuePrompt": "Voulez-vous continuer ? (o/n): ",
+    "InvalidResponse": "Réponse invalide. Veuillez saisir 'o' pour Oui ou 'n' pour Non."
   }
 }

@@ -1,14 +1,32 @@
 ﻿{
-  "Menu": {
-    "PrincipalMenu": "Principal Menu",
+  "Menu" : {
+    "PrincipalMenu": "Main Menu",
     "Option": "Option",
-    "BackupManage": "Backup Manage",
-    "DoBackup": "Do a backup",
-    "Quit": "Quit"
+    "BackupManage": "Backup Management",
+    "DoBackup": "Perform Backup",
+    "Quit": "Quit",
+    "AddBackupJob": "Add Backup Job",
+    "EditBackupJob": "Edit Backup Job",
+    "DeleteBackupJob": "Delete Backup Job",
+    "ReturnToMainMenu": "Return to Main Menu",
+    "ChooseOption": "Choose an option: "
   },
-  "messages": {
+
+  "Messages": {
     "fileSaved": "The file {0} has been saved.",
     "backupDeleted": "The backup job has been deleted successfully.",
-    "backupNotFound": "The specified backup job does not exist."
+    "backupNotFound": "The specified backup job does not exist.",
+    "FileSaved": "The file {0} has been saved.",
+    "BackupDeleted": "The backup job has been deleted successfully.",
+    "InvalidChoice": "Invalid choice. Please try again.",
+    "InvalidTypeChoice": "Invalid type choice. Please enter '1' for complete or '2' for differential.",
+    "EnterBackupName": "Backup Name: ",
+    "EnterSourceDirectory": "Source Directory: ",
+    "EnterTargetDirectory": "Target Directory: ",
+    "ChooseBackupType": "Backup Type:",
+    "CompleteBackup": "Complete",
+    "DifferentialBackup": "Differential",
+    "ContinuePrompt": "Do you want to continue? (y/n): ",
+    "InvalidResponse": "Invalid response. Please enter 'y' for Yes or 'n' for No."
   }
 }

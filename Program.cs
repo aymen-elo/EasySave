@@ -48,7 +48,7 @@ namespace EasySave
                         continuer = false;
                         break;
                     default:
-                        Console.WriteLine("Choix invalide. Veuillez réessayer.");
+                        Console.WriteLine(translation.Messages.InvalidChoice);
                         break;
                 }
                 
