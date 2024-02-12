@@ -1,5 +1,14 @@
 ﻿{
-  "welcomeMessage": "Welcome to the CLI program!",
-  "enterLanguagePrompt": "Please enter your preferred language (en/fr): ",
-  "englishGreeting": "Hello!"
+  "Menu": {
+    "PrincipalMenu": "Principal Menu",
+    "Option": "Option",
+    "BackupManage": "Backup Manage",
+    "DoBackup": "Do a backup",
+    "Quit": "Quit"
+  },
+  "messages": {
+    "fileSaved": "The file {0} has been saved.",
+    "backupDeleted": "The backup job has been deleted successfully.",
+    "backupNotFound": "The specified backup job does not exist."
+  }
 }

@@ -14,7 +14,7 @@ namespace EasySave.Controllers
         
         public event EventHandler<string> FileSaved;
 
-        public JobsController( Logger logger)
+        public JobsController(Logger logger)
         {
             Jobs = new List<Job>();
             this._logger = logger;
