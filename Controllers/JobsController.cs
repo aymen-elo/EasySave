@@ -11,12 +11,6 @@ namespace EasySave.Controllers
     {
         private JobsManager _jobsManager;
         private Logger _logger;
-        
-        public JobsController()
-        {
-            _jobsManager = new JobsManager();
-            Initialize();
-        }
 
         public JobsController(JobsManager jobsManager, Logger logger)
         {
@@ -36,11 +30,6 @@ namespace EasySave.Controllers
         public void Initialize()
         {
             _jobsManager.FileSaved += HandleFileSaved;
-        }
-
-        public void PerformBackup(string fileName)
-        {
-            _jobsManager.SaveFile(fileName);
         }
 
         private void HandleFileSaved(object sender, string fileName)
