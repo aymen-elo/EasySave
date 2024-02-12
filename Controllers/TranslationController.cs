@@ -9,6 +9,8 @@ namespace EasySave.Controllers
         private readonly TranslationManager _translationManager;
         private readonly TranslationView _translationView;
 
+        public string Language { get; private set; }
+
         public TranslationController()
         {
             _translationManager = new TranslationManager();
@@ -23,10 +25,12 @@ namespace EasySave.Controllers
             TranslationModel translation;
             if (lang == "en" || lang == "fr")
             {
+                Language = lang;
+
                 translation = _translationManager.LoadTranslation(lang);
-                _translationView.UpdateTranslations(translation); // Mettre à jour les traductions dans la vue
+                _translationView.UpdateTranslations(translation); 
                 _translationView.DisplayMessage(
-                    "Language updated successfully."); // Afficher un message de confirmation
+                    "Language updated successfully.");
             }
             else
             {

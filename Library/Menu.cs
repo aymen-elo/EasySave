@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 using EasySave.Controllers;
 using EasySave.Models;
 
@@ -60,11 +61,33 @@ namespace EasySave.Library
             Console.Clear();
             // Demander à l'utilisateur de saisir les informations pour ajouter un travail de sauvegarde
             Console.Write("Nom de sauvegarde : ");
+            
+            Regex rg = new Regex(@"^[a-zA-Z0-9\s]*$");
             string nom = Console.ReadLine();
+            while (!PatternRegEx(nom, rg))
+            {
+                Console.WriteLine("Erreur : Veuillez écrire un nom de sauvegarde composé de lettres et/ou de chiffre");
+                Console.Write("Nom de sauvegarde : ");
+                nom = Console.ReadLine();
+            }
+            
+            rg = new Regex(@"^[a-zA-Z]:\\(?:[^<>:""/\\|?*]+\\)*[^<>:""/\\|?*]*$");
             Console.Write("Répertoire source : ");
             string repertoireSource = Console.ReadLine();
+            while (!PatternRegEx(repertoireSource, rg))
+            {
+                Console.WriteLine("Erreur : Veuillez écrire un chemin de sauvegarde correct.");
+                Console.Write("Répertoire source : ");
+                repertoireSource = Console.ReadLine();
+            }
             Console.Write("Répertoire cible : ");
             string repertoireCible = Console.ReadLine();
+            while (!PatternRegEx(repertoireCible, rg))
+            {
+                Console.WriteLine("Erreur : Veuillez écrire un chemin de sauvegarde correct.");
+                Console.Write("Répertoire source : ");
+                repertoireCible = Console.ReadLine();
+            }
 
             // Demander le type de sauvegarde à l'utilisateur
             Console.WriteLine("Type de sauvegarde :");
@@ -75,20 +98,17 @@ namespace EasySave.Library
 
             // Convertir le choix de l'utilisateur en type de sauvegarde
             string type = choixType == "1" ? "complet" : choixType == "2" ? "différentiel" : null;
-            
+
             if (type != null)
             {
                 // Créer un objet BackupJob avec les informations saisies
-                var nouveauTravailSauvegarde = new Job( nom,
-                    BackupType.Full, repertoireSource,
-                     repertoireCible);
+                var nouveauTravailSauvegarde = new Job(nom, BackupType.Full, repertoireSource, repertoireCible);
 
                 // Ajouter le travail de sauvegarde en appelant la méthode correspondante du contrôleur
                 jobsController.AddJob(nouveauTravailSauvegarde);
 
                 // Logger l'action effectuée en utilisant l'instance de Logger stockée dans jobsController
-                logger.LogAction($"Ajout du travail de sauvegarde '{nouveauTravailSauvegarde.BackupName}'");
-
+                logger.LogAction(nom, repertoireSource, repertoireCible, 0, 0);
 
                 // Copier les fichiers en utilisant FileCopier
                 var fileCopier = new FileCopier();
@@ -99,10 +119,10 @@ namespace EasySave.Library
             }
             else
             {
-                Console.WriteLine(
-                    "Choix de type invalide. Veuillez saisir '1' pour complet ou '2' pour différentiel.");
+                Console.WriteLine("Choix de type invalide. Veuillez saisir '1' pour complet ou '2' pour différentiel.");
             }
         }
+
 
         static void DisplayJobs(JobsController jobsController)
         {
@@ -131,7 +151,20 @@ namespace EasySave.Library
             jobsController.DeleteJob(nomTravail);
 
             // Logger l'action effectuée en utilisant l'instance de Logger passée en paramètre
-            logger.LogAction($"Suppression du travail de sauvegarde '{nomTravail}'");
+            logger.LogAction(nomTravail, "", "", 0, 0);
         }
+        static bool PatternRegEx(string text, Regex pattern)
+        {
+            Match m = pattern.Match(text);
+            if (m.Success)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
     }
 }

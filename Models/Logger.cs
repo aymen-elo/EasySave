@@ -19,17 +19,25 @@ namespace EasySave.Models
                 Directory.CreateDirectory(_path);
             }
 
-            if (!File.Exists(Path.Combine(_path, @"\log_journalier.txt")))
+            if (!File.Exists(Path.Combine(_path, @"\log_journalier.json")))
             {
-                File.Create(Path.Combine(_path, @"\log_journalier.txt"));
+                File.Create(Path.Combine(_path, @"\log_journalier.json"));
             }
         }
 
-        public void LogAction(string action)
+        public void LogAction(string name, string fileSource, string fileTarget, long fileSize, double fileTransferTime)
         {
-            string logMessage = $"{DateTime.Now:yyyy-MM-dd HH:mm:ss} - {action}";
-            File.AppendAllText(_path + @"\log_journalier.txt", logMessage + Environment.NewLine);
+            string logMessage = $"{{\n" +
+                                $" \"Name\": \"{name}\",\n" +
+                                $" \"FileSource\": \"{fileSource}\",\n" +
+                                $" \"FileTarget\": \"{fileTarget}\",\n" +
+                                $" \"FileSize\": {fileSize},\n" +
+                                $" \"FileTransferTime\": {fileTransferTime},\n" +
+                                $" \"Time\": \"{DateTime.Now:dd/MM/yyyy HH:mm:ss}\"\n" +
+                                $" }}";
+            File.AppendAllText(_path + @"\log_journalier.json", logMessage + Environment.NewLine);
         }
+
         public void DisplayLog()
         {
             string logContents = File.ReadAllText(_path);
