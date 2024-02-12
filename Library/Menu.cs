@@ -66,44 +66,46 @@ namespace EasySave.Library
             Console.Write("Répertoire cible : ");
             string repertoireCible = Console.ReadLine();
 
-                    // Demander le type de sauvegarde à l'utilisateur
-                    Console.WriteLine("Type de sauvegarde :");
-                    Console.WriteLine("1. Complet");
-                    Console.WriteLine("2. Différentiel");
-                    Console.Write("Choix : ");
-                    string choixType = Console.ReadLine();
+            // Demander le type de sauvegarde à l'utilisateur
+            Console.WriteLine("Type de sauvegarde :");
+            Console.WriteLine("1. Complet");
+            Console.WriteLine("2. Différentiel");
+            Console.Write("Choix : ");
+            string choixType = Console.ReadLine();
 
-                    // Convertir le choix de l'utilisateur en type de sauvegarde
-                    string type = choixType == "1" ? "complet" : choixType == "2" ? "différentiel" : null;
+            // Convertir le choix de l'utilisateur en type de sauvegarde
+            string type = choixType == "1" ? "complet" : choixType == "2" ? "différentiel" : null;
 
-                    if (type != null)
-                    {
-                        // Créer un objet BackupJob avec les informations saisies
-                        var nouveauTravailSauvegarde = new Job( nom,
-                            BackupType.Full, repertoireSource,
-                             repertoireCible);
+            Console.WriteLine("toto" + type);
 
-                        // Ajouter le travail de sauvegarde en appelant la méthode correspondante du contrôleur
-                        jobsController.AddJob(nouveauTravailSauvegarde);
+            if (type != null)
+            {
+                Console.WriteLine("lllllllllllllllllllllll");
+                // Créer un objet BackupJob avec les informations saisies
+                var nouveauTravailSauvegarde = new Job( nom,
+                    BackupType.Full, repertoireSource,
+                     repertoireCible);
 
-                        // Logger l'action effectuée en utilisant l'instance de Logger stockée dans jobsController
-                        logger.LogAction($"Ajout du travail de sauvegarde '{nouveauTravailSauvegarde.BackupName}'");
+                // Ajouter le travail de sauvegarde en appelant la méthode correspondante du contrôleur
+                jobsController.AddJob(nouveauTravailSauvegarde);
+
+                // Logger l'action effectuée en utilisant l'instance de Logger stockée dans jobsController
+                logger.LogAction($"Ajout du travail de sauvegarde '{nouveauTravailSauvegarde.BackupName}'");
 
 
-                        // Copier les fichiers en utilisant FileCopier
-                        var fileCopier = new FileCopier();
-                        fileCopier.CopyDirectory(nom, nouveauTravailSauvegarde.Source,
-                            nouveauTravailSauvegarde.Destination, type);
+                // Copier les fichiers en utilisant FileCopier
+                var fileCopier = new FileCopier();
+                fileCopier.CopyDirectory(nouveauTravailSauvegarde);
 
-                        // Afficher la liste des travaux de sauvegarde après l'ajout
-                        DisplayJobs(jobsController);
-                    }
-                    else
-                    {
-                        Console.WriteLine(
-                            "Choix de type invalide. Veuillez saisir '1' pour complet ou '2' pour différentiel.");
-                    }
-                }
+                // Afficher la liste des travaux de sauvegarde après l'ajout
+                DisplayJobs(jobsController);
+            }
+            else
+            {
+                Console.WriteLine(
+                    "Choix de type invalide. Veuillez saisir '1' pour complet ou '2' pour différentiel.");
+            }
+        }
 
         static void DisplayJobs(JobsController jobsController)
         {
