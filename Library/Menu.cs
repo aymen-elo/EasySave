@@ -75,12 +75,9 @@ namespace EasySave.Library
 
             // Convertir le choix de l'utilisateur en type de sauvegarde
             string type = choixType == "1" ? "complet" : choixType == "2" ? "différentiel" : null;
-
-            Console.WriteLine("toto" + type);
-
+            
             if (type != null)
             {
-                Console.WriteLine("lllllllllllllllllllllll");
                 // Créer un objet BackupJob avec les informations saisies
                 var nouveauTravailSauvegarde = new Job( nom,
                     BackupType.Full, repertoireSource,
