@@ -9,7 +9,7 @@ namespace EasySave.Models
     public class FileCopier
     {
         // Définition des instances utiles pour copie
-        private Logger _logger = new Logger();
+        private Logger _logger = Logger.GetInstance();
         private readonly IdentityManager _identity = new IdentityManager();
         private FileGetter _fileGetter = new FileGetter();
         public void CopyDirectory(Job job)
