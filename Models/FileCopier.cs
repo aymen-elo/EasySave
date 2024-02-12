@@ -31,7 +31,9 @@ namespace EasySave.Models
             {
                 CopyFull(job, allFiles, allowedHashes);
             }
-        
+            
+            
+            
             // Fin Minuteur + stockage des données
             job.EndTime = DateTime.Now;
             job.State = JobState.Finished;
@@ -41,6 +43,12 @@ namespace EasySave.Models
         {
             string message = "Attention, les fichiers qui diffèrent dans la destination vont être supprimés.";
             bool warningAccepted = CopyWarning(message);
+            long savedFileSize = 0;
+            
+            // Calcul Taille Dir
+            DirectoryInfo diSource = new DirectoryInfo(job.Source);
+            Console.WriteLine(_fileGetter.DirSize(diSource));
+            
             if (warningAccepted == true)
             {
                 // Démarre minuteur
@@ -68,9 +76,10 @@ namespace EasySave.Models
                         job.NbSavedFiles++;
                         _logger.LogAction($"Copied file: {file} to {targetFilePath}");
                         job.State = JobState.Active;
-                        long fileSize = new System.IO.FileInfo(targetFilePath).Length;
-                        Console.WriteLine(fileSize);
-
+                        
+                        long fileSize = new FileInfo(targetFilePath).Length;
+                        savedFileSize += fileSize;
+                        Console.WriteLine(savedFileSize);
                     }
                     else
                     {
@@ -82,6 +91,8 @@ namespace EasySave.Models
                 }
 
                 _fileGetter.CompareAndDeleteDirectories(job.Destination, job.Source);
+                
+                // Stop minuteur
                 stopWatch.Stop();
                 job.Duration = stopWatch.Elapsed;
                 Console.WriteLine(job.Duration);
@@ -96,6 +107,12 @@ namespace EasySave.Models
         {
             string message = "Attention, les fichiers présents dans la destination vont être supprimés.";
             bool warningAccepted = CopyWarning(message);
+            long savedFileSize = 0;
+            
+            // Calcul Taille Dir
+            DirectoryInfo diSource = new DirectoryInfo(job.Source);
+            Console.WriteLine(_fileGetter.DirSize(diSource));
+            
             if (warningAccepted == true)
             {
                 Stopwatch stopWatch = new Stopwatch();
@@ -119,8 +136,10 @@ namespace EasySave.Models
                     _logger.LogAction($"Copied file: {file} to {targetFilePath}");
                     job.State = JobState.Active;
                     
-                    // Taille des fichiers
-                    long fileSize = new System.IO.FileInfo(targetFilePath).Length;
+                    // Taille des fichiers sauvegardé
+                    long fileSize = new FileInfo(targetFilePath).Length;
+                    savedFileSize += fileSize;
+                    Console.WriteLine(savedFileSize);
                 }
                 _identity.SaveAllowedHashes(allowedHashes, job.BackupName);
                 stopWatch.Stop();

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using EasySave.Controllers;
 using EasySave.Models;
@@ -60,12 +61,35 @@ namespace EasySave.Library
             Console.Clear();
             // Demander à l'utilisateur de saisir les informations pour ajouter un travail de sauvegarde
             Console.Write("Nom de sauvegarde : ");
+            
+            Regex rg = new Regex(@"^[a-zA-Z0-9\s]*$");
             string nom = Console.ReadLine();
+            while (!PatternRegEx(nom, rg))
+            {
+                Console.WriteLine("Erreur : Veuillez écrire un nom de sauvegarde composé de lettres et/ou de chiffre");
+                Console.Write("Nom de sauvegarde : ");
+                nom = Console.ReadLine();
+            }
+            
+            rg = new Regex(@"^[a-zA-Z]:\\(?:[^<>:""/\\|?*]+\\)*[^<>:""/\\|?*]*$");
             Console.Write("Répertoire source : ");
             string repertoireSource = Console.ReadLine();
+            while (!PatternRegEx(repertoireSource, rg))
+            {
+                Console.WriteLine("Erreur : Veuillez écrire un chemin de sauvegarde correct.");
+                Console.Write("Répertoire source : ");
+                repertoireSource = Console.ReadLine();
+            }
+            
             Console.Write("Répertoire cible : ");
             string repertoireCible = Console.ReadLine();
-
+            while (!PatternRegEx(repertoireCible, rg))
+            {
+                Console.WriteLine("Erreur : Veuillez écrire un chemin de sauvegarde correct.");
+                Console.Write("Répertoire source : ");
+                repertoireCible = Console.ReadLine();
+            }
+            
             // Demander le type de sauvegarde à l'utilisateur
             Console.WriteLine("Type de sauvegarde :");
             Console.WriteLine("1. Complet");
@@ -132,6 +156,19 @@ namespace EasySave.Library
 
             // Logger l'action effectuée en utilisant l'instance de Logger passée en paramètre
             logger.LogAction($"Suppression du travail de sauvegarde '{nomTravail}'");
+        }
+
+        static bool PatternRegEx(string text, Regex pattern)
+        {
+            Match m = pattern.Match(text);
+            if (m.Success)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }
