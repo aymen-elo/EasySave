@@ -51,9 +51,6 @@ namespace EasySave.Models
                     {
                         CleanTarget(subdir);
                     }
-
-                    // Supprime le dossier lui-même après avoir vidé son contenu
-                    Directory.Delete(targetDir);
                 }
             }
             catch (Exception ex)

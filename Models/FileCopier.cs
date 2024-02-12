@@ -15,13 +15,13 @@ public class FileCopier
     private FileGetter fileGetter = new FileGetter();
     public int FilesCopied { get => filesCopied; }
 
-    public void CopyDirectory(string jobName, string sourceDir, string targetDir, string Type)
+    public void CopyDirectory(Job job)
     {
-        List<string> allFiles = fileGetter.GetAllFiles(sourceDir);
-        HashSet<string> loadedHashes = identity.LoadAllowedHashes(jobName);
+        List<string> allFiles = fileGetter.GetAllFiles(job.Source);
+        HashSet<string> loadedHashes = identity.LoadAllowedHashes(job.BackupName);
         HashSet<string> allowedHashes = new HashSet<string>();
 
-        if (Type == "différentiel")
+        if (job.BackupType == BackupType.Diff)
         {
             // Comparer les dossiers dans la destination avec les dossiers dans la source
             foreach (string file in allFiles)
@@ -31,8 +31,8 @@ public class FileCopier
                 allowedHashes.Add(sourceHash);
                 if (!loadedHashes.Contains(sourceHash))
                 {
-                    string relativePath = fileGetter.GetRelativePath(sourceDir, file);
-                    string targetFilePath = Path.Combine(targetDir, relativePath);
+                    string relativePath = fileGetter.GetRelativePath(job.Source, file);
+                    string targetFilePath = Path.Combine(job.Destination, relativePath);
 
                     // Créer les sous-dossiers dans la destination si nécessaire
                     string targetFileDir = Path.GetDirectoryName(targetFilePath);
@@ -50,18 +50,18 @@ public class FileCopier
                     Console.WriteLine("Impossible de copier, déjà présent");
                     logger.LogAction($"FIle already exists: {file}");
                 }
-                identity.DeleteAllowedHashes(jobName);
-                identity.SaveAllowedHashes(allowedHashes, jobName);
+                identity.DeleteAllowedHashes(job.BackupName);
+                identity.SaveAllowedHashes(allowedHashes, job.BackupName);
             }
-            fileGetter.CompareAndDeleteDirectories(targetDir, sourceDir);
+            fileGetter.CompareAndDeleteDirectories(job.Destination, job.Source);
         }
         else
         {
-            fileGetter.CleanTarget(targetDir);
+            fileGetter.CleanTarget(job.Destination);
             foreach (string file in allFiles)
             {
-                string relativePath = fileGetter.GetRelativePath(sourceDir, file);
-                string targetFilePath = Path.Combine(targetDir, relativePath);
+                string relativePath = fileGetter.GetRelativePath(job.Source, file);
+                string targetFilePath = Path.Combine(job.Destination, relativePath);
                 // Créer les sous-dossiers dans la destination si nécessaire
                 string targetFileDir = Path.GetDirectoryName(targetFilePath);
                 if (!Directory.Exists(targetFileDir))
@@ -70,7 +70,7 @@ public class FileCopier
                 }
 
                 File.Copy(file, targetFilePath, true);
-                filesCopied++;
+                job.NbSavedFiles++;
                 logger.LogAction($"Copied file: {file} to {targetFilePath}");
             }
         }

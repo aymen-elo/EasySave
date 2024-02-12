@@ -30,7 +30,7 @@ namespace EasySave.Models
         private JobState State { get; set; }
     
         private int NbTotalFiles { get; set; }
-        private int NbSavedFiles { get; set; }
+        public int NbSavedFiles { get; set; }
         private TimeSpan Duration { get; set; }
         private DateTime BackupTime { get; set; }
 
