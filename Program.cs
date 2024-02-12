@@ -16,12 +16,11 @@ namespace EasySave
             var translationController = new TranslationController();
             var menu = new Menu();
             var translationManager = new TranslationManager();
-            // Charger les traductions
-            TranslationModel translation = translationManager.LoadTranslation("en");
-            
-            
 
-            // Affichage du menu principal et gestion des interactions utilisateur
+            translationController.Run();
+
+            TranslationModel translation = translationManager.LoadTranslation(translationController.Language);
+
             bool continuer = true;
             while (continuer)
             {
@@ -41,11 +40,9 @@ namespace EasySave
                         menu.Options(translationController);
                         break;
                     case "2":
-                        // Gestion des sauvegardes
                         menu.ManageJobs(jobsController, logger);
                         break;
                     case "3":
-                        // Ajoutez ici votre code pour l'option 3
                         break;
                     case "4":
                         continuer = false;
@@ -56,7 +53,6 @@ namespace EasySave
                 }
                 
             }
-            // Afficher le contenu du fichier journal dans la console à la fin de l'exécution
             logger.DisplayLog();
         }
     }
