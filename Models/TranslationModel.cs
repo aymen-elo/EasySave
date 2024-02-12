@@ -13,6 +13,8 @@ namespace EasySave.Models
         public string BackupManage { get; set; }
         public string DoBackup { get; set; }
         public string Quit { get; set; }
+        
+        
     }
 
     public class TranslationModel

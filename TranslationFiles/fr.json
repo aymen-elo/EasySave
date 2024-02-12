@@ -1,16 +1,15 @@
 ﻿{
   "Menu" : {
-    "PrincipalMenu" : "Menu principal",
-    "Option" :"Option",
-    "BackupManage" : "Gestion des sauvegardes",
-    "DoBackup" : "Effectuer des sauvegardes",
-    "Quit" : "Quitter"
+    "PrincipalMenu": "Menu principal",
+    "Option": "Option",
+    "BackupManage": "Gestion des sauvegardes",
+    "DoBackup": "Effectuer des sauvegardes",
+    "Quit": "Quitter"
   },
-  
+
   "messages": {
     "fileSaved": "Le fichier {0} a été sauvegardé.",
     "backupDeleted": "Le travail de sauvegarde a été supprimé avec succès.",
     "backupNotFound": "Le travail de sauvegarde spécifié n'existe pas."
   }
-
 }
