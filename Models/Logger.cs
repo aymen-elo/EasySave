@@ -5,11 +5,23 @@ namespace EasySave.Models
 {
     public class Logger
     {
-        private readonly string logFilePath = @"C:\temp\log_journalier.txt";
+        private readonly string _path = Program.LogsDirectoryPath;
         private static Logger instance;
 
-        private Logger() { }
+        private Logger()
+        {
 
+            if (!Directory.Exists(_path))
+            {
+                Directory.CreateDirectory(_path);
+            }
+
+            if (!File.Exists(Path.Combine(_path, @"\log_journalier.json")))
+            {
+                File.Create(Path.Combine(_path, @"\log_journalier.json"));
+            }
+        }
+        
         public static Logger GetInstance()
         {
             if (instance == null)
@@ -29,13 +41,12 @@ namespace EasySave.Models
                                 $" \"FileTransferTime\": {fileTransferTime},\n" +
                                 $" \"Time\": \"{DateTime.Now:dd/MM/yyyy HH:mm:ss}\"\n" +
                                 $" }}";
-
-            File.AppendAllText(logFilePath, logMessage + Environment.NewLine);
+            File.AppendAllText(_path + @"\log_journalier.json", logMessage + Environment.NewLine);
         }
 
         public void DisplayLog()
         {
-            string logContents = File.ReadAllText(logFilePath);
+            string logContents = File.ReadAllText(_path);
             Console.WriteLine(logContents);
         }
     }
