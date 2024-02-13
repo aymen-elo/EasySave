@@ -18,13 +18,13 @@ namespace EasySave.Models
         public FileCopier() { }
         public void CopyDirectory(Job job, TranslationModel translation)
         {
-            List<string> allFiles = _fileGetter.GetAllFiles(job.Source);
-            HashSet<string> loadedHashes = _identity.LoadAllowedHashes(job.BackupName);
+            List<string> allFiles = _fileGetter.GetAllFiles(job.SourceFilePath);
+            HashSet<string> loadedHashes = _identity.LoadAllowedHashes(job.Name);
             HashSet<string> allowedHashes = new HashSet<string>();
         
             // Stockage valeurs dans le travail en cours 
             job.StartTime = DateTime.Now;
-            job.NbTotalFiles = allFiles.Count();
+            job.TotalFilesToCopy = allFiles.Count();
         
             // Copy suivant type de sauvegarde
             if (job.BackupType == BackupType.Diff)
@@ -49,7 +49,7 @@ namespace EasySave.Models
             long savedFileSize = 0;
             
             // Calcul Taille Dir
-            DirectoryInfo diSource = new DirectoryInfo(job.Source);
+            DirectoryInfo diSource = new DirectoryInfo(job.SourceFilePath);
             Console.WriteLine(_fileGetter.DirSize(diSource));
 
             if (warningAccepted == true)
@@ -65,8 +65,8 @@ namespace EasySave.Models
                     allowedHashes.Add(sourceHash);
                     if (!loadedHashes.Contains(sourceHash))
                     {
-                        string relativePath = _fileGetter.GetRelativePath(job.Source, file);
-                        string targetFilePath = Path.Combine(job.Destination, relativePath);
+                        string relativePath = _fileGetter.GetRelativePath(job.SourceFilePath, file);
+                        string targetFilePath = Path.Combine(job.TargetFilePath, relativePath);
 
                         // Créer les sous-dossiers dans la destination si nécessaire
                         string targetFileDir = Path.GetDirectoryName(targetFilePath);
@@ -83,22 +83,22 @@ namespace EasySave.Models
                         long fileSize = new System.IO.FileInfo(targetFilePath).Length;
 
                         // Loguer l'action
-                        _logger.LogAction(job.BackupName, file, targetFilePath, fileSize, stopWatch.Elapsed);
+                        _logger.LogAction(job.Name, file, targetFilePath, fileSize, stopWatch.Elapsed);
 
                         job.State = JobState.Active;
                         Console.WriteLine(fileSize);
                     }
                     else 
                     {
-                        _logger.LogAction("Existe déjà" + job.BackupName, file, "", 0, TimeSpan.Zero);
+                        _logger.LogAction("Existe déjà" + job.Name, file, "", 0, TimeSpan.Zero);
 
                     }
 
-                    _identity.DeleteAllowedHashes(job.BackupName);
-                    _identity.SaveAllowedHashes(allowedHashes, job.BackupName);
+                    _identity.DeleteAllowedHashes(job.Name);
+                    _identity.SaveAllowedHashes(allowedHashes, job.Name);
                 }
 
-                _fileGetter.CompareAndDeleteDirectories(job.Destination, job.Source);
+                _fileGetter.CompareAndDeleteDirectories(job.TargetFilePath, job.SourceFilePath);
                 stopWatch.Stop();
                 job.Duration = stopWatch.Elapsed;
                 Console.WriteLine(job.Duration);
@@ -117,14 +117,14 @@ namespace EasySave.Models
             {
                 Stopwatch stopWatch = new Stopwatch();
                 stopWatch.Start();
-                _fileGetter.CleanTarget(job.Destination);
+                _fileGetter.CleanTarget(job.TargetFilePath);
                 foreach (string file in allFiles)
                 {
                     string sourceHash = _identity.CalculateMD5(file);
                     allowedHashes.Add(sourceHash);
 
-                    string relativePath = _fileGetter.GetRelativePath(job.Source, file);
-                    string targetFilePath = Path.Combine(job.Destination, relativePath);
+                    string relativePath = _fileGetter.GetRelativePath(job.SourceFilePath, file);
+                    string targetFilePath = Path.Combine(job.TargetFilePath, relativePath);
 
                     // Créer les sous-dossiers dans la destination si nécessaire
                     string targetFileDir = Path.GetDirectoryName(targetFilePath);
@@ -141,14 +141,14 @@ namespace EasySave.Models
                     long fileSize = new System.IO.FileInfo(targetFilePath).Length;
 
                     // Loguer l'action
-                    _logger.LogAction(job.BackupName, file, targetFilePath, fileSize, stopWatch.Elapsed);
+                    _logger.LogAction(job.Name, file, targetFilePath, fileSize, stopWatch.Elapsed);
 
                     job.State = JobState.Active;
-                    _logger.LogState(job.BackupName, job.Source, job.Destination, job.State, job.NbTotalFiles, fileSize, (job.NbTotalFiles - job.NbSavedFiles),((job.NbSavedFiles*100)/job.NbTotalFiles));
+                    _logger.LogState(job.Name, job.SourceFilePath, job.TargetFilePath, job.State, job.TotalFilesToCopy, fileSize, (job.TotalFilesToCopy - job.NbSavedFiles),((job.NbSavedFiles*100)/job.TotalFilesToCopy));
                 }
 
                 // Sauvegarder les hashes autorisés
-                _identity.SaveAllowedHashes(allowedHashes, job.BackupName);
+                _identity.SaveAllowedHashes(allowedHashes, job.Name);
 
                 // Arrêter le minuteur
                 stopWatch.Stop();

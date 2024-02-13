@@ -12,7 +12,7 @@ namespace EasySave.Models
     /* Pending = Hasn't started yet */
     /* Paused  = Started but was paused */
     /* Active  = Currently executing backup*/
-    public enum JobState { Pending, Active, Paused , Finished}
+    public enum JobState { Pending, Active, Paused , Finished, Retired}
     public enum BackupType{ Full, Diff }
 
     public class Job
@@ -22,33 +22,53 @@ namespace EasySave.Models
         private static int _nextPos = 0;
         
         private int Id { get; set; }
-        public string BackupName { get; private set; }
+        public string Name { get; set; }
         public BackupType BackupType { get; set; }
-        public string Source { get; set; }
-        public string Destination { get; set; }
+        public string SourceFilePath { get; set; }
+        public string TargetFilePath { get; set; }
         private int Position { get; set; }
         public JobState State { get; set; }
     
-        public int NbTotalFiles { get; set; }
+        public int TotalFilesToCopy { get; set; }
         public int NbSavedFiles { get; set; }
+        public int NbFilesLeftToDo { get; set; }
         public TimeSpan Duration { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
         
 
-        public Job(string backupName, BackupType type, string src, string dest) 
+        public Job(string name, BackupType type, string src, string dest) 
         {
             Id = _nextId;
             Position = _nextPos;
-            BackupName = backupName;
+            Name = name;
             BackupType = type;
             State = JobState.Pending;
-            Source = src;
-            Destination = dest;
+            SourceFilePath = src;
+            TargetFilePath = dest;
             
-            NbTotalFiles = -1;
+            TotalFilesToCopy = -1;
             NbSavedFiles = -1;
             
+            _nextId++;
+            _nextPos++;
+        }
+        
+        public Job() {}
+        
+        /* Helper constructor for state.json */
+        public Job(string name, JobState jobState, string src, string dest, int totalFilesToCopy, int nbFilesLeftToDo) 
+        {
+            Id = _nextId;
+            Position = _nextPos;
+            Name = name;
+            State = JobState.Pending;
+            SourceFilePath = src;
+            TargetFilePath = dest;
+            
+            TotalFilesToCopy = totalFilesToCopy;
+            NbFilesLeftToDo = nbFilesLeftToDo;
+
             _nextId++;
             _nextPos++;
         }

@@ -61,10 +61,7 @@ namespace EasySave.Models
             long fileSize, long nbFileLeftToDo, int progression)
         {
             string statePath = _path + @"\state.json";
-
-            sourcePath = sourcePath.Replace("\\", "\\\\");
-            targetPath = targetPath.Replace("\\", "\\\\");
-
+            
             string jsonContent = File.ReadAllText(statePath);
 
             if (File.Exists(statePath))

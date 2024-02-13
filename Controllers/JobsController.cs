@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using EasySave.Library;
 using EasySave.Models;
+using Newtonsoft.Json;
 
 namespace EasySave.Controllers
 {
@@ -41,6 +42,32 @@ namespace EasySave.Controllers
         public void Initialize()
         {
             FileSaved += HandleFileSaved;
+            
+            /* Handling the already existing backup jobs (if they exist) */
+            
+            // Checking if the State logging file exists
+            var stateFile = Program.LogsDirectoryPath + @"\state.json";
+            if (File.Exists(stateFile) & new FileInfo(stateFile).Length != 0)
+            {
+                
+                // Deserialize the Json to access its value through Job Class
+                string jsonContent = File.ReadAllText(stateFile);
+                var content = JsonConvert.DeserializeObject<List<Job>>(jsonContent);
+
+                foreach (var jobInfo in content)
+                {
+                    // When the job is not taken account of -> we ignore it because it's not a Job anymore 
+                    if (jobInfo.State == JobState.Retired) { continue; }
+                    
+                    // Construct a new Job with the available data in the json and append it to the Jobs List
+                    var job = new Job(jobInfo.Name, jobInfo.State, jobInfo.SourceFilePath, jobInfo.TargetFilePath, 
+                        jobInfo.TotalFilesToCopy, jobInfo.NbFilesLeftToDo);
+                    
+                    Jobs.Add(job);
+                }
+                
+            }
+            
         }
 
         private void HandleFileSaved(object sender, string fileName)
@@ -59,11 +86,11 @@ namespace EasySave.Controllers
         // Méthode pour modifier un travail de sauvegarde existant
         public void EditJob(string nom, string source, string destination, BackupType backupType)
         {
-            Job existingJob = Jobs.FirstOrDefault(job => job.BackupName == nom);
+            Job existingJob = Jobs.FirstOrDefault(job => job.Name == nom);
             if (existingJob != null)
             {
-                existingJob.Source = source;
-                existingJob.Destination = destination;
+                existingJob.SourceFilePath = source;
+                existingJob.TargetFilePath = destination;
                 existingJob.BackupType = backupType;
             }
             else
@@ -73,12 +100,13 @@ namespace EasySave.Controllers
         }
 
         // Méthode pour supprimer un travail de sauvegarde
-        public void DeleteJob(string nom)
+        public void DeleteJob(string name)
         {
-            Job backupJobToDelete = Jobs.FirstOrDefault(job => job.BackupName == nom);
-            if (backupJobToDelete != null)
+            Job job = Jobs.FirstOrDefault(job => job.Name == name);
+            if (job != null)
             {
-                Jobs.Remove(backupJobToDelete);
+                job.State = JobState.Retired;
+                Jobs.Remove(job);
                 Console.WriteLine("Le travail de sauvegarde a été supprimé avec succès.");
             }
             else
@@ -186,7 +214,7 @@ namespace EasySave.Controllers
             foreach (var travail in this.GetJobs())
             {
                 Console.WriteLine(
-                    $" ({i}) - {translation.Messages.EnterBackupName} : {travail.BackupName}, {translation.Messages.SourceDirectory} : {travail.Source}, {translation.Messages.DestinationDirectory} : {travail.Destination}, {translation.Messages.ChooseBackupType} {travail.BackupType}");
+                    $" ({i}) - {translation.Messages.EnterBackupName} : {travail.Name}, {translation.Messages.SourceDirectory} : {travail.SourceFilePath}, {translation.Messages.DestinationDirectory} : {travail.TargetFilePath}, {translation.Messages.ChooseBackupType} {travail.BackupType}");
                 i++;
             }
             
@@ -204,10 +232,10 @@ namespace EasySave.Controllers
         public void RemoveJob(JobsController jobsController, Logger logger)
         {
             Console.Write("Nom du travail de sauvegarde à supprimer : ");
-            string nomTravail = Console.ReadLine();
+            string jobName = Console.ReadLine();
             
-            jobsController.DeleteJob(nomTravail);
-            logger.LogAction(nomTravail, "", "", 0, TimeSpan.Zero);
+            jobsController.DeleteJob(jobName);
+            logger.LogAction(jobName, "", "", 0, TimeSpan.Zero);
         }
         static bool PatternRegEx(string text, Regex pattern)
         {

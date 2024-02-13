@@ -11,7 +11,7 @@ namespace EasySave.Library
         private readonly JobsController _jobsController;
         private readonly Logger _logger;
         private readonly TranslationManager _translationManager;
-        public TranslationModel _translation; // Champ de classe pour stocker la traduction
+        private TranslationModel _translation; // Champ de classe pour stocker la traduction
 
         public Menu(TranslationController translationController, JobsController jobsController, Logger logger, TranslationManager translationManager)
         {
