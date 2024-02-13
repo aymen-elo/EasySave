@@ -64,6 +64,7 @@ namespace EasySave.Library
         private void Options()
         {
             _translationController.Run();
+            _translation = _translationManager.LoadTranslation(_translationController.Language);
         }
 
         private void ManageJobs()
