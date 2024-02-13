@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 using EasySave.Controllers;
 using EasySave.Models;
@@ -11,23 +7,75 @@ namespace EasySave.Library
 {
     public class Menu
     {
-        public Menu() { }
-        
-        public void Options(TranslationController translationController)
+       private readonly TranslationController _translationController;
+        private readonly JobsController _jobsController;
+        private readonly Logger _logger;
+        private readonly TranslationManager _translationManager;
+        private TranslationModel _translation; // Champ de classe pour stocker la traduction
+
+        public Menu(TranslationController translationController, JobsController jobsController, Logger logger, TranslationManager translationManager)
         {
-            translationController.Run();
+            _translationController = translationController;
+            _jobsController = jobsController;
+            _logger = logger;
+            _translationManager = translationManager;
         }
 
-        public void ManageJobs(JobsController jobsController, Logger logger)
+        public void Run()
+        {
+            _translationController.Run();
+            _translation = _translationManager.LoadTranslation(_translationController.Language); // Assigner la traduction au champ de classe
+
+            bool continuer = true;
+            while (continuer)
+            {
+                Console.Clear();
+                Console.WriteLine(_translation.Menu.PrincipalMenu);
+                Console.WriteLine($"1. {_translation.Menu.Option}");
+                Console.WriteLine($"2. {_translation.Menu.BackupManage}");
+                Console.WriteLine($"3. {_translation.Menu.DoBackup}");
+                Console.WriteLine($"4. {_translation.Menu.Quit}");
+
+                Console.Write("Choix : ");
+                string choice = Console.ReadLine();
+
+                switch (choice)
+                {
+                    case "1":
+                        Options();
+                        break;
+                    case "2":
+                        ManageJobs();
+                        break;
+                    case "3":
+                        break;
+                    case "4":
+                        continuer = false;
+                        break;
+                    default:
+                        Console.WriteLine(_translation.Messages.InvalidChoice);
+                        break;
+                }
+            }
+
+            _logger.DisplayLog();
+        }
+
+        private void Options()
+        {
+            _translationController.Run();
+        }
+
+        private void ManageJobs()
         {
             bool continuer = true;
             while (continuer)
             {
-                Console.WriteLine("Gestion des sauvegardes :");
-                Console.WriteLine("1. Ajouter un travail de sauvegarde");
-                Console.WriteLine("2. Modifier un travail de sauvegarde");
-                Console.WriteLine("3. Supprimer un travail de sauvegarde");
-                Console.WriteLine("4. Retour au menu principal");
+                Console.WriteLine(_translation.Menu.BackupManage);
+                Console.WriteLine($"1. {_translation.Menu.AddBackupJob}");
+                Console.WriteLine($"2. {_translation.Menu.EditBackupJob}");
+                Console.WriteLine($"3. {_translation.Menu.DeleteBackupJob}");
+                Console.WriteLine($"4. {_translation.Menu.ReturnToMainMenu}");
 
                 Console.Write("Choix : ");
                 string choix = Console.ReadLine();
@@ -35,28 +83,24 @@ namespace EasySave.Library
                 switch (choix)
                 {
                     case "1":
-                        // Ajouter un travail de sauvegarde
-                        AddJob(jobsController, logger);
+                        AddJob(_jobsController, _logger);
                         break;
                     case "2":
-                        // Modifier un travail de sauvegarde
-                        EditJob(jobsController);
                         break;
                     case "3":
-                        // Supprimer un travail de sauvegarde
-                        RemoveJob(jobsController, logger);
+                        RemoveJob(_jobsController, _logger);
                         break;
                     case "4":
                         continuer = false;
                         break;
                     default:
-                        Console.WriteLine("Choix invalide. Veuillez réessayer.");
+                        Console.WriteLine(_translation.Messages.InvalidChoice);
                         break;
                 }
             }
         }
         
-        static void AddJob(JobsController jobsController, Logger logger)
+         void AddJob(JobsController jobsController, Logger logger)
         {
             Console.Clear();
             // Demander à l'utilisateur de saisir les informations pour ajouter un travail de sauvegarde
@@ -91,13 +135,13 @@ namespace EasySave.Library
 
             // Demander le type de sauvegarde à l'utilisateur
             Console.WriteLine("Type de sauvegarde :");
-            Console.WriteLine("1. Complet");
-            Console.WriteLine("2. Différentiel");
-            Console.Write("Choix : ");
+            Console.WriteLine($"1. {_translation.Messages.CompleteBackup}");
+            Console.WriteLine($"2. {_translation.Messages.DifferentialBackup}");
+            Console.Write(_translation.Messages.Choice);
             string choixType = Console.ReadLine();
 
             // Convertir le choix de l'utilisateur en type de sauvegarde
-            string type = choixType == "1" ? "complet" : choixType == "2" ? "différentiel" : null;
+            string type = choixType == "1" ? (_translation.Messages.CompleteBackup) : choixType == "2" ? (_translation.Messages.DifferentialBackup) : null;
 
             if (type != null)
             {
@@ -119,14 +163,14 @@ namespace EasySave.Library
             }
             else
             {
-                Console.WriteLine("Choix de type invalide. Veuillez saisir '1' pour complet ou '2' pour différentiel.");
+                Console.WriteLine(_translation.Messages.InvalidTypeChoice);
             }
         }
 
 
-        static void DisplayJobs(JobsController jobsController)
+         void DisplayJobs(JobsController jobsController)
         {
-            Console.WriteLine("Liste des travaux de sauvegarde :");
+            Console.WriteLine(_translation.Messages.ListBackupJobs);
             foreach (var travail in jobsController.GetJobs())
             {
                 Console.WriteLine(

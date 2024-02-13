@@ -15,49 +15,16 @@ namespace EasySave
         public static string LogsDirectoryPath = @"C:\Prosoft\EasySave\Logs";
         static void Main(string[] args)
         {
+            // Initialisation des composants
             var logger = Logger.GetInstance();
             var jobsController = new JobsController(logger);
             var translationController = new TranslationController();
-            var menu = new Menu();
             var translationManager = new TranslationManager();
+            var menu = new Menu(translationController, jobsController, logger, translationManager);
 
-            translationController.Run();
-
-            TranslationModel translation = translationManager.LoadTranslation(translationController.Language);
-
-            bool continuer = true;
-            while (continuer)
-            {
-                Console.Clear();
-                Console.WriteLine(translation.Menu.PrincipalMenu);
-                Console.WriteLine($"1. {translation.Menu.Option}");
-                Console.WriteLine($"2. {translation.Menu.BackupManage}");
-                Console.WriteLine($"3. {translation.Menu.DoBackup}");
-                Console.WriteLine($"4. {translation.Menu.Quit}");
-
-                Console.Write("Choix : ");
-                string choice = Console.ReadLine();
-
-                switch (choice)
-                {
-                    case "1":
-                        menu.Options(translationController);
-                        break;
-                    case "2":
-                        menu.ManageJobs(jobsController, logger);
-                        break;
-                    case "3":
-                        break;
-                    case "4":
-                        continuer = false;
-                        break;
-                    default:
-                        Console.WriteLine(translation.Messages.InvalidChoice);
-                        break;
-                }
-                
-            }
-            logger.DisplayLog();
+            // Exécution du menu
+            menu.Run();
+        
         }
     }
 }

@@ -27,7 +27,10 @@
     "CompleteBackup": "Complete",
     "DifferentialBackup": "Differential",
     "ContinuePrompt": "Do you want to continue? (y/n): ",
-    "InvalidResponse": "Invalid response. Please enter 'y' for Yes or 'n' for No."
+    "InvalidResponse": "Invalid response. Please enter 'y' for Yes or 'n' for No.",
+    "Choice": "Choice : ",
+    "ListBackupJobs" : "List of backup jobs :"
+
   },
   
   "JobsController": {

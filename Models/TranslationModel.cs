@@ -38,6 +38,8 @@ namespace EasySave.Models
         public string DifferentialBackup { get; set; }
         public string ContinuePrompt { get; set; }
         public string InvalidResponse { get; set; }
+         public string ListBackupJobs { get; set; }
+        public string Choice { get; set; }
     }
     public class JobsControllerTranslations
     {

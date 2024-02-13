@@ -27,7 +27,9 @@
     "CompleteBackup": "Complet",
     "DifferentialBackup": "Différentiel",
     "ContinuePrompt": "Voulez-vous continuer ? (o/n): ",
-    "InvalidResponse": "Réponse invalide. Veuillez saisir 'o' pour Oui ou 'n' pour Non."
+    "InvalidResponse": "Réponse invalide. Veuillez saisir 'o' pour Oui ou 'n' pour Non.",
+    "Choice": "Choix : ",
+    "ListBackupJobs" : "Liste des travaux de sauvegarde :"
   },
 
   "JobsController": {
