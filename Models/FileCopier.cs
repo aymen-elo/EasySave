@@ -13,13 +13,10 @@ namespace EasySave.Models
         private Logger _logger = Logger.GetInstance();
         private readonly IdentityManager _identity = new IdentityManager();
         private FileGetter _fileGetter = new FileGetter();
-        private readonly Menu _menu;
+
         
-        public FileCopier(Menu menu)
-        {
-            _menu = menu;
-        }
-        public void CopyDirectory(Job job)
+        public FileCopier() { }
+        public void CopyDirectory(Job job, TranslationModel translation)
         {
             List<string> allFiles = _fileGetter.GetAllFiles(job.Source);
             HashSet<string> loadedHashes = _identity.LoadAllowedHashes(job.BackupName);
@@ -32,11 +29,11 @@ namespace EasySave.Models
             // Copy suivant type de sauvegarde
             if (job.BackupType == BackupType.Diff)
             {
-                CopyDiff(job, allFiles, allowedHashes, loadedHashes);
+                CopyDiff(job, allFiles, allowedHashes, loadedHashes, translation);
             }
             else
             {
-                CopyFull(job, allFiles, allowedHashes);
+                CopyFull(job, allFiles, allowedHashes, translation);
             }
         
             // Fin Minuteur + stockage des données
@@ -44,11 +41,11 @@ namespace EasySave.Models
             job.State = JobState.Finished;
         }
 
-        private void CopyDiff(Job job, List<string> allFiles, HashSet<string> allowedHashes, HashSet<string> loadedHashes)
+        private void CopyDiff(Job job, List<string> allFiles, HashSet<string> allowedHashes, HashSet<string> loadedHashes, TranslationModel translation)
         {
             
-            string message = _menu._translation.FileCopier.WarningMessage;
-            bool warningAccepted = CopyWarning(message);
+            string message = translation.FileCopier.WarningMessage; //
+            bool warningAccepted = CopyWarning(message, translation);
             long savedFileSize = 0;
             
             // Calcul Taille Dir
@@ -112,10 +109,10 @@ namespace EasySave.Models
             }
         }
 
-        private void CopyFull (Job job, List<string> allFiles, HashSet<string> allowedHashes)
+        private void CopyFull (Job job, List<string> allFiles, HashSet<string> allowedHashes, TranslationModel translation)
         {
-            string message = (_menu._translation.FileCopier.WarningMessage);
-            bool warningAccepted = CopyWarning(message);
+            string message = (translation.FileCopier.WarningMessage); //
+            bool warningAccepted = CopyWarning(message, translation);
             if (warningAccepted == true)
             {
                 Stopwatch stopWatch = new Stopwatch();
@@ -164,12 +161,12 @@ namespace EasySave.Models
             }
         }
 
-        private bool CopyWarning(string message)
+        private bool CopyWarning(string message, TranslationModel translation)
         {
             Console.WriteLine(message);
 
             // Demander à l'utilisateur de continuer
-            Console.Write(_menu._translation.FileCopier.Continue);
+            Console.Write(translation.FileCopier.Continue); //
             string response = Console.ReadLine();
 
             // Vérifier la réponse de l'utilisateur
@@ -183,8 +180,8 @@ namespace EasySave.Models
             }
             else
             {
-                Console.WriteLine(_menu._translation.FileCopier.InvalidResponseFileCopier);
-                return CopyWarning(message);
+                Console.WriteLine(translation.FileCopier.InvalidResponseFileCopier);
+                return CopyWarning(message, translation);
             }
         }
     }

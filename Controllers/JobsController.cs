@@ -16,6 +16,7 @@ namespace EasySave.Controllers
         private Logger _logger;
         
         public event EventHandler<string> FileSaved;
+        private FileCopier _fileCopier;
 
         public JobsController(Logger logger)
         {
@@ -147,8 +148,8 @@ namespace EasySave.Controllers
                 logger.LogAction(name, source, destination, 0, TimeSpan.Zero);
 
                 // Copier les fichiers en utilisant FileCopier
-                var fileCopier = new FileCopier(menu);
-                fileCopier.CopyDirectory(job);
+                var fileCopier = new FileCopier();
+                fileCopier.CopyDirectory(job, translation);
 
                 // Afficher la liste des travaux de sauvegarde après l'ajout
                 DisplayJobs(translation);
@@ -161,6 +162,7 @@ namespace EasySave.Controllers
 
         public void LaunchJob(Job job)
         {
+            
         }
 
         public void LaunchAllJobs()
