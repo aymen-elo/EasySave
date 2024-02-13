@@ -2,6 +2,7 @@
   "Menu" : {
     "PrincipalMenu": "Menu principal",
     "Option": "Option",
+    "DisplayJobs": "Afficher les sauvegardes",
     "BackupManage": "Gestion des sauvegardes",
     "DoBackup": "Effectuer des sauvegardes",
     "Quit": "Quitter",

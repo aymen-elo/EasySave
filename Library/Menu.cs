@@ -64,6 +64,7 @@ namespace EasySave.Library
         private void Options()
         {
             _translationController.Run();
+            _translation = _translationManager.LoadTranslation(_translationController.Language);
         }
 
         private void ManageJobs()
@@ -72,7 +73,7 @@ namespace EasySave.Library
             while (continuer)
             {
                 Console.WriteLine(_translation.Menu.BackupManage);
-                Console.WriteLine($"0. Display all Backup Jobs");
+                Console.WriteLine($"0. {_translation.Menu.DisplayJobs}");
                 Console.WriteLine($"1. {_translation.Menu.AddBackupJob}");
                 Console.WriteLine($"2. {_translation.Menu.EditBackupJob}");
                 Console.WriteLine($"3. {_translation.Menu.DeleteBackupJob}");

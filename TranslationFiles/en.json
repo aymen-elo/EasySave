@@ -2,6 +2,7 @@
   "Menu" : {
     "PrincipalMenu": "Main Menu",
     "Option": "Option",
+    "DisplayJobs": "Display all Backup Jobs",
     "BackupManage": "Backup Management",
     "DoBackup": "Perform Backup",
     "Quit": "Quit",
