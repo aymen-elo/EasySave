@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -20,7 +21,12 @@ namespace EasySave.Controllers
             Jobs = new List<Job>();
             this._logger = logger;
             Initialize();
-
+            
+            
+            /* Jobs List outside of app lifecycle */
+            
+            // TODO : Check state.json for job
+            
             // abonnement  à l'événement FileSaved du BackupManager
             FileSaved += HandleFileSaved;
         }
@@ -78,11 +84,6 @@ namespace EasySave.Controllers
                 Console.WriteLine("Le travail de sauvegarde spécifié n'existe pas.");
             }
         }
-
-        internal void AddJob(Job nouveauTravailSauvegarde)
-        {
-            Jobs.Add(nouveauTravailSauvegarde);
-        }
         
         public void AddJob(Logger logger, TranslationModel translation)
         {
@@ -136,20 +137,12 @@ namespace EasySave.Controllers
             if (type != null)
             {
                 // Créer un objet BackupJob avec les informations saisies
-                var nouveauTravailSauvegarde = new Job(name, BackupType.Full, source, destination);
+                var job = new Job(name, BackupType.Full, source, destination);
 
                 // Ajouter le travail de sauvegarde en appelant la méthode correspondante du contrôleur
-                this.AddJob(nouveauTravailSauvegarde);
-
-                // Logger l'action effectuée en utilisant l'instance de Logger stockée dans jobsController
-                logger.LogAction(name, source, destination, 0, 0);
-
-                // Copier les fichiers en utilisant FileCopier
-                var fileCopier = new FileCopier();
-                fileCopier.CopyDirectory(nouveauTravailSauvegarde);
-
-                // Afficher la liste des travaux de sauvegarde après l'ajout
-                DisplayJobs(translation);
+                Jobs.Add(job);
+                
+                
             }
             else
             {
@@ -157,15 +150,38 @@ namespace EasySave.Controllers
             }
         }
 
+        public void LaunchJob(Job job)
+        {
+        }
+
+        public void LaunchAllJobs()
+        {
+            foreach (var job in Jobs)
+            {
+                LaunchJob(job);
+            }
+        }
 
         public void DisplayJobs(TranslationModel translation)
         {
             Console.WriteLine(translation.Messages.ListBackupJobs);
+
+            if (Jobs.Count == 0)
+            {
+                Console.WriteLine("<Aucun travail de sauvegarde disponible>");
+            }
+
+            int i = 0;
             foreach (var travail in this.GetJobs())
             {
                 Console.WriteLine(
-                    $"Nom : {travail.BackupName}, Répertoire source : {travail.Source}, Répertoire cible : {travail.Destination}, Type : {travail.BackupType}");
+                    $" ({i}) - Nom : {travail.BackupName}, Répertoire source : {travail.Source}, Répertoire cible : {travail.Destination}, Type : {travail.BackupType}");
+                i++;
             }
+            
+            Console.WriteLine("\nAppuyer sur une touche pour revenir au menu de sauvegarde...");
+            Console.ReadKey();
+            Console.Clear();
         }
 
         public static void EditJob(JobsController jobsController)

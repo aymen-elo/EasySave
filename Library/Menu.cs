@@ -72,6 +72,7 @@ namespace EasySave.Library
             while (continuer)
             {
                 Console.WriteLine(_translation.Menu.BackupManage);
+                Console.WriteLine($"0. Display all Backup Jobs");
                 Console.WriteLine($"1. {_translation.Menu.AddBackupJob}");
                 Console.WriteLine($"2. {_translation.Menu.EditBackupJob}");
                 Console.WriteLine($"3. {_translation.Menu.DeleteBackupJob}");
@@ -82,6 +83,9 @@ namespace EasySave.Library
 
                 switch (choix)
                 {
+                    case "0":
+                        _jobsController.DisplayJobs(_translation);
+                        break;
                     case "1":
                         _jobsController.AddJob(_logger, _translation);
                         break;
