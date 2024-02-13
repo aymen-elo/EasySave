@@ -86,14 +86,14 @@ namespace EasySave.Models
                         long fileSize = new System.IO.FileInfo(targetFilePath).Length;
 
                         // Loguer l'action
-                        _logger.LogAction(job.BackupName, file, targetFilePath, fileSize, stopWatch.Elapsed.TotalSeconds);
+                        _logger.LogAction(job.BackupName, file, targetFilePath, fileSize, stopWatch.Elapsed);
 
                         job.State = JobState.Active;
                         Console.WriteLine(fileSize);
                     }
                     else 
                     {
-                        _logger.LogAction("Existe déjà" + job.BackupName, file, "", 0, 0);
+                        _logger.LogAction("Existe déjà" + job.BackupName, file, "", 0, TimeSpan.Zero);
 
                     }
 
@@ -144,9 +144,10 @@ namespace EasySave.Models
                     long fileSize = new System.IO.FileInfo(targetFilePath).Length;
 
                     // Loguer l'action
-                    _logger.LogAction(job.BackupName, file, targetFilePath, fileSize, stopWatch.Elapsed.TotalSeconds);
+                    _logger.LogAction(job.BackupName, file, targetFilePath, fileSize, stopWatch.Elapsed);
 
                     job.State = JobState.Active;
+                    _logger.LogState(job.BackupName, job.Source, job.Destination, job.State, job.NbTotalFiles, fileSize, (job.NbTotalFiles - job.NbSavedFiles),((job.NbSavedFiles*100)/job.NbTotalFiles));
                 }
 
                 // Sauvegarder les hashes autorisés

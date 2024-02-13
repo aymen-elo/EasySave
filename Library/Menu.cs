@@ -87,7 +87,7 @@ namespace EasySave.Library
                         _jobsController.DisplayJobs(_translation);
                         break;
                     case "1":
-                        _jobsController.AddJob(_logger, _translation);
+                        _jobsController.AddJob(_logger, _translation, this);
                         break;
                     case "2":
                         break;

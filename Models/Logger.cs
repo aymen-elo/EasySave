@@ -24,8 +24,9 @@ namespace EasySave.Models
             string statePath = _path + @"\state.json";
             if (!File.Exists(logPath))
             {
-                File.Create(logPath);
+                File.Create(logPath).Close();
             }
+
             if (!File.Exists(statePath))
             {
                 File.Create(statePath).Close();
@@ -41,7 +42,8 @@ namespace EasySave.Models
             return instance;
         }
 
-        public void LogAction(string name, string fileSource, string fileTarget, long fileSize, double fileTransferTime)
+        public void LogAction(string name, string fileSource, string fileTarget, long fileSize,
+            TimeSpan fileTransferTime)
         {
             string logMessage = $"{{\n" +
                                 $" \"Name\": \"{name}\",\n" +
@@ -53,6 +55,70 @@ namespace EasySave.Models
                                 $" }}";
             File.AppendAllText(_path + @"\log_journalier.json", logMessage + Environment.NewLine);
         }
+        
+        
+        public void LogState(string name, string sourcePath, string targetPath, JobState state, long nbFileToCopy,
+            long fileSize, long nbFileLeftToDo, int progression)
+        {
+            string statePath = _path + @"\state.json";
+
+            sourcePath = sourcePath.Replace("\\", "\\\\");
+            targetPath = targetPath.Replace("\\", "\\\\");
+
+            string jsonContent = File.ReadAllText(statePath);
+
+            if (File.Exists(statePath))
+            {
+                if (jsonContent != string.Empty)
+                {
+                    JArray jsonArray = JArray.Parse(jsonContent);
+                    JObject jobEntry = jsonArray.Children<JObject>()
+                        .FirstOrDefault(obj => obj["Name"]?.ToString() == name);
+
+                    if (jobEntry != null)
+                    {
+                        jobEntry["SourceFilePath"] = sourcePath;
+                        jobEntry["TargetFilePath"] = targetPath;
+                        jobEntry["State"] = state.ToString();
+                        jobEntry["TotalFilesToCopy"] = nbFileToCopy;
+                        jobEntry["TotalFilesSize"] = fileSize;
+                        jobEntry["NbFilesLeftToDo"] = nbFileLeftToDo;
+                        jobEntry["Progression"] = progression;
+                    }
+                    else
+                    {
+                        JObject newJob = CreateJobObject(name, sourcePath, targetPath, state, nbFileToCopy, fileSize,
+                            nbFileLeftToDo, progression);
+                        jsonArray.Add(newJob);
+                    }
+
+                    File.WriteAllText(statePath, JsonConvert.SerializeObject(jsonArray, Formatting.Indented));
+                }
+                else
+                {
+                    JArray jsonArray = new JArray();
+                    JObject newJob = CreateJobObject(name, sourcePath, targetPath, state, nbFileToCopy, fileSize,
+                        nbFileLeftToDo, progression);
+                    jsonArray.Add(newJob);
+                    File.WriteAllText(statePath, JsonConvert.SerializeObject(jsonArray, Formatting.Indented));
+                }
+            }
+        }
+
+        private JObject CreateJobObject(string name, string sourcePath, string targetPath, JobState state, long nbFileToCopy,
+            long fileSize, long nbFileLeftToDo, int progression)
+        {
+            JObject jobObject = new JObject();
+            jobObject["Name"] = name;
+            jobObject["SourceFilePath"] = sourcePath;
+            jobObject["TargetFilePath"] = targetPath;
+            jobObject["State"] = state.ToString();
+            jobObject["TotalFilesToCopy"] = nbFileToCopy;
+            jobObject["TotalFilesSize"] = fileSize;
+            jobObject["NbFilesLeftToDo"] = nbFileLeftToDo;
+            jobObject["Progression"] = progression;
+            return jobObject; 
+        } 
 
         public void DisplayLog()
         {

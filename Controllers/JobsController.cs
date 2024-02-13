@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using EasySave.Library;
 using EasySave.Models;
 
 namespace EasySave.Controllers
@@ -43,7 +44,7 @@ namespace EasySave.Controllers
 
         private void HandleFileSaved(object sender, string fileName)
         {
-            _logger.LogAction(fileName, "", "", 0, 0);
+            _logger.LogAction(fileName, "", "", 0, TimeSpan.Zero);
         }
 
         // Méthode pour créer un travail de sauvegarde
@@ -85,7 +86,7 @@ namespace EasySave.Controllers
             }
         }
         
-        public void AddJob(Logger logger, TranslationModel translation)
+        public void AddJob(Logger logger, TranslationModel translation, Menu menu)
         {
             Console.Clear();
             
@@ -142,7 +143,15 @@ namespace EasySave.Controllers
                 // Ajouter le travail de sauvegarde en appelant la méthode correspondante du contrôleur
                 Jobs.Add(job);
                 
-                
+                // Logger l'action effectuée en utilisant l'instance de Logger stockée dans jobsController
+                logger.LogAction(name, source, destination, 0, TimeSpan.Zero);
+
+                // Copier les fichiers en utilisant FileCopier
+                var fileCopier = new FileCopier(menu);
+                fileCopier.CopyDirectory(job);
+
+                // Afficher la liste des travaux de sauvegarde après l'ajout
+                DisplayJobs(translation);
             }
             else
             {
@@ -196,7 +205,7 @@ namespace EasySave.Controllers
             string nomTravail = Console.ReadLine();
             
             jobsController.DeleteJob(nomTravail);
-            logger.LogAction(nomTravail, "", "", 0, 0);
+            logger.LogAction(nomTravail, "", "", 0, TimeSpan.Zero);
         }
         static bool PatternRegEx(string text, Regex pattern)
         {
