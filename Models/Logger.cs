@@ -16,9 +16,10 @@ namespace EasySave.Models
                 Directory.CreateDirectory(_path);
             }
 
-            if (!File.Exists(Path.Combine(_path, @"\log_journalier.json")))
+            if (!File.Exists(_path + @"\log_journalier.json"))
             {
-                File.Create(Path.Combine(_path, @"\log_journalier.json"));
+                Console.WriteLine("here");
+                File.Create(_path + @"\log_journalier.json");
             }
         }
         
