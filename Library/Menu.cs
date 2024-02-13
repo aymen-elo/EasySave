@@ -108,7 +108,7 @@ namespace EasySave.Library
                 jobsController.AddJob(nouveauTravailSauvegarde);
 
                 // Logger l'action effectuée en utilisant l'instance de Logger stockée dans jobsController
-                logger.LogAction(nom, repertoireSource, repertoireCible, 0, 0);
+                logger.LogAction(nom, repertoireSource, repertoireCible, 0, TimeSpan.Zero);
 
                 // Copier les fichiers en utilisant FileCopier
                 var fileCopier = new FileCopier();
@@ -151,7 +151,7 @@ namespace EasySave.Library
             jobsController.DeleteJob(nomTravail);
 
             // Logger l'action effectuée en utilisant l'instance de Logger passée en paramètre
-            logger.LogAction(nomTravail, "", "", 0, 0);
+            logger.LogAction(nomTravail, "", "", 0, TimeSpan.Zero);
         }
         static bool PatternRegEx(string text, Regex pattern)
         {
