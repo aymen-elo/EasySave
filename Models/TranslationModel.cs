@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace EasySave.Models
 {
     public class MenuTranslations
@@ -18,9 +13,15 @@ namespace EasySave.Models
         public string DeleteBackupJob { get; set; }
         public string ReturnToMainMenu { get; set; }
         public string ChooseOption { get; set; }
+    }
 
-        
-        
+    public class FileCopierTranslation
+    {
+        public string WarningMessage { get; set; }
+        public string InvalidResponseFileCopier { get; set; }
+        public string Continue { get; set; }
+        public string AlreadyExist { get; set; }
+
     }
 
     public class MessagesTranslations
@@ -30,6 +31,8 @@ namespace EasySave.Models
         public string BackupNotFound { get; set; }
         public string InvalidChoice { get; set; }
         public string InvalidTypeChoice { get; set; }
+        public string InvalidBackupDirectory { get; set; }
+        public string InvalidBackupName { get; set; }
         public string EnterBackupName { get; set; }
         public string EnterSourceDirectory { get; set; }
         public string EnterTargetDirectory { get; set; }
@@ -38,8 +41,14 @@ namespace EasySave.Models
         public string DifferentialBackup { get; set; }
         public string ContinuePrompt { get; set; }
         public string InvalidResponse { get; set; }
-         public string ListBackupJobs { get; set; }
+        public string ListBackupJobs { get; set; }
+        public string EnterJobNameToDelete { get; set; }
         public string Choice { get; set; }
+        public string JobDetails { get; set; }
+        public string DestinationDirectory { get; set; }
+        public string SourceDirectory { get; set; }
+
+
     }
     public class JobsControllerTranslations
     {
@@ -57,6 +66,8 @@ namespace EasySave.Models
         public MenuTranslations Menu { get; set; }
         public MessagesTranslations Messages { get; set; }
         public JobsControllerTranslations JobsController { get; set; }
+        public FileCopierTranslation FileCopier { get; set; }
+
         // Ajoutez d'autres propriétés si nécessaire pour d'autres traductions
     }
 }

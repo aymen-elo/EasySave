@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using EasySave.Library;
 
 namespace EasySave.Models
 {
@@ -12,6 +13,12 @@ namespace EasySave.Models
         private Logger _logger = Logger.GetInstance();
         private readonly IdentityManager _identity = new IdentityManager();
         private FileGetter _fileGetter = new FileGetter();
+        private readonly Menu _menu;
+        
+        public FileCopier(Menu menu)
+        {
+            _menu = menu;
+        }
         public void CopyDirectory(Job job)
         {
             List<string> allFiles = _fileGetter.GetAllFiles(job.Source);
@@ -40,7 +47,7 @@ namespace EasySave.Models
         private void CopyDiff(Job job, List<string> allFiles, HashSet<string> allowedHashes, HashSet<string> loadedHashes)
         {
             
-            string message = "Attention, les fichiers qui diffèrent dans la destination vont être supprimés.";
+            string message = _menu._translation.FileCopier.WarningMessage;
             bool warningAccepted = CopyWarning(message);
             long savedFileSize = 0;
             
@@ -79,14 +86,14 @@ namespace EasySave.Models
                         long fileSize = new System.IO.FileInfo(targetFilePath).Length;
 
                         // Loguer l'action
-                        _logger.LogAction(job.BackupName, file, targetFilePath, fileSize, stopWatch.Elapsed.TotalSeconds);
+                        _logger.LogAction(job.BackupName, file, targetFilePath, fileSize, stopWatch.Elapsed);
 
                         job.State = JobState.Active;
                         Console.WriteLine(fileSize);
                     }
-                    else
+                    else 
                     {
-                        _logger.LogAction("Existe déjà" + job.BackupName, file, "", 0, 0);
+                        _logger.LogAction((_menu._translation.FileCopier.AlreadyExist) + job.BackupName, file, "", 0, TimeSpan.Zero);
 
                     }
 
@@ -107,7 +114,7 @@ namespace EasySave.Models
 
         private void CopyFull (Job job, List<string> allFiles, HashSet<string> allowedHashes)
         {
-            string message = "Attention, les fichiers présents dans la destination vont être supprimés.";
+            string message = (_menu._translation.FileCopier.WarningMessage);
             bool warningAccepted = CopyWarning(message);
             if (warningAccepted == true)
             {
@@ -137,7 +144,7 @@ namespace EasySave.Models
                     long fileSize = new System.IO.FileInfo(targetFilePath).Length;
 
                     // Loguer l'action
-                    _logger.LogAction(job.BackupName, file, targetFilePath, fileSize, stopWatch.Elapsed.TotalSeconds);
+                    _logger.LogAction(job.BackupName, file, targetFilePath, fileSize, stopWatch.Elapsed);
 
                     job.State = JobState.Active;
                 }
@@ -161,7 +168,7 @@ namespace EasySave.Models
             Console.WriteLine(message);
 
             // Demander à l'utilisateur de continuer
-            Console.Write("Voulez-vous continuer ? (y/n): ");
+            Console.Write(_menu._translation.FileCopier.Continue);
             string response = Console.ReadLine();
 
             // Vérifier la réponse de l'utilisateur
@@ -175,7 +182,7 @@ namespace EasySave.Models
             }
             else
             {
-                Console.WriteLine("Réponse invalide. Veuillez saisir 'y' pour Oui ou 'n' pour Non.");
+                Console.WriteLine(_menu._translation.FileCopier.InvalidResponseFileCopier);
                 return CopyWarning(message);
             }
         }

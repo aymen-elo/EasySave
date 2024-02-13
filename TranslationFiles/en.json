@@ -20,6 +20,8 @@
     "BackupDeleted": "The backup job has been deleted successfully.",
     "InvalidChoice": "Invalid choice. Please try again.",
     "InvalidTypeChoice": "Invalid type choice. Please enter '1' for complete or '2' for differential.",
+    "InvalidBackupDirectory": "Error: Please enter a correct backup directory.",
+    "InvalidBackupName": "Error: Please enter a backup name composed of letters and/or numbers.",
     "EnterBackupName": "Backup Name: ",
     "EnterSourceDirectory": "Source Directory: ",
     "EnterTargetDirectory": "Target Directory: ",
@@ -29,8 +31,18 @@
     "ContinuePrompt": "Do you want to continue? (y/n): ",
     "InvalidResponse": "Invalid response. Please enter 'y' for Yes or 'n' for No.",
     "Choice": "Choice : ",
-    "ListBackupJobs" : "List of backup jobs :"
+    "ListBackupJobs" : "List of backup jobs :",
+    "JobDetails": "Name: {travail.BackupName}, Source Directory: {travail.Source}, Target Directory: {travail.Destination}, Type: {travail.BackupType}",
+    "EnterJobNameToDelete": "Enter the backup job name to delete: ",
+    "DestinationDirectory": "Destination directory: ",
+    "SourceDirectory": "Source directory: "
+  },
 
+  "FileCopier": {
+    "WarningMessage": "Warning, files that differ in the destination will be deleted.",
+    "InvalidResponseFileCopier": "Invalid response. Please enter 'y' for Yes or 'n' for No.",
+    "Continue": "Do you want to continue ? (y/n): ",
+    "AlreadyExist": "Already Exists"
   },
   
   "JobsController": {
