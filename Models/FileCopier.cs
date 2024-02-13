@@ -86,14 +86,14 @@ namespace EasySave.Models
                         long fileSize = new System.IO.FileInfo(targetFilePath).Length;
 
                         // Loguer l'action
-                        _logger.LogAction(job.BackupName, file, targetFilePath, fileSize, stopWatch.Elapsed);
+                        _logger.LogAction(job.BackupName, file, targetFilePath, fileSize, stopWatch.Elapsed.TotalSeconds);
 
                         job.State = JobState.Active;
                         Console.WriteLine(fileSize);
                     }
                     else 
                     {
-                        _logger.LogAction((_menu._translation.FileCopier.AlreadyExist) + job.BackupName, file, "", 0, TimeSpan.Zero);
+                        _logger.LogAction("Existe déjà" + job.BackupName, file, "", 0, 0);
 
                     }
 
@@ -144,7 +144,7 @@ namespace EasySave.Models
                     long fileSize = new System.IO.FileInfo(targetFilePath).Length;
 
                     // Loguer l'action
-                    _logger.LogAction(job.BackupName, file, targetFilePath, fileSize, stopWatch.Elapsed);
+                    _logger.LogAction(job.BackupName, file, targetFilePath, fileSize, stopWatch.Elapsed.TotalSeconds);
 
                     job.State = JobState.Active;
                 }

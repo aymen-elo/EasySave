@@ -43,7 +43,7 @@ namespace EasySave.Controllers
 
         private void HandleFileSaved(object sender, string fileName)
         {
-            _logger.LogAction(fileName, "", "", 0, TimeSpan.Zero);
+            _logger.LogAction(fileName, "", "", 0, 0);
         }
 
         // Méthode pour créer un travail de sauvegarde
@@ -92,40 +92,40 @@ namespace EasySave.Controllers
             
             /* Backup Name */
             Regex rg = new Regex(@"^[a-zA-Z0-9\s]*$");
-            Console.Write("Nom de sauvegarde : ");
+            Console.Write(translation.Messages.EnterBackupName);
 
             string name = Console.ReadLine();
             while (!PatternRegEx(name, rg))
             {
-                Console.WriteLine("Erreur : Veuillez écrire un nom de sauvegarde composé de lettres et/ou de chiffre");
+                Console.WriteLine(translation.Messages.InvalidBackupName);
                 Console.Write("Nom de sauvegarde : ");
                 name = Console.ReadLine();
             }
             
             /* Backup Source */ 
             rg = new Regex(@"^[a-zA-Z]:\\(?:[^<>:""/\\|?*]+\\)*[^<>:""/\\|?*]*$");
-            Console.Write("Répertoire source : ");
+            Console.Write(translation.Messages.SourceDirectory);
 
             string source = Console.ReadLine();
             while (!PatternRegEx(source, rg))
             {
-                Console.WriteLine("Erreur : Veuillez écrire un chemin de sauvegarde correct.");
-                Console.Write("Répertoire source : ");
+                Console.WriteLine(translation.Messages.InvalidBackupDirectory);
+                Console.Write(translation.Messages.SourceDirectory);
                 source = Console.ReadLine();
             }
             
             /* Backup Destination */
-            Console.Write("Répertoire cible : ");
+            Console.Write(translation.Messages.DestinationDirectory);
             string destination = Console.ReadLine();
             while (!PatternRegEx(destination, rg))
             {
-                Console.WriteLine("Erreur : Veuillez écrire un chemin de sauvegarde correct.");
-                Console.Write("Répertoire source : ");
+                Console.WriteLine(translation.Messages.InvalidBackupDirectory);
+                Console.Write(translation.Messages.DestinationDirectory);
                 destination = Console.ReadLine();
             }
 
             // Backup Type Choice
-            Console.WriteLine("Type de sauvegarde :");
+            Console.WriteLine(translation.Messages.ChooseBackupType);
             Console.WriteLine($"1. {translation.Messages.CompleteBackup}");
             Console.WriteLine($"2. {translation.Messages.DifferentialBackup}");
             Console.Write(translation.Messages.Choice);
@@ -168,14 +168,14 @@ namespace EasySave.Controllers
 
             if (Jobs.Count == 0)
             {
-                Console.WriteLine("<Aucun travail de sauvegarde disponible>");
+                Console.WriteLine(translation.Messages.EmptyJobsList);
             }
 
             int i = 0;
             foreach (var travail in this.GetJobs())
             {
                 Console.WriteLine(
-                    $" ({i}) - Nom : {travail.BackupName}, Répertoire source : {travail.Source}, Répertoire cible : {travail.Destination}, Type : {travail.BackupType}");
+                    $" ({i}) - {translation.Messages.EnterBackupName} : {travail.BackupName}, {translation.Messages.SourceDirectory} : {travail.Source}, {translation.Messages.DestinationDirectory} : {travail.Destination}, {translation.Messages.ChooseBackupType} {travail.BackupType}");
                 i++;
             }
             
@@ -192,15 +192,10 @@ namespace EasySave.Controllers
 
         public void RemoveJob(JobsController jobsController, Logger logger)
         {
-            // Implémenter la logique de suppression d'un travail de sauvegarde
-            // Utiliser les méthodes du contrôleur pour supprimer un travail existant
             Console.Write("Nom du travail de sauvegarde à supprimer : ");
             string nomTravail = Console.ReadLine();
-
-            // Supprimer le travail de sauvegarde en appelant la méthode correspondante du contrôleur
+            
             jobsController.DeleteJob(nomTravail);
-
-            // Logger l'action effectuée en utilisant l'instance de Logger passée en paramètre
             logger.LogAction(nomTravail, "", "", 0, 0);
         }
         static bool PatternRegEx(string text, Regex pattern)

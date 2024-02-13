@@ -35,7 +35,8 @@
     "JobDetails": "Name: {travail.BackupName}, Source Directory: {travail.Source}, Target Directory: {travail.Destination}, Type: {travail.BackupType}",
     "EnterJobNameToDelete": "Enter the backup job name to delete: ",
     "DestinationDirectory": "Destination directory: ",
-    "SourceDirectory": "Source directory: "
+    "SourceDirectory": "Source directory: ",
+    "EmptyJobsList" : "There are no backup jobs available"
   },
 
   "FileCopier": {
