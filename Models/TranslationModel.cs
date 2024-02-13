@@ -5,6 +5,9 @@ namespace EasySave.Models
     {
         public string PrincipalMenu { get; set; }
         public string Option { get; set; }
+        public string DisplayJobs { get; set; }
+
+        
         public string BackupManage { get; set; }
         public string DoBackup { get; set; }
         public string Quit { get; set; }
