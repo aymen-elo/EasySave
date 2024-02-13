@@ -20,6 +20,7 @@
     "BackupDeleted": "Le travail de sauvegarde a été supprimé avec succès.",
     "InvalidChoice": "Choix invalide. Veuillez réessayer.",
     "InvalidTypeChoice": "Choix de type invalide. Veuillez saisir '1' pour complet ou '2' pour différentiel.",
+    "InvalidBackupDirectory": "Erreur : Veuillez écrire un chemin de sauvegarde correct.",
     "EnterBackupName": "Nom de sauvegarde : ",
     "EnterSourceDirectory": "Répertoire source : ",
     "EnterTargetDirectory": "Répertoire cible : ",
@@ -29,10 +30,22 @@
     "ContinuePrompt": "Voulez-vous continuer ? (o/n): ",
     "InvalidResponse": "Réponse invalide. Veuillez saisir 'o' pour Oui ou 'n' pour Non.",
     "Choice": "Choix : ",
-    "ListBackupJobs" : "Liste des travaux de sauvegarde :"
+    "ListBackupJobs" : "Liste des travaux de sauvegarde :",
+    "JobDetails": "Nom : {travail.BackupName}, Répertoire source : {travail.Source}, Répertoire cible : {travail.Destination}, Type : {travail.BackupType}",
+    "EnterJobNameToDelete": "Nom du travail de sauvegarde à supprimer : ",
+    "DestinationDirectory": "Répertoire Cible : ",
+    "SourceDirectory": "Répertoire Source : ",
+    "InvalidBackupName": "Erreur : Veuillez écrire un nom de sauvegarde composé de lettres et/ou de chiffre"
+  },
+  
+  "FileCopier": {
+    "WarningMessage": "Attention, les fichiers qui diffèrent dans la destination vont être supprimés.",
+    "InvalidResponseFileCopier": "Réponse invalide. Veuillez saisir 'y' pour Oui ou 'n' pour Non.",
+    "Continue": "Voulez-vous continuer ? (y/n): ",
+    "AlreadyExist": "Existe déjà"
   },
 
-  "JobsController": {
+"JobsController": {
     "AddJob": "Ajouter un travail",
     "EditJob": "Modifier un travail",
     "DeleteJob": "Supprimer un travail",

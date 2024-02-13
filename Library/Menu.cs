@@ -7,11 +7,11 @@ namespace EasySave.Library
 {
     public class Menu
     {
-       private readonly TranslationController _translationController;
+        private readonly TranslationController _translationController;
         private readonly JobsController _jobsController;
         private readonly Logger _logger;
         private readonly TranslationManager _translationManager;
-        private TranslationModel _translation; // Champ de classe pour stocker la traduction
+        public TranslationModel _translation; // Champ de classe pour stocker la traduction
 
         public Menu(TranslationController translationController, JobsController jobsController, Logger logger, TranslationManager translationManager)
         {
@@ -104,37 +104,37 @@ namespace EasySave.Library
         {
             Console.Clear();
             // Demander à l'utilisateur de saisir les informations pour ajouter un travail de sauvegarde
-            Console.Write("Nom de sauvegarde : ");
+            Console.Write(_translation.Messages.EnterBackupName); 
             
             Regex rg = new Regex(@"^[a-zA-Z0-9\s]*$");
             string nom = Console.ReadLine();
             while (!PatternRegEx(nom, rg))
-            {
-                Console.WriteLine("Erreur : Veuillez écrire un nom de sauvegarde composé de lettres et/ou de chiffre");
-                Console.Write("Nom de sauvegarde : ");
+            { 
+                Console.WriteLine(_translation.Messages.InvalidBackupName);
+                Console.Write(_translation.Messages.EnterBackupName);
                 nom = Console.ReadLine();
             }
             
             rg = new Regex(@"^[a-zA-Z]:\\(?:[^<>:""/\\|?*]+\\)*[^<>:""/\\|?*]*$");
-            Console.Write("Répertoire source : ");
+            Console.Write(_translation.Messages.SourceDirectory); 
             string repertoireSource = Console.ReadLine();
             while (!PatternRegEx(repertoireSource, rg))
             {
-                Console.WriteLine("Erreur : Veuillez écrire un chemin de sauvegarde correct.");
-                Console.Write("Répertoire source : ");
+                Console.WriteLine(_translation.Messages.InvalidBackupDirectory);
+                Console.Write(_translation.Messages.SourceDirectory); 
                 repertoireSource = Console.ReadLine();
             }
-            Console.Write("Répertoire cible : ");
+            Console.Write(_translation.Messages.DestinationDirectory); 
             string repertoireCible = Console.ReadLine();
             while (!PatternRegEx(repertoireCible, rg))
             {
-                Console.WriteLine("Erreur : Veuillez écrire un chemin de sauvegarde correct.");
-                Console.Write("Répertoire source : ");
+                Console.WriteLine(_translation.Messages.InvalidBackupDirectory);
+                Console.Write(_translation.Messages.SourceDirectory); 
                 repertoireCible = Console.ReadLine();
             }
 
             // Demander le type de sauvegarde à l'utilisateur
-            Console.WriteLine("Type de sauvegarde :");
+            Console.WriteLine(_translation.Messages.ChooseBackupType);
             Console.WriteLine($"1. {_translation.Messages.CompleteBackup}");
             Console.WriteLine($"2. {_translation.Messages.DifferentialBackup}");
             Console.Write(_translation.Messages.Choice);
@@ -155,7 +155,7 @@ namespace EasySave.Library
                 logger.LogAction(nom, repertoireSource, repertoireCible, 0, 0);
 
                 // Copier les fichiers en utilisant FileCopier
-                var fileCopier = new FileCopier();
+                var fileCopier = new FileCopier(this);
                 fileCopier.CopyDirectory(nouveauTravailSauvegarde);
 
                 // Afficher la liste des travaux de sauvegarde après l'ajout
@@ -170,11 +170,11 @@ namespace EasySave.Library
 
          void DisplayJobs(JobsController jobsController)
         {
-            Console.WriteLine(_translation.Messages.ListBackupJobs);
-            foreach (var travail in jobsController.GetJobs())
-            {
-                Console.WriteLine(
-                    $"Nom : {travail.BackupName}, Répertoire source : {travail.Source}, Répertoire cible : {travail.Destination}, Type : {travail.BackupType}");
+            Console.WriteLine(_translation.Messages.ListBackupJobs); 
+            foreach (var travail in jobsController.GetJobs()) 
+            {  
+                Console.WriteLine($"{_translation.Messages.EnterBackupName} {travail.BackupName}, {_translation.Messages.EnterSourceDirectory} {travail.Source}, {_translation.Messages.EnterTargetDirectory} {travail.Destination}, {_translation.Messages.ChooseBackupType} {travail.BackupType}");
+
             }
         }
 
@@ -184,11 +184,11 @@ namespace EasySave.Library
             // Utiliser les méthodes du contrôleur pour modifier un travail existant
         }
 
-        static void RemoveJob(JobsController jobsController, Logger logger)
+         void RemoveJob(JobsController jobsController, Logger logger)
         {
             // Implémenter la logique de suppression d'un travail de sauvegarde
             // Utiliser les méthodes du contrôleur pour supprimer un travail existant
-            Console.Write("Nom du travail de sauvegarde à supprimer : ");
+            Console.Write(_translation.Messages.EnterJobNameToDelete);
             string nomTravail = Console.ReadLine();
 
             // Supprimer le travail de sauvegarde en appelant la méthode correspondante du contrôleur
