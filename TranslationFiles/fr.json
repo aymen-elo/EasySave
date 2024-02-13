@@ -35,7 +35,8 @@
     "EnterJobNameToDelete": "Nom du travail de sauvegarde à supprimer : ",
     "DestinationDirectory": "Répertoire Cible : ",
     "SourceDirectory": "Répertoire Source : ",
-    "InvalidBackupName": "Erreur : Veuillez écrire un nom de sauvegarde composé de lettres et/ou de chiffre"
+    "InvalidBackupName": "Erreur : Veuillez écrire un nom de sauvegarde composé de lettres et/ou de chiffre",
+    "EmptyJobsList" : "Aucun travail de sauvegarde disponible"
   },
   
   "FileCopier": {

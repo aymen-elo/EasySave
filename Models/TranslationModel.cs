@@ -47,8 +47,8 @@ namespace EasySave.Models
         public string JobDetails { get; set; }
         public string DestinationDirectory { get; set; }
         public string SourceDirectory { get; set; }
-
-
+        
+        public string EmptyJobsList { get; set; }
     }
     public class JobsControllerTranslations
     {

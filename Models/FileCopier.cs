@@ -93,7 +93,7 @@ namespace EasySave.Models
                     }
                     else 
                     {
-                        _logger.LogAction((_menu._translation.FileCopier.AlreadyExist) + job.BackupName, file, "", 0, TimeSpan.Zero);
+                        _logger.LogAction("Existe déjà" + job.BackupName, file, "", 0, TimeSpan.Zero);
 
                     }
 
@@ -147,6 +147,7 @@ namespace EasySave.Models
                     _logger.LogAction(job.BackupName, file, targetFilePath, fileSize, stopWatch.Elapsed);
 
                     job.State = JobState.Active;
+                    _logger.LogState(job.BackupName, job.Source, job.Destination, job.State, job.NbTotalFiles, fileSize, (job.NbTotalFiles - job.NbSavedFiles),((job.NbSavedFiles*100)/job.NbTotalFiles));
                 }
 
                 // Sauvegarder les hashes autorisés
