@@ -51,11 +51,13 @@ namespace EasySave.Models
 
             job.EndTime = DateTime.Now;
             job.State = JobState.Finished;
+            
         }
 
         private void CopyDiff(Job job, List<string> allFiles, HashSet<string> allowedHashes, HashSet<string> loadedHashes, TranslationModel translation)
         {
             DirectoryInfo diSource = new DirectoryInfo(job.SourceFilePath);
+            long totalFilesSize = _fileGetter.DirSize(diSource);
 
             foreach (string file in allFiles)
             {
@@ -75,7 +77,7 @@ namespace EasySave.Models
                     
                     File.Copy(file, targetFilePath, true);
                     
-                    EndFileCopy(job, targetFilePath, file, copyTime);
+                    EndFileCopy(job, targetFilePath, file, copyTime, totalFilesSize);
                 }
                 else
                 {
@@ -83,6 +85,9 @@ namespace EasySave.Models
                 }
             }
 
+            job.State = JobState.Finished;
+            _logger.LogState(job.Name, job.SourceFilePath, job.TargetFilePath, job.State, job.TotalFilesToCopy, totalFilesSize , (job.TotalFilesToCopy - job.NbSavedFiles), ((job.NbSavedFiles * 100) / job.TotalFilesToCopy));
+            
             _identity.DeleteAllowedHashes(job.Name);
             _identity.SaveAllowedHashes(allowedHashes, job.Name);
             _fileGetter.CompareAndDeleteDirectories(job.TargetFilePath, job.SourceFilePath);
@@ -90,6 +95,9 @@ namespace EasySave.Models
 
         private void CopyFull(Job job, List<string> allFiles, HashSet<string> allowedHashes, TranslationModel translation)
         {
+            DirectoryInfo diSource = new DirectoryInfo(job.SourceFilePath);
+            long totalFilesSize = _fileGetter.DirSize(diSource);
+            
             _fileGetter.CleanTarget(job.TargetFilePath);
 
             foreach (string file in allFiles)
@@ -107,9 +115,12 @@ namespace EasySave.Models
 
                 File.Copy(file, targetFilePath, true);
 
-                EndFileCopy(job, targetFilePath, file, copyTime);
+                EndFileCopy(job, targetFilePath, file, copyTime, totalFilesSize);
             }
-
+            
+            job.State = JobState.Finished;
+            _logger.LogState(job.Name, job.SourceFilePath, job.TargetFilePath, job.State, job.TotalFilesToCopy, totalFilesSize , (job.TotalFilesToCopy - job.NbSavedFiles), ((job.NbSavedFiles * 100) / job.TotalFilesToCopy));
+            
             _identity.DeleteAllowedHashes(job.Name);
             _identity.SaveAllowedHashes(allowedHashes, job.Name);
         }
@@ -131,8 +142,9 @@ namespace EasySave.Models
                 return CopyWarning(message, translation);
             }
         }
-        private void EndFileCopy(Job job, string targetFilePath, string file, Stopwatch copyTime)
+        private void EndFileCopy(Job job, string targetFilePath, string file, Stopwatch copyTime, long totalFilesSize)
         {
+            
             job.NbSavedFiles++;
 
             // TODO : JobID /!\
@@ -145,8 +157,8 @@ namespace EasySave.Models
 
             job.State = JobState.Active;
             job.Progression = ((job.NbSavedFiles * 100) / job.TotalFilesToCopy);
-
-            _logger.LogState(job.Name, job.SourceFilePath, job.TargetFilePath, job.State, job.TotalFilesToCopy, fileSize, (job.TotalFilesToCopy - job.NbSavedFiles), ((job.NbSavedFiles * 100) / job.TotalFilesToCopy));
+            
+            _logger.LogState(job.Name, job.SourceFilePath, job.TargetFilePath, job.State, job.TotalFilesToCopy, totalFilesSize , (job.TotalFilesToCopy - job.NbSavedFiles), ((job.NbSavedFiles * 100) / job.TotalFilesToCopy));
                     
             copyTime.Stop();
             copyTime.Reset();
