@@ -37,7 +37,10 @@
     "EnterJobNameToDelete": "Enter the backup job name to delete: ",
     "DestinationDirectory": "Destination directory: ",
     "SourceDirectory": "Source directory: ",
-    "EmptyJobsList" : "There are no backup jobs available"
+    "EmptyJobsList" : "There are no backup jobs available",
+    "LanguageUpdated": "Language updated successfully.",
+    "InvalidLanguage": "Invalid language choice.",
+    "ChooseLanguage":"Please choose a language (en/fr): "
   },
 
   "FileCopier": {

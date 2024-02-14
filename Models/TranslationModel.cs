@@ -1,6 +1,7 @@
 ﻿
 namespace EasySave.Models
 {
+    
     public class MenuTranslations
     {
         public string PrincipalMenu { get; set; }
@@ -52,6 +53,11 @@ namespace EasySave.Models
         public string SourceDirectory { get; set; }
         
         public string EmptyJobsList { get; set; }
+        public string LanguageUpdated { get; set; }
+        public string InvalidLanguage { get; set; }
+        public string ChooseLanguage { get; set; }
+
+        
     }
     public class JobsControllerTranslations
     {

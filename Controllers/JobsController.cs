@@ -180,9 +180,9 @@ namespace EasySave.Controllers
 
         public void LaunchJob(Job job, Logger logger, TranslationModel translation)
         {
-            if (job.State == JobState.Finished)
+            if (job.State == JobState.Finished || job.State == JobState.Pending)
             {
-                job.Progession = 0;
+                job.Progression = 0;
                 job.State = JobState.Active;
                 job.NbFilesLeftToDo = job.TotalFilesToCopy;
             }
@@ -192,12 +192,11 @@ namespace EasySave.Controllers
             var fileCopier = new FileCopier();
             fileCopier.CopyDirectory(job, translation);
             
-            if (job.Progession >= 100)
+            if (job.Progression >= 100)
             {
                 job.State = JobState.Finished;
             }
 
-            DisplayJobs(translation, logger);
         }
 
         public void LaunchAllJobs(Logger logger, TranslationModel translation)
@@ -254,16 +253,45 @@ namespace EasySave.Controllers
             foreach (var travail in this.GetJobs())
             {
                 Console.WriteLine(
-                    $" ({i}) - {translation.Messages.EnterBackupName} : {travail.Name}, {translation.Messages.SourceDirectory} : {travail.SourceFilePath}, {translation.Messages.DestinationDirectory} : {travail.TargetFilePath}, {translation.Messages.ChooseBackupType} {travail.BackupType}");
+                    $" ({i + 1}) - {translation.Messages.EnterBackupName} : {travail.Name}, {translation.Messages.SourceDirectory} : {travail.SourceFilePath}, {translation.Messages.DestinationDirectory} : {travail.TargetFilePath}, {translation.Messages.ChooseBackupType} {travail.BackupType}");
                 i++;
             }
-
-            Console.WriteLine("Choisir un job par indice :");
+            
             var choice = Console.ReadLine();
 
-            if (choice == "0")
+            /*Console.WriteLine("(0)   Lancer tous les travaux de sauvegarde");
+            Console.WriteLine("(P-D) Lancer les travaux dans l'intervalle [P-D]");
+            Console.WriteLine("(x,y) Lancer les travaux x et y (ou plus)");*/
+            
+            // Intervals
+            if (choice.Contains("-"))
             {
-                LaunchJob(Jobs[0], logger, translation);
+                var choiceArray = choice.Split("-");
+
+                int begin = int.Parse(choiceArray[0]);
+                int end = int.Parse(choiceArray[1]);
+
+                for (int k = begin; k <= end; k++)
+                {
+                    LaunchJob(Jobs[k-1], logger, translation);
+                }
+            }
+
+            // Specific Jobs
+            if (choice.Contains(","))
+            {
+                string[] choiceArrayStr = choice.Split(",");
+                int[] choiceArray = Array.ConvertAll(choiceArrayStr, int.Parse);
+
+                int it = 1;
+                foreach (var job in Jobs)
+                {
+                    if (choiceArray.Contains(it))
+                    {
+                        LaunchJob(job, logger, translation);
+                    }
+                    it++;
+                }
             }
             
             Console.WriteLine("\nAppuyer sur une touche pour revenir au menu de sauvegarde...");
