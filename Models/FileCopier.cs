@@ -12,7 +12,7 @@ namespace EasySave.Models
     {
         private Logger _logger = Logger.GetInstance();
         private readonly IdentityManager _identity = new IdentityManager();
-        private FileGetter _fileGetter = new FileGetter();
+        public FileGetter _fileGetter = new FileGetter();
         private ProgressBar _progressBar = new ProgressBar();
 
         public FileCopier() { }
@@ -86,7 +86,7 @@ namespace EasySave.Models
             }
 
             job.State = JobState.Finished;
-            _logger.LogState(job.Name, job.SourceFilePath, job.TargetFilePath, job.State, job.TotalFilesToCopy, totalFilesSize , (job.TotalFilesToCopy - job.NbSavedFiles), ((job.NbSavedFiles * 100) / job.TotalFilesToCopy));
+            _logger.LogState(job.Name, job.SourceFilePath, job.TargetFilePath, job.State, job.TotalFilesToCopy, totalFilesSize , (job.TotalFilesToCopy - job.NbSavedFiles), ((job.NbSavedFiles * 100) / job.TotalFilesToCopy), job.Name);
             
             _identity.DeleteAllowedHashes(job.Name);
             _identity.SaveAllowedHashes(allowedHashes, job.Name);
@@ -119,7 +119,7 @@ namespace EasySave.Models
             }
             
             job.State = JobState.Finished;
-            _logger.LogState(job.Name, job.SourceFilePath, job.TargetFilePath, job.State, job.TotalFilesToCopy, totalFilesSize , (job.TotalFilesToCopy - job.NbSavedFiles), ((job.NbSavedFiles * 100) / job.TotalFilesToCopy));
+            _logger.LogState(job.Name, job.SourceFilePath, job.TargetFilePath, job.State, job.TotalFilesToCopy, totalFilesSize , (job.TotalFilesToCopy - job.NbSavedFiles), ((job.NbSavedFiles * 100) / job.TotalFilesToCopy), job.Name);
             
             _identity.DeleteAllowedHashes(job.Name);
             _identity.SaveAllowedHashes(allowedHashes, job.Name);
@@ -158,7 +158,7 @@ namespace EasySave.Models
             job.State = JobState.Active;
             job.Progression = ((job.NbSavedFiles * 100) / job.TotalFilesToCopy);
             
-            _logger.LogState(job.Name, job.SourceFilePath, job.TargetFilePath, job.State, job.TotalFilesToCopy, totalFilesSize , (job.TotalFilesToCopy - job.NbSavedFiles), ((job.NbSavedFiles * 100) / job.TotalFilesToCopy));
+            _logger.LogState(job.Name, job.SourceFilePath, job.TargetFilePath, job.State, job.TotalFilesToCopy, totalFilesSize , (job.TotalFilesToCopy - job.NbSavedFiles), ((job.NbSavedFiles * 100) / job.TotalFilesToCopy), job.Name);
                     
             copyTime.Stop();
             copyTime.Reset();

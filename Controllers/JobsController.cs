@@ -11,6 +11,7 @@ using Newtonsoft.Json;
 
 namespace EasySave.Controllers
 {
+    public enum OperationType { Display, Perform, Remove, Edit}
     public class JobsController
     { 
         public List<Job> Jobs { get; private set; }
@@ -62,7 +63,7 @@ namespace EasySave.Controllers
                     
                     // Construct a new Job with the available data in the json and append it to the Jobs List
                     var job = new Job(jobInfo.Name, jobInfo.State, jobInfo.SourceFilePath, jobInfo.TargetFilePath, 
-                        jobInfo.TotalFilesToCopy, jobInfo.NbFilesLeftToDo);
+                        jobInfo.TotalFilesToCopy, jobInfo.NbFilesLeftToDo, jobInfo.TotalFilesSize);
                     
                     Jobs.Add(job);
                 }
@@ -76,23 +77,30 @@ namespace EasySave.Controllers
             _logger.LogAction(fileName, "", "", 0, TimeSpan.Zero);
         }
 
-        // Méthode pour créer un travail de sauvegarde
-        public void CreateJob(string nom, string source, string destination, BackupType backupType)
+        // Editing a job that exists -> used in another method EditJob(logger, translation)
+        public void EditJob(int i, string name, string source, string destination, BackupType backupType, Logger logger)
         {
-            Job newBackupJob = new Job(nom, backupType,source, destination);
-
-            Jobs.Add(newBackupJob);
-        }
-
-        // Méthode pour modifier un travail de sauvegarde existant
-        public void EditJob(string nom, string source, string destination, BackupType backupType)
-        {
-            Job existingJob = Jobs.FirstOrDefault(job => job.Name == nom);
-            if (existingJob != null)
+            Job job = Jobs[i];
+            if (job != null)
             {
-                existingJob.SourceFilePath = source;
-                existingJob.TargetFilePath = destination;
-                existingJob.BackupType = backupType;
+                
+                job.SourceFilePath = source;
+                job.TargetFilePath = destination;
+                job.BackupType = backupType;
+                
+                // Using helpers to calculate the new directory's size info
+                var _fileCopier = new FileCopier();
+                DirectoryInfo diSource = new DirectoryInfo(job.SourceFilePath);
+                long totalFilesSize = _fileCopier._fileGetter.DirSize(diSource);
+                
+                job.TotalFilesSize = totalFilesSize;
+                job.NbFilesLeftToDo = totalFilesSize;
+                job.NbSavedFiles = 0;
+
+                logger.LogState(job.Name, job.SourceFilePath, job.TargetFilePath, job.State, job.TotalFilesToCopy, job.TotalFilesSize , (job.TotalFilesToCopy - job.NbSavedFiles), ((job.NbSavedFiles * 100) / job.TotalFilesToCopy), name);
+                
+                // Renaming for the current job object (LogState Constaints)
+                job.Name = name;
             }
             else
             {
@@ -101,13 +109,15 @@ namespace EasySave.Controllers
         }
 
         // Méthode pour supprimer un travail de sauvegarde
-        public void DeleteJob(string name)
+        public void DeleteJob(int i, TranslationModel translation, Logger logger)
         {
-            Job job = Jobs.FirstOrDefault(job => job.Name == name);
+            Job job = Jobs[i];
             if (job != null)
             {
                 job.State = JobState.Retired;
+                logger.LogState(job.Name, job.SourceFilePath, job.TargetFilePath, JobState.Pending, job.TotalFilesToCopy, job.TotalFilesSize , (job.TotalFilesToCopy - job.NbSavedFiles), ((job.NbSavedFiles * 100) / job.TotalFilesToCopy), job.Name);
                 Jobs.Remove(job);
+                Console.Clear();
                 Console.WriteLine(translation.JobsController.JobDeletedSuccessfully);
             }
             else
@@ -162,15 +172,12 @@ namespace EasySave.Controllers
             Console.Write(translation.Messages.Choice);
             string backupType = Console.ReadLine();
 
-            // Convertir le choix de l'utilisateur en type de sauvegarde
+            // Convert user choice (Full/Diff)
             string type = backupType == "1" ? (translation.Messages.CompleteBackup) : backupType == "2" ? (translation.Messages.DifferentialBackup) : null;
 
             if (type != null)
             {
-                // Créer un objet BackupJob avec les informations saisies
                 var job = new Job(name, BackupType.Full, source, destination);
-
-                // Ajouter le travail de sauvegarde en appelant la méthode correspondante du contrôleur
                 Jobs.Add(job);
             }
             else
@@ -240,7 +247,8 @@ namespace EasySave.Controllers
             Console.Clear();
         }
 
-        public void DisplayJobs(TranslationModel translation, Logger logger)
+        /* Used to displayJobs & perform operations on jobs */
+        public void DisplayJobs(TranslationModel translation, Logger logger, OperationType op)
         {
             Console.WriteLine(translation.Messages.ListBackupJobs);
 
@@ -262,6 +270,43 @@ namespace EasySave.Controllers
                 i++;
             }
 
+            string choice;
+
+            
+            // REMOVE JOB
+            if (op == OperationType.Remove)
+            {
+                Console.WriteLine("\n");
+                Console.Write(translation.Messages.Choice);
+
+                choice = Console.ReadLine();
+                int ch = int.Parse(choice);
+                ch--;
+
+                if (ch >= Jobs.Count || ch < 0 || Jobs.Count == 0)
+                {
+                    Console.WriteLine(translation.JobsController.JobNotFound);
+                    return;
+                }
+                
+                DeleteJob(ch, translation, logger);
+                return;
+            }
+            
+            // EDIT JOB
+            if (op == OperationType.Edit)
+            {
+                return;
+            }
+
+            // DISPLAY JOB
+            if (op == OperationType.Display)
+            {
+                return;
+            }
+
+            
+            // PERFORM JOB
 
             Console.WriteLine("\n");
             Console.WriteLine(translation.Messages.LaunchJobSpecific);
@@ -271,7 +316,7 @@ namespace EasySave.Controllers
 
 
             Console.Write(translation.Messages.Choice);
-            var choice = Console.ReadLine();
+            choice = Console.ReadLine();
 
             if (choice == "0")
             {
@@ -304,7 +349,7 @@ namespace EasySave.Controllers
                     string[] choiceArrayStr = choice.Split(",");
                     int[] choiceArray = Array.ConvertAll(choiceArrayStr, int.Parse);
 
-                    if (containsDuplicates(choiceArrayStr))
+                    if (ContainsDuplicates(choiceArrayStr))
                     {
                         isValid = false;
                     }
@@ -348,19 +393,56 @@ namespace EasySave.Controllers
             Console.Clear();
         }
 
-        public static void EditJob(JobsController jobsController)
+        public void EditJob( Logger logger, TranslationModel translation)
         {
-            // Implémenter la logique de modification d'un travail de sauvegarde
-            // Utiliser les méthodes du contrôleur pour modifier un travail existant
+            DisplayJobs(translation, logger, OperationType.Edit);
+
+            Console.WriteLine(translation.Messages.Choice);
+            string choice = Console.ReadLine();
+            
+            Console.Clear();
+
+            if (int.TryParse(choice, out int index) && index > 0 && index <= Jobs.Count)
+            {
+
+                // Prompt user for new details
+                Console.Write(translation.Messages.EnterBackupName);
+                string newName = Console.ReadLine();
+
+                Console.Write(translation.Messages.EnterSourceDirectory);
+                string newSource = Console.ReadLine();
+
+                Console.Write(translation.Messages.EnterTargetDirectory);
+                string newDestination = Console.ReadLine();
+
+                Console.WriteLine(translation.Messages.ChooseBackupType);
+                Console.WriteLine($"1. {translation.Messages.CompleteBackup}");
+                Console.WriteLine($"2. {translation.Messages.DifferentialBackup}");
+                Console.Write(translation.Messages.Choice);
+                string backupTypeChoice = Console.ReadLine();
+                
+                BackupType newBackupType = backupTypeChoice == "1" ? BackupType.Full : BackupType.Diff;
+                
+                EditJob(index - 1, newName, newSource, newDestination, newBackupType, logger);
+
+                Console.WriteLine(translation.JobsController.JobEditedSuccessfully);
+            }
+            else
+            {
+                Console.WriteLine(translation.Messages.InvalidChoice);
+            }
+
+            Console.WriteLine(translation.JobsController.ReturnToMenu);
+            Console.ReadKey();
+            Console.Clear();
         }
 
-        public void RemoveJob(JobsController jobsController, Logger logger)
+        public void RemoveJob( Logger logger, TranslationModel translation)
         {
-            Console.Write(translation.JobsController.BackupNameToDelete); 
-            string jobName = Console.ReadLine();
-            
-            jobsController.DeleteJob(jobName);
-            logger.LogAction(jobName, "", "", 0, TimeSpan.Zero);
+            DisplayJobs(translation, logger, OperationType.Remove);
+            Console.WriteLine(translation.JobsController.ReturnToMenu);
+            Console.ReadKey();
+            Console.Clear();
         }
         static bool PatternRegEx(string text, Regex pattern)
         {
@@ -368,7 +450,7 @@ namespace EasySave.Controllers
             return m.Success;
         }
 
-        bool containsDuplicates(Array array)
+        bool ContainsDuplicates(Array array)
         {
             HashSet<object> set = new HashSet<object>();
             foreach (var item in array)

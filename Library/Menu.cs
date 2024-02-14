@@ -48,6 +48,7 @@ namespace EasySave.Library
                         ManageJobs();
                         break;
                     case "3":
+                        _jobsController.DisplayJobs(_translation, _logger, OperationType.Perform);
                         break;
                     case "4":
                         continuer = false;
@@ -86,15 +87,16 @@ namespace EasySave.Library
                 switch (choice)
                 {
                     case "0":
-                        _jobsController.DisplayJobs(_translation, _logger);
+                        _jobsController.DisplayJobs(_translation, _logger, OperationType.Display);
                         break;
                     case "1":
                         _jobsController.AddJob(_logger, _translation, this);
                         break;
                     case "2":
+                        _jobsController.EditJob(_logger, _translation);
                         break;
                     case "3":
-                        _jobsController.RemoveJob(_jobsController, _logger);
+                        _jobsController.RemoveJob(_logger, _translation);
                         break;
                     case "4":
                         continuer = false;

@@ -56,9 +56,9 @@ namespace EasySave.Models
             File.AppendAllText(_path + @"\log_journalier.json", logMessage + Environment.NewLine);
         }
         
-        
+        /* Logging inside state.json, newName is for EditJob (search done by name, hence the need for both old & new names) */
         public void LogState(string name, string sourcePath, string targetPath, JobState state, long nbFileToCopy,
-            long fileSize, long nbFileLeftToDo, int progression)
+            long fileSize, long nbFileLeftToDo, int progression, string newName)
         {
             string statePath = _path + @"\state.json";
             
@@ -74,6 +74,7 @@ namespace EasySave.Models
 
                     if (jobEntry != null)
                     {
+                        jobEntry["Name"] = newName;
                         jobEntry["SourceFilePath"] = sourcePath;
                         jobEntry["TargetFilePath"] = targetPath;
                         jobEntry["State"] = state.ToString();

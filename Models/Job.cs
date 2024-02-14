@@ -29,9 +29,10 @@ namespace EasySave.Models
         private int Position { get; set; }
         public JobState State { get; set; }
     
+        public long TotalFilesSize { get; set; }
         public int TotalFilesToCopy { get; set; }
         public int NbSavedFiles { get; set; }
-        public int NbFilesLeftToDo { get; set; }
+        public long NbFilesLeftToDo { get; set; }
         public TimeSpan Duration { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
@@ -58,7 +59,7 @@ namespace EasySave.Models
         public Job() {}
         
         /* Helper constructor for state.json */
-        public Job(string name, JobState jobState, string src, string dest, int totalFilesToCopy, int nbFilesLeftToDo) 
+        public Job(string name, JobState jobState, string src, string dest, int totalFilesToCopy, long nbFilesLeftToDo, long totalFilesSize) 
         {
             Id = _nextId;
             Position = _nextPos;
@@ -69,6 +70,7 @@ namespace EasySave.Models
             
             TotalFilesToCopy = totalFilesToCopy;
             NbFilesLeftToDo = nbFilesLeftToDo;
+            TotalFilesSize = totalFilesSize;
 
             _nextId++;
             _nextPos++;
