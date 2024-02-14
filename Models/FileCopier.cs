@@ -19,11 +19,13 @@ namespace EasySave.Models
 
         public void CopyDirectory(Job job, TranslationModel translation)
         {
+            job.StartTime = DateTime.Now;
+            job.State = JobState.Active;
+            
             List<string> allFiles = _fileGetter.GetAllFiles(job.SourceFilePath);
             HashSet<string> loadedHashes = _identity.LoadAllowedHashes(job.Name);
             HashSet<string> allowedHashes = new HashSet<string>();
 
-            job.StartTime = DateTime.Now;
             job.TotalFilesToCopy = allFiles.Count();
 
             string message = translation.FileCopier.WarningMessage;
@@ -35,6 +37,10 @@ namespace EasySave.Models
             Stopwatch stopWatch = new Stopwatch();
             stopWatch.Start();
 
+            // TODO : JobID /!\
+            Console.Clear();
+            Console.WriteLine(_progressBar.UpdateProgress(0, job.Name, job.TotalFilesToCopy, job.NbSavedFiles));
+            
             if (job.BackupType == BackupType.Diff)
                 CopyDiff(job, allFiles, allowedHashes, loadedHashes, translation);
             else
@@ -54,6 +60,7 @@ namespace EasySave.Models
             foreach (string file in allFiles)
             {
                 Stopwatch copyTime = new Stopwatch();
+                
                 string sourceHash = _identity.CalculateMD5(file);
                 allowedHashes.Add(sourceHash);
 
@@ -65,15 +72,10 @@ namespace EasySave.Models
                     string targetFileDir = Path.GetDirectoryName(targetFilePath);
                     if (!Directory.Exists(targetFileDir))
                         Directory.CreateDirectory(targetFileDir);
-
+                    
                     File.Copy(file, targetFilePath, true);
-                    job.NbSavedFiles++;
-
-                    long fileSize = new System.IO.FileInfo(targetFilePath).Length;
-
-                    _logger.LogAction(job.Name, file, targetFilePath, fileSize, copyTime.Elapsed);
-
-                    job.State = JobState.Active;
+                    
+                    EndFileCopy(job, targetFilePath, file, copyTime);
                 }
                 else
                 {
@@ -104,21 +106,8 @@ namespace EasySave.Models
                     Directory.CreateDirectory(targetFileDir);
 
                 File.Copy(file, targetFilePath, true);
-                job.NbSavedFiles++;
 
-                long fileSize = new System.IO.FileInfo(targetFilePath).Length;
-
-                _logger.LogAction(job.Name, file, targetFilePath, fileSize, copyTime.Elapsed);
-
-                job.State = JobState.Active;
-
-                _logger.LogState(job.Name, job.SourceFilePath, job.TargetFilePath, job.State, job.TotalFilesToCopy, fileSize, (job.TotalFilesToCopy - job.NbSavedFiles), ((job.NbSavedFiles * 100) / job.TotalFilesToCopy));
-
-                Console.Clear();
-                Console.WriteLine(_progressBar.UpdateProgress(0, job.Name, job.TotalFilesToCopy, job.NbSavedFiles));
-
-                copyTime.Stop();
-                copyTime.Reset();
+                EndFileCopy(job, targetFilePath, file, copyTime);
             }
 
             _identity.DeleteAllowedHashes(job.Name);
@@ -141,6 +130,26 @@ namespace EasySave.Models
                 Console.WriteLine(translation.FileCopier.InvalidResponseFileCopier);
                 return CopyWarning(message, translation);
             }
+        }
+        private void EndFileCopy(Job job, string targetFilePath, string file, Stopwatch copyTime)
+        {
+            job.NbSavedFiles++;
+
+            // TODO : JobID /!\
+            Console.Clear();
+            Console.WriteLine(_progressBar.UpdateProgress(0, job.Name, job.TotalFilesToCopy, job.NbSavedFiles));
+
+            long fileSize = new System.IO.FileInfo(targetFilePath).Length;
+
+            _logger.LogAction(job.Name, file, targetFilePath, fileSize, copyTime.Elapsed);
+
+            job.State = JobState.Active;
+            job.Progression = ((job.NbSavedFiles * 100) / job.TotalFilesToCopy);
+
+            _logger.LogState(job.Name, job.SourceFilePath, job.TargetFilePath, job.State, job.TotalFilesToCopy, fileSize, (job.TotalFilesToCopy - job.NbSavedFiles), ((job.NbSavedFiles * 100) / job.TotalFilesToCopy));
+                    
+            copyTime.Stop();
+            copyTime.Reset();
         }
     }
 }
