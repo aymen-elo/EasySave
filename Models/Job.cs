@@ -47,8 +47,8 @@ namespace EasySave.Models
             SourceFilePath = src;
             TargetFilePath = dest;
             
-            TotalFilesToCopy = -1;
-            NbSavedFiles = -1;
+            TotalFilesToCopy = 0;
+            NbSavedFiles = 0;
             
             _nextId++;
             _nextPos++;
