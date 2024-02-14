@@ -84,7 +84,7 @@ namespace EasySave.Library
                 switch (choix)
                 {
                     case "0":
-                        _jobsController.DisplayJobs(_translation);
+                        _jobsController.DisplayJobs(_translation, _logger);
                         break;
                     case "1":
                         _jobsController.AddJob(_logger, _translation, this);

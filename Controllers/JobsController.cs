@@ -171,16 +171,6 @@ namespace EasySave.Controllers
 
                 // Ajouter le travail de sauvegarde en appelant la méthode correspondante du contrôleur
                 Jobs.Add(job);
-                
-                // Logger l'action effectuée en utilisant l'instance de Logger stockée dans jobsController
-                logger.LogAction(name, source, destination, 0, TimeSpan.Zero);
-
-                // Copier les fichiers en utilisant FileCopier
-                var fileCopier = new FileCopier();
-                fileCopier.CopyDirectory(job, translation);
-
-                // Afficher la liste des travaux de sauvegarde après l'ajout
-                DisplayJobs(translation);
             }
             else
             {
@@ -188,26 +178,76 @@ namespace EasySave.Controllers
             }
         }
 
-        public void LaunchJob(Job job)
+        public void LaunchJob(Job job, Logger logger, TranslationModel translation)
         {
+            if (job.State == JobState.Finished)
+            {
+                job.Progession = 0;
+                job.State = JobState.Active;
+                job.NbFilesLeftToDo = job.TotalFilesToCopy;
+            }
             
+            logger.LogAction(job.Name, job.SourceFilePath, job.TargetFilePath, 0, TimeSpan.Zero);
+            
+            var fileCopier = new FileCopier();
+            fileCopier.CopyDirectory(job, translation);
+            
+            if (job.Progession >= 100)
+            {
+                job.State = JobState.Finished;
+            }
+
+            DisplayJobs(translation, logger);
         }
 
-        public void LaunchAllJobs()
+        public void LaunchAllJobs(Logger logger, TranslationModel translation)
         {
             foreach (var job in Jobs)
             {
-                LaunchJob(job);
+                LaunchJob(job, logger, translation);
             }
         }
 
-        public void DisplayJobs(TranslationModel translation)
+        public void DisplayJob(Job job, TranslationModel translation, Logger logger)
         {
             Console.WriteLine(translation.Messages.ListBackupJobs);
 
             if (Jobs.Count == 0)
             {
                 Console.WriteLine(translation.Messages.EmptyJobsList);
+                return;
+            }
+
+            for (int j = 0; j < Jobs.Count; j++)
+            {
+                if (Jobs[j].Name == job.Name)
+                {
+                    Console.WriteLine($"-> {translation.Messages.EnterBackupName} : {job.Name}, {translation.Messages.SourceDirectory} : {job.SourceFilePath}, {translation.Messages.DestinationDirectory} : {job.TargetFilePath}, {translation.Messages.ChooseBackupType} {job.BackupType}");
+                    break;
+                }
+            }
+            
+            Console.WriteLine("Lancer ? y/n");
+            var choice = Console.ReadLine();
+
+            if (choice == "y")
+            {
+                LaunchJob(job, logger, translation);
+            }
+            
+            Console.WriteLine("\nAppuyer sur une touche pour revenir au menu de sauvegarde...");
+            Console.ReadKey();
+            Console.Clear();
+        }
+
+        public void DisplayJobs(TranslationModel translation, Logger logger)
+        {
+            Console.WriteLine(translation.Messages.ListBackupJobs);
+
+            if (Jobs.Count == 0)
+            {
+                Console.WriteLine(translation.Messages.EmptyJobsList);
+                return;
             }
 
             int i = 0;
@@ -216,6 +256,14 @@ namespace EasySave.Controllers
                 Console.WriteLine(
                     $" ({i}) - {translation.Messages.EnterBackupName} : {travail.Name}, {translation.Messages.SourceDirectory} : {travail.SourceFilePath}, {translation.Messages.DestinationDirectory} : {travail.TargetFilePath}, {translation.Messages.ChooseBackupType} {travail.BackupType}");
                 i++;
+            }
+
+            Console.WriteLine("Choisir un job par indice :");
+            var choice = Console.ReadLine();
+
+            if (choice == "0")
+            {
+                LaunchJob(Jobs[0], logger, translation);
             }
             
             Console.WriteLine("\nAppuyer sur une touche pour revenir au menu de sauvegarde...");
