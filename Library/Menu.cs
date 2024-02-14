@@ -35,7 +35,7 @@ namespace EasySave.Library
                 Console.WriteLine($"3. {_translation.Menu.DoBackup}");
                 Console.WriteLine($"4. {_translation.Menu.Quit}");
 
-                Console.Write("Choix : ");
+                Console.Write(_translation.Messages.Choice);
                 string choice = Console.ReadLine();
 
                 switch (choice)

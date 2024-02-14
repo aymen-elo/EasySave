@@ -129,7 +129,7 @@ namespace EasySave.Controllers
             while (!PatternRegEx(name, rg))
             {
                 Console.WriteLine(translation.Messages.InvalidBackupName);
-                Console.Write("Nom de sauvegarde : ");
+                Console.Write(translation.Messages.EnterBackupName);
                 name = Console.ReadLine();
             }
             

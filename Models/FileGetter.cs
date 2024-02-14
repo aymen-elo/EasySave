@@ -11,6 +11,7 @@ namespace EasySave.Models
 {
     public class FileGetter
     {
+        TranslationModel translation;
         public string GetRelativePath(string sourceDir, string filePath)
         {
             return filePath.Substring(sourceDir.Length + 1); // +1 pour enlever le séparateur de dossier
@@ -58,7 +59,7 @@ namespace EasySave.Models
             catch (Exception ex)
             {
                 // TO DO : ADD LOG
-                Console.WriteLine($"Une erreur s'est produite : {ex.Message}");
+                Console.WriteLine(translation.Messages.Error + ex.Message);
             }
         }
         public void CompareAndDeleteDirectories(string targetDir, string sourceDir)

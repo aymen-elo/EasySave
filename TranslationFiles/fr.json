@@ -40,7 +40,8 @@
     "EmptyJobsList" : "Aucun travail de sauvegarde disponible",
     "LanguageUpdated": "La langue à été correctement mis à jour.",
     "InvalidLanguage": "Choix de langue invalide.",
-    "ChooseLanguage":"Veuillez choisir une langue (en/fr): "
+    "ChooseLanguage":"Veuillez choisir une langue (en/fr): ",
+    "Error": "$\"Une erreur s'est produite :"
 
   },
   

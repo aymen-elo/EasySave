@@ -40,7 +40,9 @@
     "EmptyJobsList" : "There are no backup jobs available",
     "LanguageUpdated": "Language updated successfully.",
     "InvalidLanguage": "Invalid language choice.",
-    "ChooseLanguage":"Please choose a language (en/fr): "
+    "ChooseLanguage":"Please choose a language (en/fr): ",
+    "Error": "$\",An error has occured :"
+
   },
 
   "FileCopier": {

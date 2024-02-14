@@ -56,6 +56,9 @@ namespace EasySave.Models
         public string LanguageUpdated { get; set; }
         public string InvalidLanguage { get; set; }
         public string ChooseLanguage { get; set; }
+        public string Error { get; set; }
+
+        
 
         
     }
