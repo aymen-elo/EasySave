@@ -249,52 +249,97 @@ namespace EasySave.Controllers
                 Console.WriteLine(translation.Messages.EmptyJobsList);
                 return;
             }
-
+            
+            Console.WriteLine(" (0) - " + translation.Menu.BackupManage);
             int i = 0;
             foreach (var travail in this.GetJobs())
             {
                 Console.WriteLine(
-                    $" ({i + 1}) - {translation.Messages.EnterBackupName} : {travail.Name}, " +
-                    $"{translation.Messages.SourceDirectory} : {travail.SourceFilePath}, " +
-                    $"{translation.Messages.DestinationDirectory} : {travail.TargetFilePath}, " +
+                    $" ({i + 1}) - {translation.Messages.EnterBackupName} {travail.Name}, " +
+                    $"{translation.Messages.SourceDirectory} {travail.SourceFilePath}, " +
+                    $"{translation.Messages.DestinationDirectory} {travail.TargetFilePath}, " +
                     $"{translation.Messages.ChooseBackupType} {travail.BackupType}");
                 i++;
             }
-            
+
+
+            Console.WriteLine("\n");
+            Console.WriteLine(translation.Messages.LaunchJobSpecific);
+            Console.WriteLine(translation.Messages.LaunchAllJobs);
+            Console.WriteLine(translation.Messages.LaunchJobsRange);
+            Console.WriteLine(translation.Messages.LaunchJobsInterval);
+
+
+            Console.Write(translation.Messages.Choice);
             var choice = Console.ReadLine();
 
-            /*Console.WriteLine("(0)   Lancer tous les travaux de sauvegarde");
-            Console.WriteLine("(P-D) Lancer les travaux dans l'intervalle [P-D]");
-            Console.WriteLine("(x,y) Lancer les travaux x et y (ou plus)");*/
-            
-            // Intervals
-            if (choice.Contains("-"))
+            if (choice == "0")
             {
-                var choiceArray = choice.Split("-");
-
-                int begin = int.Parse(choiceArray[0]);
-                int end = int.Parse(choiceArray[1]);
-
-                for (int k = begin; k <= end; k++)
-                {
-                    LaunchJob(Jobs[k-1], logger, translation);
-                }
+                Console.Clear();
+                return;
             }
 
-            // Specific Jobs
-            if (choice.Contains(","))
-            {
-                string[] choiceArrayStr = choice.Split(",");
-                int[] choiceArray = Array.ConvertAll(choiceArrayStr, int.Parse);
-
-                int it = 1;
-                foreach (var job in Jobs)
+            var isValid = false;
+            while (!isValid) {
+                // Interval of jobs : x to z => Backup(x,y,z)
+                if (choice.Contains("-") & Regex.IsMatch(choice, @"^[1-9]\d*-[1-9]\d*$"))
                 {
-                    if (choiceArray.Contains(it))
+                    isValid = true;
+                    
+                    var choiceArray = choice.Split("-");
+                    int begin = int.Parse(choiceArray[0]);
+                    int end = int.Parse(choiceArray[1]);
+
+                    for (int k = begin; k <= end; k++)
                     {
-                        LaunchJob(job, logger, translation);
+                        LaunchJob(Jobs[k - 1], logger, translation);
                     }
-                    it++;
+                }
+                // Specific set of Jobs : x, z => Backup(x,z)
+                else if (choice.Contains(",") & Regex.IsMatch(choice, @"^[1-9]\d*(,[1-9]\d*)*$"))
+                {
+                    isValid = true;
+
+
+                    string[] choiceArrayStr = choice.Split(",");
+                    int[] choiceArray = Array.ConvertAll(choiceArrayStr, int.Parse);
+
+                    if (containsDuplicates(choiceArrayStr))
+                    {
+                        isValid = false;
+                    }
+                    else
+                    {
+                        int it = 1;
+                        foreach (var job in Jobs)
+                        {
+                            if (choiceArray.Contains(it))
+                            {
+                                LaunchJob(job, logger, translation);
+                            }
+    
+                            it++;
+                        }
+                    }
+                }
+                else if (choice == "A" & Regex.IsMatch(choice, @"^A$"))
+                {
+                    isValid = true;
+                    
+                    LaunchAllJobs(logger, translation);
+                }
+                // One and only one job to perform
+                else if (Regex.IsMatch(choice, @"^[1-9]\d*$"))
+                {
+                    isValid = true;
+                    
+                    LaunchJob(Jobs[int.Parse(choice) - 1], logger, translation);
+                }
+                else
+                {
+                    Console.WriteLine(translation.Messages.InvalidResponse);
+                    Console.Write(translation.Messages.Choice);
+                    choice = Console.ReadLine();
                 }
             }
             
@@ -321,6 +366,19 @@ namespace EasySave.Controllers
         {
             Match m = pattern.Match(text);
             return m.Success;
+        }
+
+        bool containsDuplicates(Array array)
+        {
+            HashSet<object> set = new HashSet<object>();
+            foreach (var item in array)
+            {
+                if (!set.Add(item))
+                {
+                    return true; 
+                }
+            }
+            return false;
         }
     }
 }

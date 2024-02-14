@@ -3,7 +3,7 @@
     "PrincipalMenu": "Main Menu",
     "Option": "Option",
     "DisplayJobs": "Display all Backup Jobs",
-    "BackupManage": "Backup Management",
+    "BackupManage": "Backup Management Menu",
     "DoBackup": "Perform Backup",
     "Quit": "Quit",
     "AddBackupJob": "Add Backup Job",
@@ -41,7 +41,12 @@
     "LanguageUpdated": "Language updated successfully.",
     "InvalidLanguage": "Invalid language choice.",
     "ChooseLanguage":"Please choose a language (en/fr): ",
-    "Error": "$\",An error has occured :"
+    "Error": "$\",An error has occured :",
+
+    "LaunchJobSpecific": "  X.   Launch job number X",
+    "LaunchAllJobs": "  A.   Launch all existing jobs",
+    "LaunchJobsRange": " P-D.  Launch all jobs from P to D",
+    "LaunchJobsInterval": "X,Y,T. Launch jobs X, Y, and T only"
 
   },
 
@@ -60,7 +65,7 @@
     "JobEditedSuccessfully": "The job has been edited successfully.",
     "JobDeletedSuccessfully": "The job has been deleted successfully.",
     "JobNotFound": "The specified job does not exist.",
-    "ReturnToMenu": "\nPress a touch to return to backup menu...",
+    "ReturnToMenu": "\nPress any button to return to backup menu...",
     "BackupNameToDelete": "Job name to delete : "
 
 

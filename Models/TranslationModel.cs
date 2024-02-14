@@ -57,8 +57,11 @@ namespace EasySave.Models
         public string InvalidLanguage { get; set; }
         public string ChooseLanguage { get; set; }
         public string Error { get; set; }
-
         
+        public string LaunchJobSpecific { get; set; }
+        public string LaunchAllJobs { get; set; }
+        public string LaunchJobsRange { get; set; }
+        public string LaunchJobsInterval { get; set; }
 
         
     }

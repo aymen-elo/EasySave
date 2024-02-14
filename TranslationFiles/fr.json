@@ -3,7 +3,7 @@
     "PrincipalMenu": "Menu principal",
     "Option": "Option",
     "DisplayJobs": "Afficher les sauvegardes",
-    "BackupManage": "Gestion des sauvegardes",
+    "BackupManage": "Menu de gestion des sauvegardes",
     "DoBackup": "Effectuer des sauvegardes",
     "Quit": "Quitter",
     "AddBackupJob": "Ajouter un travail de sauvegarde",
@@ -41,7 +41,12 @@
     "LanguageUpdated": "La langue à été correctement mis à jour.",
     "InvalidLanguage": "Choix de langue invalide.",
     "ChooseLanguage":"Veuillez choisir une langue (en/fr): ",
-    "Error": "$\"Une erreur s'est produite :"
+    "Error": "$\"Une erreur s'est produite :",
+    
+    "LaunchJobSpecific": "  X.   Lancer le travail numéro X",
+    "LaunchAllJobs": "  A.   Lancer tous les travaux existants",
+    "LaunchJobsRange": " P-D.  Lancer tous les travaux de P à D",
+    "LaunchJobsInterval": "X,Y,T. Lancer les travaux X, Y et T uniquement"
 
   },
   

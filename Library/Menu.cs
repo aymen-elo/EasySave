@@ -37,6 +37,7 @@ namespace EasySave.Library
 
                 Console.Write(_translation.Messages.Choice);
                 string choice = Console.ReadLine();
+                Console.Clear();
 
                 switch (choice)
                 {
@@ -78,10 +79,11 @@ namespace EasySave.Library
                 Console.WriteLine($"3. {_translation.Menu.DeleteBackupJob}");
                 Console.WriteLine($"4. {_translation.Menu.ReturnToMainMenu}");
 
-                Console.Write("Choix : ");
-                string choix = Console.ReadLine();
+                Console.Write(_translation.Messages.Choice);
+                string choice = Console.ReadLine();
+                Console.Clear();
 
-                switch (choix)
+                switch (choice)
                 {
                     case "0":
                         _jobsController.DisplayJobs(_translation, _logger);
