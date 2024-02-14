@@ -68,6 +68,10 @@ namespace EasySave.Models
         public string JobEditedSuccessfully { get; set; }
         public string JobDeletedSuccessfully { get; set; }
         public string JobNotFound { get; set; }
+        public string ReturnToMenu { get; set; }
+        public string BackupNameToDelete { get; set; }
+        
+        
     }
 
     public class TranslationModel

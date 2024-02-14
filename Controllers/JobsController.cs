@@ -15,6 +15,7 @@ namespace EasySave.Controllers
     { 
         public List<Job> Jobs { get; private set; }
         private Logger _logger;
+        TranslationModel translation;
         
         public event EventHandler<string> FileSaved;
         private FileCopier _fileCopier;
@@ -95,7 +96,7 @@ namespace EasySave.Controllers
             }
             else
             {
-                Console.WriteLine("Le travail de sauvegarde spécifié n'existe pas.");
+                Console.WriteLine(translation.JobsController.JobNotFound); 
             }
         }
 
@@ -107,11 +108,11 @@ namespace EasySave.Controllers
             {
                 job.State = JobState.Retired;
                 Jobs.Remove(job);
-                Console.WriteLine("Le travail de sauvegarde a été supprimé avec succès.");
+                Console.WriteLine(translation.JobsController.JobDeletedSuccessfully);
             }
             else
             {
-                Console.WriteLine("Le travail de sauvegarde spécifié n'existe pas.");
+                Console.WriteLine(translation.JobsController.JobNotFound);
             }
         }
         
@@ -234,7 +235,7 @@ namespace EasySave.Controllers
                 LaunchJob(job, logger, translation);
             }
             
-            Console.WriteLine("\nAppuyer sur une touche pour revenir au menu de sauvegarde...");
+            Console.WriteLine(translation.JobsController.ReturnToMenu);
             Console.ReadKey();
             Console.Clear();
         }
@@ -253,7 +254,10 @@ namespace EasySave.Controllers
             foreach (var travail in this.GetJobs())
             {
                 Console.WriteLine(
-                    $" ({i + 1}) - {translation.Messages.EnterBackupName} : {travail.Name}, {translation.Messages.SourceDirectory} : {travail.SourceFilePath}, {translation.Messages.DestinationDirectory} : {travail.TargetFilePath}, {translation.Messages.ChooseBackupType} {travail.BackupType}");
+                    $" ({i + 1}) - {translation.Messages.EnterBackupName} : {travail.Name}, " +
+                    $"{translation.Messages.SourceDirectory} : {travail.SourceFilePath}, " +
+                    $"{translation.Messages.DestinationDirectory} : {travail.TargetFilePath}, " +
+                    $"{translation.Messages.ChooseBackupType} {travail.BackupType}");
                 i++;
             }
             
@@ -294,7 +298,7 @@ namespace EasySave.Controllers
                 }
             }
             
-            Console.WriteLine("\nAppuyer sur une touche pour revenir au menu de sauvegarde...");
+            Console.WriteLine(translation.JobsController.ReturnToMenu);
             Console.ReadKey();
             Console.Clear();
         }
@@ -307,7 +311,7 @@ namespace EasySave.Controllers
 
         public void RemoveJob(JobsController jobsController, Logger logger)
         {
-            Console.Write("Nom du travail de sauvegarde à supprimer : ");
+            Console.Write(translation.JobsController.BackupNameToDelete); 
             string jobName = Console.ReadLine();
             
             jobsController.DeleteJob(jobName);

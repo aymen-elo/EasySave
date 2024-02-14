@@ -57,7 +57,10 @@
     "DeleteJob": "Supprimer un travail",
     "JobAddedSuccessfully": "Le travail a été ajouté avec succès.",
     "JobEditedSuccessfully": "Le travail a été modifié avec succès.",
-    "JobDeletedSuccessfully": "Le travail a été supprimé avec succès.",
-    "JobNotFound": "Le travail spécifié n'existe pas."
+    "JobDeletedSuccessfully": "Le travail de sauvegarde a été supprimé avec succès.",
+    "JobNotFound": "Le travail de sauvegarde spécifié n'existe pas.",
+    "ReturnToMenu": "\nAppuyer sur une touche pour revenir au menu de sauvegarde...",
+    "BackupNameToDelete": "Nom du travail de sauvegarde à supprimer : "
+  
   }
 }
