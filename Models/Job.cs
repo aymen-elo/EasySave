@@ -35,7 +35,7 @@ namespace EasySave.Models
         public TimeSpan Duration { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
-        public int Progession { get; set; }
+        public int Progression { get; set; }
         
 
         public Job(string name, BackupType type, string src, string dest) 
