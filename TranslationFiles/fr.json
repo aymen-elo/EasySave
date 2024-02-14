@@ -37,7 +37,11 @@
     "DestinationDirectory": "Répertoire Cible : ",
     "SourceDirectory": "Répertoire Source : ",
     "InvalidBackupName": "Erreur : Veuillez écrire un nom de sauvegarde composé de lettres et/ou de chiffre",
-    "EmptyJobsList" : "Aucun travail de sauvegarde disponible"
+    "EmptyJobsList" : "Aucun travail de sauvegarde disponible",
+    "LanguageUpdated": "La langue à été correctement mis à jour.",
+    "InvalidLanguage": "Choix de langue invalide.",
+    "ChooseLanguage":"Veuillez choisir une langue (en/fr): "
+
   },
   
   "FileCopier": {
