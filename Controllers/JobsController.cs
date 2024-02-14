@@ -171,16 +171,6 @@ namespace EasySave.Controllers
 
                 // Ajouter le travail de sauvegarde en appelant la méthode correspondante du contrôleur
                 Jobs.Add(job);
-                
-                // Logger l'action effectuée en utilisant l'instance de Logger stockée dans jobsController
-                logger.LogAction(name, source, destination, 0, TimeSpan.Zero);
-
-                // Copier les fichiers en utilisant FileCopier
-                var fileCopier = new FileCopier();
-                fileCopier.CopyDirectory(job, translation);
-
-                // Afficher la liste des travaux de sauvegarde après l'ajout
-                DisplayJobs(translation);
             }
             else
             {
@@ -188,34 +178,120 @@ namespace EasySave.Controllers
             }
         }
 
-        public void LaunchJob(Job job)
+        public void LaunchJob(Job job, Logger logger, TranslationModel translation)
         {
+            if (job.State == JobState.Finished || job.State == JobState.Pending)
+            {
+                job.Progression = 0;
+                job.State = JobState.Active;
+                job.NbFilesLeftToDo = job.TotalFilesToCopy;
+            }
             
+            logger.LogAction(job.Name, job.SourceFilePath, job.TargetFilePath, 0, TimeSpan.Zero);
+            
+            var fileCopier = new FileCopier();
+            fileCopier.CopyDirectory(job, translation);
+            
+            if (job.Progression >= 100)
+            {
+                job.State = JobState.Finished;
+            }
+
         }
 
-        public void LaunchAllJobs()
+        public void LaunchAllJobs(Logger logger, TranslationModel translation)
         {
             foreach (var job in Jobs)
             {
-                LaunchJob(job);
+                LaunchJob(job, logger, translation);
             }
         }
 
-        public void DisplayJobs(TranslationModel translation)
+        public void DisplayJob(Job job, TranslationModel translation, Logger logger)
         {
             Console.WriteLine(translation.Messages.ListBackupJobs);
 
             if (Jobs.Count == 0)
             {
                 Console.WriteLine(translation.Messages.EmptyJobsList);
+                return;
+            }
+
+            for (int j = 0; j < Jobs.Count; j++)
+            {
+                if (Jobs[j].Name == job.Name)
+                {
+                    Console.WriteLine($"-> {translation.Messages.EnterBackupName} : {job.Name}, {translation.Messages.SourceDirectory} : {job.SourceFilePath}, {translation.Messages.DestinationDirectory} : {job.TargetFilePath}, {translation.Messages.ChooseBackupType} {job.BackupType}");
+                    break;
+                }
+            }
+            
+            Console.WriteLine("Lancer ? y/n");
+            var choice = Console.ReadLine();
+
+            if (choice == "y")
+            {
+                LaunchJob(job, logger, translation);
+            }
+            
+            Console.WriteLine("\nAppuyer sur une touche pour revenir au menu de sauvegarde...");
+            Console.ReadKey();
+            Console.Clear();
+        }
+
+        public void DisplayJobs(TranslationModel translation, Logger logger)
+        {
+            Console.WriteLine(translation.Messages.ListBackupJobs);
+
+            if (Jobs.Count == 0)
+            {
+                Console.WriteLine(translation.Messages.EmptyJobsList);
+                return;
             }
 
             int i = 0;
             foreach (var travail in this.GetJobs())
             {
                 Console.WriteLine(
-                    $" ({i}) - {translation.Messages.EnterBackupName} : {travail.Name}, {translation.Messages.SourceDirectory} : {travail.SourceFilePath}, {translation.Messages.DestinationDirectory} : {travail.TargetFilePath}, {translation.Messages.ChooseBackupType} {travail.BackupType}");
+                    $" ({i + 1}) - {translation.Messages.EnterBackupName} : {travail.Name}, {translation.Messages.SourceDirectory} : {travail.SourceFilePath}, {translation.Messages.DestinationDirectory} : {travail.TargetFilePath}, {translation.Messages.ChooseBackupType} {travail.BackupType}");
                 i++;
+            }
+            
+            var choice = Console.ReadLine();
+
+            /*Console.WriteLine("(0)   Lancer tous les travaux de sauvegarde");
+            Console.WriteLine("(P-D) Lancer les travaux dans l'intervalle [P-D]");
+            Console.WriteLine("(x,y) Lancer les travaux x et y (ou plus)");*/
+            
+            // Intervals
+            if (choice.Contains("-"))
+            {
+                var choiceArray = choice.Split("-");
+
+                int begin = int.Parse(choiceArray[0]);
+                int end = int.Parse(choiceArray[1]);
+
+                for (int k = begin; k <= end; k++)
+                {
+                    LaunchJob(Jobs[k-1], logger, translation);
+                }
+            }
+
+            // Specific Jobs
+            if (choice.Contains(","))
+            {
+                string[] choiceArrayStr = choice.Split(",");
+                int[] choiceArray = Array.ConvertAll(choiceArrayStr, int.Parse);
+
+                int it = 1;
+                foreach (var job in Jobs)
+                {
+                    if (choiceArray.Contains(it))
+                    {
+                        LaunchJob(job, logger, translation);
+                    }
+                    it++;
+                }
             }
             
             Console.WriteLine("\nAppuyer sur une touche pour revenir au menu de sauvegarde...");
