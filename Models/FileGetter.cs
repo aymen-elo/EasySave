@@ -96,17 +96,17 @@ namespace EasySave.Models
             }
         }
         
-        public long DirSize(DirectoryInfo d) 
+        public long DirSize(DirectoryInfo dir) 
         {    
             long size = 0;    
             // Add file sizes.
-            FileInfo[] fis = d.GetFiles();
+            FileInfo[] fis = dir.GetFiles();
             foreach (FileInfo fi in fis) 
             {      
                 size += fi.Length;    
             }
             // Add subdirectory sizes.
-            DirectoryInfo[] dis = d.GetDirectories();
+            DirectoryInfo[] dis = dir.GetDirectories();
             foreach (DirectoryInfo di in dis) 
             {
                 size += DirSize(di);   
