@@ -141,11 +141,12 @@ namespace EasySave.Controllers
             Console.Write(translation.Messages.EnterBackupName);
 
             string name = Console.ReadLine();
-            while (!PatternRegEx(name, rg) || name == string.Empty)
+            while (!PatternRegEx(name, rg) || name == string.Empty || JobExists(name))
             {
                 Console.WriteLine(translation.Messages.InvalidBackupName);
                 Console.Write(translation.Messages.EnterBackupName);
                 name = Console.ReadLine();
+                Console.Clear();
             }
             
             /* Backup Source */ 
@@ -162,7 +163,7 @@ namespace EasySave.Controllers
                 Console.Write(translation.Messages.SourceDirectory);
                 source = Console.ReadLine();
                 pathExist = Directory.Exists(source);
-
+                Console.Clear();
             }
             
             /* Backup Destination */
@@ -176,7 +177,7 @@ namespace EasySave.Controllers
                 Console.Write(translation.Messages.DestinationDirectory);
                 destination = Console.ReadLine();
                 pathExist = Directory.Exists(destination);
-
+                Console.Clear();
             }
 
             // Backup Type Choice
@@ -185,6 +186,7 @@ namespace EasySave.Controllers
             Console.WriteLine($"2. {translation.Messages.DifferentialBackup}");
             Console.Write(translation.Messages.Choice);
             string backupType = Console.ReadLine();
+            Console.Clear();
 
             // Convert user choice (Full/Diff)
             string type = backupType == "1" ? (translation.Messages.CompleteBackup) : backupType == "2" ? (translation.Messages.DifferentialBackup) : null;
@@ -234,6 +236,7 @@ namespace EasySave.Controllers
         /* Used to displayJobs & perform operations on jobs */
         public void DisplayJobs(TranslationModel translation, Logger logger, OperationType op)
         {
+            Console.Clear();
             Console.WriteLine(translation.Messages.ListBackupJobs);
 
             if (Jobs.Count == 0)
@@ -286,6 +289,9 @@ namespace EasySave.Controllers
             // DISPLAY JOB
             if (op == OperationType.Display)
             {
+                Console.WriteLine(translation.JobsController.ReturnToMenu);
+                Console.ReadKey();
+                Console.Clear();
                 return;
             }
 
@@ -418,7 +424,7 @@ namespace EasySave.Controllers
                 string newName = Console.ReadLine();
                 Regex rg = new Regex(@"^(?=.*[a-zA-Z0-9])[a-zA-Z0-9\s]*$");
                 
-                while (!PatternRegEx(newName, rg) || newName == string.Empty)
+                while (!PatternRegEx(newName, rg) || newName == string.Empty || JobExists(newName))
                 {
                     Console.WriteLine(translation.Messages.InvalidBackupDirectory);
                     Console.Write(translation.Messages.DestinationDirectory);
@@ -516,5 +522,19 @@ namespace EasySave.Controllers
                 return CopyWarning(message, translation);
             }
         }
+
+        private bool JobExists(string name)
+        {
+            foreach (var job in Jobs)
+            {
+                if (job.Name == name)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+        
     }
 }
