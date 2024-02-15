@@ -21,6 +21,7 @@ namespace EasySave.Models
         {
             job.StartTime = DateTime.Now;
             job.State = JobState.Active;
+            job.NbSavedFiles = 0;
             
             List<string> allFiles = _fileGetter.GetAllFiles(job.SourceFilePath);
             HashSet<string> loadedHashes = _identity.LoadAllowedHashes(job.Name);
