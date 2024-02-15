@@ -42,6 +42,7 @@
     "InvalidLanguage": "Choix de langue invalide.",
     "ChooseLanguage":"Veuillez choisir une langue (en/fr): ",
     "Error": "$\"Une erreur s'est produite :",
+    "NoJobSelected": "Veuillez sélécitonner une valeur valide.",
     
     "LaunchJobSpecific": "  X.   Lancer le travail numéro X",
     "LaunchAllJobs": "  A.   Lancer tous les travaux existants",

@@ -221,37 +221,6 @@ namespace EasySave.Controllers
             }
         }
 
-        public void DisplayJob(Job job, TranslationModel translation, Logger logger)
-        {
-            Console.WriteLine(translation.Messages.ListBackupJobs);
-
-            if (Jobs.Count == 0)
-            {
-                Console.WriteLine(translation.Messages.EmptyJobsList);
-                return;
-            }
-
-            for (int j = 0; j < Jobs.Count; j++)
-            {
-                if (Jobs[j].Name == job.Name)
-                {
-                    Console.WriteLine($"-> {translation.Messages.EnterBackupName} : {job.Name}, {translation.Messages.SourceDirectory} : {job.SourceFilePath}, {translation.Messages.DestinationDirectory} : {job.TargetFilePath}, {translation.Messages.ChooseBackupType} {job.BackupType}");
-                    break;
-                }
-            }
-            
-            Console.WriteLine("Lancer ? y/n");
-            var choice = Console.ReadLine();
-
-            if (choice == "y")
-            {
-                LaunchJob(job, logger, translation);
-            }
-            
-            Console.WriteLine(translation.JobsController.ReturnToMenu);
-            Console.ReadKey();
-            Console.Clear();
-        }
 
         /* Used to displayJobs & perform operations on jobs */
         public void DisplayJobs(TranslationModel translation, Logger logger, OperationType op)
@@ -388,7 +357,7 @@ namespace EasySave.Controllers
                 }
                 else
                 {
-                    Console.WriteLine(translation.Messages.InvalidResponse);
+                    Console.WriteLine(translation.Messages.NoJobSelected);
                     Console.Write(translation.Messages.Choice);
                     choice = Console.ReadLine();
                 }

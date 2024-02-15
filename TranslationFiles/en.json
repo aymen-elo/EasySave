@@ -42,6 +42,8 @@
     "InvalidLanguage": "Invalid language choice.",
     "ChooseLanguage":"Please choose a language (en/fr): ",
     "Error": "$\",An error has occured :",
+    "NoJobSelected": "Please, select a valid value.",
+
 
     "LaunchJobSpecific": "  X.   Launch job number X",
     "LaunchAllJobs": "  A.   Launch all existing jobs",

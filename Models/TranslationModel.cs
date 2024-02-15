@@ -63,6 +63,8 @@ namespace EasySave.Models
         public string LaunchJobsRange { get; set; }
         public string LaunchJobsInterval { get; set; }
 
+        public string NoJobSelected { get; set; }
+
         
     }
     public class JobsControllerTranslations
