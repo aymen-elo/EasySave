@@ -132,7 +132,7 @@ namespace EasySave.Controllers
 
             if (Jobs.Count >= 5)
             {
-                Console.WriteLine("Vous avez déjà atteint le nombre maximal de travaux de sauvegarde !");
+                Console.WriteLine(translation.JobsController.BackupFull);
                 return;
             }
             
