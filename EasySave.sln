@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34511.84
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EasySave", "EasySave.csproj", "{8B268A1A-2A03-4522-85A4-2E38A7B0BE77}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EasySave", "EasySave\EasySave.csproj", "{8B268A1A-2A03-4522-85A4-2E38A7B0BE77}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasySave 2.0", "..\EasySave 2.0\EasySave 2.0.csproj", "{6703567E-7F42-4A52-BEDC-F498F9FDBD6F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasySave 2.0", "EasySaveGUI\EasySaveGUI.csproj", "{6703567E-7F42-4A52-BEDC-F498F9FDBD6F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
