@@ -99,7 +99,7 @@ namespace EasySave.Models
         public long DirSize(DirectoryInfo dir) 
         {    
             long size = 0;    
-            // Add file sizes.
+            // TODO : Try Catch here if path doesnt exist
             FileInfo[] fis = dir.GetFiles();
             foreach (FileInfo fi in fis) 
             {      

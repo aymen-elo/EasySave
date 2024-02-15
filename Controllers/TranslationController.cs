@@ -29,12 +29,13 @@ namespace EasySave.Controllers
                 Language = lang;
 
                 translation = _translationManager.LoadTranslation(lang);
-                _translationView.UpdateTranslations(translation); 
                 _translationView.DisplayMessage(translation.Messages.LanguageUpdated);
             }
             else
             {
-                _translationView.DisplayMessage(translation.Messages.InvalidLanguage);
+                Console.WriteLine("Invalid language choice");
+                Console.Clear();
+                Run();
             }
         }
     }
