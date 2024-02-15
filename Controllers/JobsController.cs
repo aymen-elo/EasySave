@@ -182,7 +182,8 @@ namespace EasySave.Controllers
 
             if (type != null)
             {
-                var job = new Job(name, BackupType.Full, source, destination);
+                BackupType typeSave = type == "1" ? BackupType.Full : BackupType.Diff;                
+                var job = new Job(name, typeSave, source, destination);
                 Jobs.Add(job);
             }
             else
