@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Xml.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -10,7 +10,7 @@ namespace EasySave.Models
     public class Logger
     {
         private readonly string _path = Program.LogsDirectoryPath;
-        private static Logger instance;
+        private static Logger _instance;
 
         private Logger()
         {
@@ -20,30 +20,23 @@ namespace EasySave.Models
                 Directory.CreateDirectory(_path);
             }
 
-            string logPath = _path + @"\log_journalier.json";
-            string statePath = _path + @"\state.json";
-            if (!File.Exists(logPath))
-            {
-                File.Create(logPath).Close();
-            }
-
+            string statePath = Path.Combine(_path, "state.json");
             if (!File.Exists(statePath))
             {
-                File.Create(statePath).Close();
+                File.WriteAllText(statePath, ""); 
             }
         }
         
         public static Logger GetInstance()
         {
-            if (instance == null)
+            if (_instance == null)
             {
-                instance = new Logger();
+                _instance = new Logger();
             }
-            return instance;
+            return _instance;
         }
 
-        public void LogAction(string name, string fileSource, string fileTarget, long fileSize,
-            TimeSpan fileTransferTime)
+        public void LogAction(string name, string fileSource, string fileTarget, long fileSize, TimeSpan fileTransferTime)
         {
             string logMessage = $"{{\n" +
                                 $" \"Name\": \"{name}\",\n" +
@@ -53,8 +46,44 @@ namespace EasySave.Models
                                 $" \"FileTransferTime\": {fileTransferTime},\n" +
                                 $" \"Time\": \"{DateTime.Now:dd/MM/yyyy HH:mm:ss}\"\n" +
                                 $" }}";
-            File.AppendAllText(_path + @"\log_journalier.json", logMessage + Environment.NewLine);
+
+            string jsonFilePath = Path.Combine(_path, $"{DateTime.Now:yyyy-MM-dd}.json");
+
+            if (!File.Exists(jsonFilePath))
+            {
+                using (File.Create(jsonFilePath)) { }
+            }
+
+            File.AppendAllText(jsonFilePath, logMessage + Environment.NewLine);
+
+            LogActionXml(name, fileSource, fileTarget, fileSize, fileTransferTime);
         }
+        
+        public void LogActionXml(string name, string fileSource, string fileTarget, long fileSize, TimeSpan fileTransferTime)
+        {
+            string transferTimeString = fileTransferTime.ToString();
+
+            XElement logElement = new XElement("Log",
+                new XElement("Name", name),
+                new XElement("FileSource", fileSource),
+                new XElement("FileTarget", fileTarget),
+                new XElement("FileSize", fileSize),
+                new XElement("FileTransferTime", transferTimeString),
+                new XElement("Time", DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss")));
+
+            string xmlFilePath = Path.Combine(_path, $"{DateTime.Now:yyyy-MM-dd}.xml");
+
+            if (!File.Exists(xmlFilePath))
+            {
+                XDocument newDoc = new XDocument(new XElement("Logs"));
+                newDoc.Save(xmlFilePath);
+            }
+
+            XDocument doc = XDocument.Load(xmlFilePath);
+            doc.Element("Logs")?.Add(logElement);
+            doc.Save(xmlFilePath);
+        }
+
         
         /* Logging inside state.json, newName is for EditJob (search done by name, hence the need for both old & new names) */
         public void LogState(string name, string sourcePath, string targetPath, JobState state, long nbFileToCopy,
@@ -101,6 +130,11 @@ namespace EasySave.Models
                     File.WriteAllText(statePath, JsonConvert.SerializeObject(jsonArray, Formatting.Indented));
                 }
             }
+
+
+                /* method for logs in XML */
+               LogStateXml(name, sourcePath, targetPath, state, nbFileToCopy, fileSize, nbFileLeftToDo, progression);
+
         }
 
         private JObject CreateJobObject(string name, string sourcePath, string targetPath, JobState state, long nbFileToCopy,
@@ -117,6 +151,71 @@ namespace EasySave.Models
             jobObject["Progression"] = progression;
             return jobObject; 
         } 
+        
+        public void LogStateXml(string name, string sourcePath, string targetPath, JobState state, long nbFileToCopy,
+            long fileSize, long nbFileLeftToDo, int progression)
+        {
+            // Chemin du fichier XML de log d'état
+            string xmlFilePath = _path + @"\state.xml";
+
+            // Vérification de l'existence du fichier XML
+            if (!File.Exists(xmlFilePath) || new FileInfo(xmlFilePath).Length == 0)
+            {
+                // Si le fichier n'existe pas ou s'il est vide, créez un nouvel élément racine
+                XDocument newDoc = new XDocument(new XElement("Logs"));
+                newDoc.Save(xmlFilePath);
+            }
+
+            // Chargement du fichier XML
+            XDocument doc = XDocument.Load(xmlFilePath);
+            XElement logsElement = doc.Root;
+            if (logsElement == null)
+            {
+                logsElement = new XElement("Logs");
+                doc.Add(logsElement);
+            }
+
+            // Vérification de l'existence d'un élément avec le même nom
+            bool exists = logsElement.Elements("Log")
+                .Any(e => e.Element("Name")?.Value == name);
+
+            if (!exists)
+            {
+                // Création d'un élément XML pour le log d'état
+                XElement logElement = new XElement("Log",
+                    new XElement("Name", name),
+                    new XElement("SourceFilePath", sourcePath),
+                    new XElement("TargetFilePath", targetPath),
+                    new XElement("State", state.ToString()),
+                    new XElement("TotalFilesToCopy", nbFileToCopy),
+                    new XElement("TotalFilesSize", fileSize),
+                    new XElement("NbFilesLeftToDo", nbFileLeftToDo),
+                    new XElement("Progression", progression));
+
+                // Ajout de l'élément XML au fichier
+                logsElement.Add(logElement);
+                doc.Save(xmlFilePath);
+            }
+            else
+            {
+                XElement existingLogElement = logsElement.Elements("Log")
+                    .FirstOrDefault(e => e.Element("Name")?.Value == name);
+
+                if (existingLogElement != null)
+                {
+                    existingLogElement.Element("SourceFilePath")?.SetValue(sourcePath);
+                    existingLogElement.Element("TargetFilePath")?.SetValue(targetPath);
+                    existingLogElement.Element("State")?.SetValue(state.ToString());
+                    existingLogElement.Element("TotalFilesToCopy")?.SetValue(nbFileToCopy);
+                    existingLogElement.Element("TotalFilesSize")?.SetValue(fileSize);
+                    existingLogElement.Element("NbFilesLeftToDo")?.SetValue(nbFileLeftToDo);
+                    existingLogElement.Element("Progression")?.SetValue(progression);
+
+                    doc.Save(xmlFilePath);
+                }
+            }
+        }
+
 
         public void DisplayLog()
         {

@@ -37,6 +37,7 @@
     "EnterJobNameToDelete": "Nom du travail de sauvegarde à supprimer : ",
     "DestinationDirectory": "Répertoire Cible : ",
     "SourceDirectory": "Répertoire Source : ",
+    "InvalidBackupNumber": "Erreur : Veuillez écrire l'ID de la sauvegarde",
     "InvalidBackupName": "Erreur : Veuillez écrire un nom de sauvegarde composé de lettres et/ou de chiffre",
     "EmptyJobsList" : "Aucun travail de sauvegarde disponible",
     "LanguageUpdated": "La langue à été correctement mis à jour.",
@@ -44,6 +45,8 @@
     "ChooseLanguage":"Veuillez choisir une langue (en/fr): ",
     "Error": "$\"Une erreur s'est produite :",
     "NoJobSelected": "Veuillez sélécitonner une valeur valide.",
+    "JobDeleting": "Vous allez supprimer une sauvegarde.",
+    "NojobDeleted": "La sauvegarde n'a pas été supprimée.",
     
     "LaunchJobSpecific": "  X.   Lancer le travail numéro X",
     "LaunchAllJobs": "  A.   Lancer tous les travaux existants",

@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using EasySave.Library;
 using EasySave.Models;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace EasySave.Controllers
 {
@@ -115,7 +116,7 @@ namespace EasySave.Controllers
             if (job != null)
             {
                 job.State = JobState.Retired;
-                logger.LogState(job.Name, job.SourceFilePath, job.TargetFilePath, JobState.Pending, job.TotalFilesToCopy, job.TotalFilesSize , (job.TotalFilesToCopy - job.NbSavedFiles), ((job.NbSavedFiles * 100) / job.TotalFilesToCopy), job.Name);
+                logger.LogState(job.Name, job.SourceFilePath, job.TargetFilePath, job.State, job.TotalFilesToCopy, job.TotalFilesSize , (job.TotalFilesToCopy - job.NbSavedFiles), ((job.NbSavedFiles * 100) / job.TotalFilesToCopy), job.Name);
                 Jobs.Remove(job);
                 Console.Clear();
                 Console.WriteLine(translation.JobsController.JobDeletedSuccessfully);
@@ -267,6 +268,16 @@ namespace EasySave.Controllers
                 Console.Write(translation.Messages.Choice);
 
                 choice = Console.ReadLine();
+                
+                Regex rg = new Regex(@"^(?=.*[0-9])[0-9\s]*$");
+
+                while (!PatternRegEx(choice, rg) || choice == string.Empty)
+                {
+                    Console.WriteLine(translation.Messages.InvalidBackupNumber);
+                    Console.Write(translation.Messages.EnterBackupName);
+                    choice = Console.ReadLine();
+                }
+                
                 int ch = int.Parse(choice);
                 ch--;
 
@@ -275,9 +286,18 @@ namespace EasySave.Controllers
                     Console.WriteLine(translation.JobsController.JobNotFound);
                     return;
                 }
+
+                if (CopyWarning(translation.Messages.JobDeleting, translation))
+                {
+                    DeleteJob(ch, translation, logger);
+                    return;
+                }
+                else
+                {
+                    Console.WriteLine(translation.Messages.NojobDeleted);
+                    return;
+                }
                 
-                DeleteJob(ch, translation, logger);
-                return;
             }
             
             // EDIT JOB

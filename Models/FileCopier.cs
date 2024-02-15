@@ -21,6 +21,7 @@ namespace EasySave.Models
         {
             job.StartTime = DateTime.Now;
             job.State = JobState.Active;
+            job.NbSavedFiles = 0;
             
             List<string> allFiles = _fileGetter.GetAllFiles(job.SourceFilePath);
             HashSet<string> loadedHashes = _identity.LoadAllowedHashes(job.Name);
@@ -56,6 +57,7 @@ namespace EasySave.Models
             foreach (string file in allFiles)
             {
                 Stopwatch copyTime = new Stopwatch();
+                copyTime.Start();
                 
                 string sourceHash = _identity.CalculateMD5(file);
                 allowedHashes.Add(sourceHash);
@@ -97,6 +99,7 @@ namespace EasySave.Models
             foreach (string file in allFiles)
             {
                 Stopwatch copyTime = new Stopwatch();
+                copyTime.Start();
                 string sourceHash = _identity.CalculateMD5(file);
                 allowedHashes.Add(sourceHash);
 
@@ -110,6 +113,7 @@ namespace EasySave.Models
                 File.Copy(file, targetFilePath, true);
 
                 EndFileCopy(job, targetFilePath, file, copyTime, totalFilesSize);
+                
             }
             
             job.State = JobState.Finished;

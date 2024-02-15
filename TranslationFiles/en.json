@@ -24,6 +24,7 @@
     "InvalidBackupDirectory": "Error: Please enter a correct backup directory.",
     "BackupPathNotFound": "Error : Please enter an existing directory.",
     "InvalidBackupName": "Error: Please enter a backup name that doesn't exist already and that is composed of letters and/or numbers.",
+    "InvalidBackupNumber": "Error : Please select a backup ID",
     "EnterBackupName": "Backup Name: ",
     "EnterSourceDirectory": "Source Directory: ",
     "EnterTargetDirectory": "Target Directory: ",
@@ -44,6 +45,9 @@
     "ChooseLanguage":"Please choose a language (en/fr): ",
     "Error": "$\",An error has occured :",
     "NoJobSelected": "Please, select a valid value.",
+    "JobDeleting": "You are about to delete a job.",
+    "NojobDeleted": "The backup was not deleted",
+
 
 
 
