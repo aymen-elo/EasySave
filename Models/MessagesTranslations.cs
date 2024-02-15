@@ -35,5 +35,6 @@
         public string LaunchJobsRange { get; set; }
         public string LaunchJobsInterval { get; set; }
         public string NoJobSelected { get; set; }
+        public string BackupPathNotFound { get; set; }
     }
 }
