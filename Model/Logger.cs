@@ -11,9 +11,11 @@ namespace EasySave.Models
     {
         private readonly string _path = Program.LogsDirectoryPath;
         private static Logger _instance;
+        public string _logFormat { get; set; }
 
         private Logger()
         {
+            _logFormat = "json";
 
             if (!Directory.Exists(_path))
             {
@@ -38,6 +40,23 @@ namespace EasySave.Models
 
         public void LogAction(string name, string fileSource, string fileTarget, long fileSize, TimeSpan fileTransferTime)
         {
+            if (_logFormat == "json")
+            {
+                LogActionJson( name,  fileSource,  fileTarget,  fileSize,  fileTransferTime);
+            } else if (_logFormat == "xml")
+            {
+                LogActionXml(name, fileSource, fileTarget, fileSize, fileTransferTime);
+            } else
+            {
+                LogActionJson( name,  fileSource,  fileTarget,  fileSize,  fileTransferTime);
+            }
+
+            
+        }
+
+        public void LogActionJson(string name, string fileSource, string fileTarget, long fileSize,
+            TimeSpan fileTransferTime)
+        {
             string logMessage = $"{{\n" +
                                 $" \"Name\": \"{name}\",\n" +
                                 $" \"FileSource\": \"{fileSource}\",\n" +
@@ -46,7 +65,7 @@ namespace EasySave.Models
                                 $" \"FileTransferTime\": {fileTransferTime},\n" +
                                 $" \"Time\": \"{DateTime.Now:dd/MM/yyyy HH:mm:ss}\"\n" +
                                 $" }}";
-
+            
             string jsonFilePath = Path.Combine(_path, $"{DateTime.Now:yyyy-MM-dd}.json");
 
             if (!File.Exists(jsonFilePath))
@@ -55,9 +74,8 @@ namespace EasySave.Models
             }
 
             File.AppendAllText(jsonFilePath, logMessage + Environment.NewLine);
-
-            LogActionXml(name, fileSource, fileTarget, fileSize, fileTransferTime);
         }
+        
         
         public void LogActionXml(string name, string fileSource, string fileTarget, long fileSize, TimeSpan fileTransferTime)
         {

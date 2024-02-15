@@ -10,7 +10,11 @@
     "EditBackupJob": "Edit Backup Job",
     "DeleteBackupJob": "Delete Backup Job",
     "ReturnToMainMenu": "Return to Main Menu",
-    "ChooseOption": "Choose an option: "
+    "ChooseOption": "Choose an option: ",
+    "LogFormatMenu" : "Log format Menu",
+    "ChangeLanguage": "Change language",
+    "ChangeLogFormat": "Change log format",
+    "OptionsMenu": "Menu Option"
   },
 
   "Messages": {
@@ -47,6 +51,10 @@
     "NoJobSelected": "Please, select a valid value.",
     "JobDeleting": "You are about to delete a job.",
     "NojobDeleted": "The backup was not deleted",
+    "LogFormatChangedJson": "Format changed to json",
+    "LogFormatChangedXml": "Format changed to Xml",
+    "SelectLanguage": "Select a language",
+
 
 
 

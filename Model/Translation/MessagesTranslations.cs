@@ -40,5 +40,13 @@
         public string InvalidBackupNumber { get; set; }
         public string JobDeleting { get; set; }
         public string NojobDeleted { get; set; }
+        public string LogFormatChangedJson { get; set; }
+        public string LogFormatChangedXml { get; set; }
+        public string SelectLanguage { get; set; }
+
+        
+
+        
+        
     }
 }

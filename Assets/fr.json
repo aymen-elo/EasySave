@@ -10,7 +10,15 @@
     "EditBackupJob": "Modifier un travail de sauvegarde",
     "DeleteBackupJob": "Supprimer un travail de sauvegarde",
     "ReturnToMainMenu": "Retour au Menu Principal",
-    "ChooseOption": "Choisir une option: "
+    "ChooseOption": "Choisir une option: ",
+    "LogFormatMenu" : "Log format Menu",
+    "ChangeLanguage": "Changer de langue",
+    "ChangeLogFormat": "Changer le format de log",
+    "OptionsMenu": "Menu des Options"
+
+
+
+
   },
 
   "Messages": {
@@ -47,7 +55,12 @@
     "NoJobSelected": "Veuillez sélécitonner une valeur valide.",
     "JobDeleting": "Vous allez supprimer une sauvegarde.",
     "NojobDeleted": "La sauvegarde n'a pas été supprimée.",
-    
+    "LogFormatChangedJson": "Le format a changé en json",
+    "LogFormatChangedXml": "Le format a changé en Xml",
+    "SelectLanguage": "Séléctionner une langue",
+
+
+
     "LaunchJobSpecific": "  X.   Lancer le travail numéro X",
     "LaunchAllJobs": "  A.   Lancer tous les travaux existants",
     "LaunchJobsRange": " P-D.  Lancer tous les travaux de P à D",

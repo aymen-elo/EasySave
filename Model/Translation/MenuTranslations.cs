@@ -14,5 +14,17 @@
         public string DeleteBackupJob { get; set; }
         public string ReturnToMainMenu { get; set; }
         public string ChooseOption { get; set; }
+        public string LogFormatMenu { get; set; }
+        public string ChangeLanguage { get; set; }
+        public string ChangeLogFormat { get; set; }
+        public string OptionsMenu { get; set; }
+
+        
+
+        
+
+        
+
+        
     }
 }

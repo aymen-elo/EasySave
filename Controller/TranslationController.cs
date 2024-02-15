@@ -11,7 +11,7 @@ namespace EasySave.Controllers
         TranslationModel translation;
 
 
-        public string Language { get; private set; }
+        public string Language { get; set; }
 
         public TranslationController()
         {
