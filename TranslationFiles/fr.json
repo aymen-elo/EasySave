@@ -22,6 +22,7 @@
     "InvalidChoice": "Choix invalide. Veuillez réessayer.",
     "InvalidTypeChoice": "Choix de type invalide. Veuillez saisir '1' pour complet ou '2' pour différentiel.",
     "InvalidBackupDirectory": "Erreur : Veuillez écrire un chemin de sauvegarde correct.",
+    "BackupPathNotFound": "Erreur : Veuillez écrire un chemin de sauvegarde existant.",
     "EnterBackupName": "Nom de sauvegarde : ",
     "EnterSourceDirectory": "Répertoire source : ",
     "EnterTargetDirectory": "Répertoire cible : ",

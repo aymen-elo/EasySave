@@ -95,23 +95,36 @@ namespace EasySave.Models
                 }
             }
         }
-        
-        public long DirSize(DirectoryInfo dir) 
-        {    
-            long size = 0;    
-            // TODO : Try Catch here if path doesnt exist
-            FileInfo[] fis = dir.GetFiles();
-            foreach (FileInfo fi in fis) 
-            {      
-                size += fi.Length;    
-            }
-            // Add subdirectory sizes.
-            DirectoryInfo[] dis = dir.GetDirectories();
-            foreach (DirectoryInfo di in dis) 
+
+        public long DirSize(DirectoryInfo dir)
+        {
+            try
             {
-                size += DirSize(di);   
+                if (Directory.Exists(dir.ToString()))
+                {
+                    long size = 0;
+                    // TODO : Try Catch here if path doesnt exist
+                    FileInfo[] fis = dir.GetFiles();
+                    foreach (FileInfo fi in fis)
+                    {
+                        size += fi.Length;
+                    }
+
+                    // Add subdirectory sizes.
+                    DirectoryInfo[] dis = dir.GetDirectories();
+                    foreach (DirectoryInfo di in dis)
+                    {
+                        size += DirSize(di);
+                    }
+
+                    return size;
+                }                
             }
-            return size;  
+            catch (Exception ex)
+            {
+                Console.WriteLine(translation.Messages.Error + ex.Message);
+            }
+            return 0;
         }
     }
 }

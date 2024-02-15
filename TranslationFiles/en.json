@@ -22,6 +22,7 @@
     "InvalidChoice": "Invalid choice. Please try again.",
     "InvalidTypeChoice": "Invalid type choice. Please enter '1' for complete or '2' for differential.",
     "InvalidBackupDirectory": "Error: Please enter a correct backup directory.",
+    "BackupPathNotFound": "Error : Please enter an existing directory.",
     "InvalidBackupName": "Error: Please enter a backup name composed of letters and/or numbers.",
     "EnterBackupName": "Backup Name: ",
     "EnterSourceDirectory": "Source Directory: ",
