@@ -129,7 +129,12 @@ namespace EasySave.Controllers
         public void AddJob(Logger logger, TranslationModel translation, Menu menu)
         {
             Console.Clear();
-            
+
+            if (Jobs.Count >= 5)
+            {
+                Console.WriteLine("Vous avez déjà atteint le nombre maximal de travaux de sauvegarde !");
+                return;
+            }
             
             /* Backup Name */
             Regex rg = new Regex(@"^[a-zA-Z0-9\s]*$");
