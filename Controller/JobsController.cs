@@ -20,7 +20,7 @@ namespace EasySave.Controllers
         TranslationModel translation;
         
         public event EventHandler<string> FileSaved;
-        private FileCopier _fileCopier;
+        private CopyController _copyController;
 
         public JobsController(Logger logger)
         {
@@ -90,7 +90,7 @@ namespace EasySave.Controllers
                 job.BackupType = backupType;
                 
                 // Using helpers to calculate the new directory's size info
-                var _fileCopier = new FileCopier();
+                var _fileCopier = new CopyController();
                 DirectoryInfo diSource = new DirectoryInfo(job.SourceFilePath);
                 long totalFilesSize = _fileCopier._fileGetter.DirSize(diSource);
                 
@@ -215,7 +215,7 @@ namespace EasySave.Controllers
             
             logger.LogAction(job.Name, job.SourceFilePath, job.TargetFilePath, 0, TimeSpan.Zero);
             
-            var fileCopier = new FileCopier();
+            var fileCopier = new CopyController();
             fileCopier.CopyDirectory(job, translation);
             
             if (job.Progression >= 100)

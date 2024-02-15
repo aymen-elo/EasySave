@@ -51,8 +51,7 @@ namespace EasySave.Library
                         _jobsController.DisplayJobs(_translation, _logger, OperationType.Perform);
                         break;
                     case "4":
-                        continuer = false;
-                        break;
+                        return;
                     default:
                         Console.WriteLine(_translation.Messages.InvalidChoice);
                         break;

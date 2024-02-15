@@ -8,14 +8,14 @@ using EasySave.Views;
 
 namespace EasySave.Models
 {
-    public class FileCopier
+    public class CopyController
     {
         private Logger _logger = Logger.GetInstance();
         private readonly IdentityManager _identity = new IdentityManager();
         public FileGetter _fileGetter = new FileGetter();
         private ProgressBar _progressBar = new ProgressBar();
 
-        public FileCopier() { }
+        public CopyController() { }
 
         public void CopyDirectory(Job job, TranslationModel translation)
         {

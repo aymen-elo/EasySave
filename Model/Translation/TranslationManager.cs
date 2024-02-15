@@ -14,7 +14,7 @@ namespace EasySave.Models
         public TranslationModel LoadTranslation(string lang)
         {
             
-            string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "TranslationFiles", $"{lang}.json");
+            string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "Assets", $"{lang}.json");
 
             if (!File.Exists(filePath))
             {
