@@ -137,11 +137,11 @@ namespace EasySave.Controllers
             }
             
             /* Backup Name */
-            Regex rg = new Regex(@"^[a-zA-Z0-9\s]*$");
+            Regex rg = new Regex(@"^(?=.*[a-zA-Z0-9])[a-zA-Z0-9\s]*$");
             Console.Write(translation.Messages.EnterBackupName);
 
             string name = Console.ReadLine();
-            while (!PatternRegEx(name, rg))
+            while (!PatternRegEx(name, rg) || name == string.Empty)
             {
                 Console.WriteLine(translation.Messages.InvalidBackupName);
                 Console.Write(translation.Messages.EnterBackupName);
@@ -153,21 +153,30 @@ namespace EasySave.Controllers
             Console.Write(translation.Messages.SourceDirectory);
 
             string source = Console.ReadLine();
-            while (!PatternRegEx(source, rg))
+
+            bool pathExist = Directory.Exists(source);
+            
+            while (!PatternRegEx(source, rg) || !pathExist)
             {
                 Console.WriteLine(translation.Messages.InvalidBackupDirectory);
                 Console.Write(translation.Messages.SourceDirectory);
                 source = Console.ReadLine();
+                pathExist = Directory.Exists(source);
+
             }
             
             /* Backup Destination */
             Console.Write(translation.Messages.DestinationDirectory);
             string destination = Console.ReadLine();
-            while (!PatternRegEx(destination, rg))
+            pathExist = Directory.Exists(source);
+
+            while (!PatternRegEx(destination, rg) || !pathExist)
             {
-                Console.WriteLine(translation.Messages.InvalidBackupDirectory);
+                Console.WriteLine(translation.Messages.BackupPathNotFound);
                 Console.Write(translation.Messages.DestinationDirectory);
                 destination = Console.ReadLine();
+                pathExist = Directory.Exists(destination);
+
             }
 
             // Backup Type Choice
@@ -310,6 +319,12 @@ namespace EasySave.Controllers
                     int begin = int.Parse(choiceArray[0]);
                     int end = int.Parse(choiceArray[1]);
 
+                    string message = translation.FileCopier.WarningMessage;
+                    bool warningAccepted = CopyWarning(message, translation);
+
+                    if (!warningAccepted) 
+                        return;
+                    
                     for (int k = begin; k <= end; k++)
                     {
                         LaunchJob(Jobs[k - 1], logger, translation);
@@ -330,6 +345,11 @@ namespace EasySave.Controllers
                     }
                     else
                     {
+                        string message = translation.FileCopier.WarningMessage;
+                        bool warningAccepted = CopyWarning(message, translation);
+
+                        if (!warningAccepted) 
+                            return;
                         int it = 1;
                         foreach (var job in Jobs)
                         {
@@ -344,6 +364,12 @@ namespace EasySave.Controllers
                 }
                 else if (choice == "A" & Regex.IsMatch(choice, @"^A$"))
                 {
+                    string message = translation.FileCopier.WarningMessage;
+                    bool warningAccepted = CopyWarning(message, translation);
+
+                    if (!warningAccepted) 
+                        return;
+                    
                     isValid = true;
                     
                     LaunchAllJobs(logger, translation);
@@ -351,6 +377,12 @@ namespace EasySave.Controllers
                 // One and only one job to perform
                 else if (Regex.IsMatch(choice, @"^[1-9]\d*$"))
                 {
+                    string message = translation.FileCopier.WarningMessage;
+                    bool warningAccepted = CopyWarning(message, translation);
+
+                    if (!warningAccepted) 
+                        return;
+                    
                     isValid = true;
                     
                     LaunchJob(Jobs[int.Parse(choice) - 1], logger, translation);
@@ -380,15 +412,45 @@ namespace EasySave.Controllers
             if (int.TryParse(choice, out int index) && index > 0 && index <= Jobs.Count)
             {
 
+                
                 // Prompt user for new details
                 Console.Write(translation.Messages.EnterBackupName);
                 string newName = Console.ReadLine();
-
+                Regex rg = new Regex(@"^(?=.*[a-zA-Z0-9])[a-zA-Z0-9\s]*$");
+                
+                while (!PatternRegEx(newName, rg) || newName == string.Empty)
+                {
+                    Console.WriteLine(translation.Messages.InvalidBackupDirectory);
+                    Console.Write(translation.Messages.DestinationDirectory);
+                    newName = Console.ReadLine();
+                }
+                
                 Console.Write(translation.Messages.EnterSourceDirectory);
                 string newSource = Console.ReadLine();
+                bool pathExist = Directory.Exists(newSource);
+                
+                rg = new Regex(@"^[a-zA-Z]:\\(?:[^<>:""/\\|?*]+\\)*[^<>:""/\\|?*]*$");
+                    
+                while (!PatternRegEx(newSource, rg) || !pathExist)
+                {
+                    Console.WriteLine(translation.Messages.InvalidBackupDirectory);
+                    Console.Write(translation.Messages.DestinationDirectory);
+                    newSource = Console.ReadLine();
+                    pathExist = Directory.Exists(newSource);
+                }
 
                 Console.Write(translation.Messages.EnterTargetDirectory);
                 string newDestination = Console.ReadLine();
+                pathExist = Directory.Exists(newDestination);
+                
+                while (!PatternRegEx(newSource, rg) || !pathExist)
+                {
+                    Console.WriteLine(translation.Messages.InvalidBackupDirectory);
+                    Console.Write(translation.Messages.DestinationDirectory);
+                    newDestination = Console.ReadLine();
+                    pathExist = Directory.Exists(newDestination);
+
+                }
 
                 Console.WriteLine(translation.Messages.ChooseBackupType);
                 Console.WriteLine($"1. {translation.Messages.CompleteBackup}");
@@ -436,6 +498,23 @@ namespace EasySave.Controllers
                 }
             }
             return false;
+        }
+        private bool CopyWarning(string message, TranslationModel translation)
+        {
+            Console.WriteLine(message);
+
+            Console.Write(translation.FileCopier.Continue);
+            string response = Console.ReadLine();
+
+            if (response.ToLower() == "y")
+                return true;
+            else if (response.ToLower() == "n")
+                return false;
+            else
+            {
+                Console.WriteLine(translation.FileCopier.InvalidResponseFileCopier);
+                return CopyWarning(message, translation);
+            }
         }
     }
 }

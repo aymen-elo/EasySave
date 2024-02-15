@@ -36,6 +36,7 @@ namespace EasySave.Models
         public string InvalidChoice { get; set; }
         public string InvalidTypeChoice { get; set; }
         public string InvalidBackupDirectory { get; set; }
+        public string BackupPathNotFound { get; set; }
         public string InvalidBackupName { get; set; }
         public string EnterBackupName { get; set; }
         public string EnterSourceDirectory { get; set; }

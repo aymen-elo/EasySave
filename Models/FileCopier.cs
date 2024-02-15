@@ -28,12 +28,6 @@ namespace EasySave.Models
 
             job.TotalFilesToCopy = allFiles.Count();
 
-            string message = translation.FileCopier.WarningMessage;
-            bool warningAccepted = CopyWarning(message, translation);
-
-            if (!warningAccepted)
-                return;
-
             Stopwatch stopWatch = new Stopwatch();
             stopWatch.Start();
 
@@ -124,24 +118,7 @@ namespace EasySave.Models
             _identity.DeleteAllowedHashes(job.Name);
             _identity.SaveAllowedHashes(allowedHashes, job.Name);
         }
-
-        private bool CopyWarning(string message, TranslationModel translation)
-        {
-            Console.WriteLine(message);
-
-            Console.Write(translation.FileCopier.Continue);
-            string response = Console.ReadLine();
-
-            if (response.ToLower() == "y")
-                return true;
-            else if (response.ToLower() == "n")
-                return false;
-            else
-            {
-                Console.WriteLine(translation.FileCopier.InvalidResponseFileCopier);
-                return CopyWarning(message, translation);
-            }
-        }
+        
         private void EndFileCopy(Job job, string targetFilePath, string file, Stopwatch copyTime, long totalFilesSize)
         {
             
