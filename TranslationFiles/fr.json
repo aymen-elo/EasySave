@@ -66,7 +66,7 @@
     "JobDeletedSuccessfully": "Le travail de sauvegarde a été supprimé avec succès.",
     "JobNotFound": "Le travail de sauvegarde spécifié n'existe pas.",
     "ReturnToMenu": "\nAppuyer sur une touche pour revenir au menu de sauvegarde...",
-    "BackupNameToDelete": "Nom du travail de sauvegarde à supprimer : "
-  
-  }
+    "BackupNameToDelete": "Nom du travail de sauvegarde à supprimer : ",
+    "BackupFull": "Vous avez déjà atteint le nombre maximal de travaux de sauvegarde !"
+}
 }

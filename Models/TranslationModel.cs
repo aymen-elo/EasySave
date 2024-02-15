@@ -62,6 +62,7 @@ namespace EasySave.Models
         public string LaunchAllJobs { get; set; }
         public string LaunchJobsRange { get; set; }
         public string LaunchJobsInterval { get; set; }
+        
 
         
     }
@@ -76,6 +77,8 @@ namespace EasySave.Models
         public string JobNotFound { get; set; }
         public string ReturnToMenu { get; set; }
         public string BackupNameToDelete { get; set; }
+        public string BackupFull { get; set; }
+
         
         
     }

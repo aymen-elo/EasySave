@@ -43,6 +43,7 @@
     "ChooseLanguage":"Please choose a language (en/fr): ",
     "Error": "$\",An error has occured :",
 
+
     "LaunchJobSpecific": "  X.   Launch job number X",
     "LaunchAllJobs": "  A.   Launch all existing jobs",
     "LaunchJobsRange": " P-D.  Launch all jobs from P to D",
@@ -66,8 +67,7 @@
     "JobDeletedSuccessfully": "The job has been deleted successfully.",
     "JobNotFound": "The specified job does not exist.",
     "ReturnToMenu": "\nPress any button to return to backup menu...",
-    "BackupNameToDelete": "Job name to delete : "
-
-
+    "BackupNameToDelete": "Job name to delete : ",
+    "BackupFull": "You have already reached the maximum number of backup jobs!"
   }
 }
