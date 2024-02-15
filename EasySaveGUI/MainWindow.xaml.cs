@@ -25,11 +25,7 @@ namespace EasySave_2._0
         public MainWindow()
         {
             InitializeComponent();
-            {
-            string LogsDirectoryPath = @"C:\Prosoft\EasySave\Logs";
-
-            }
-
+            DataContext = new MainViewModel();
 
         }
 

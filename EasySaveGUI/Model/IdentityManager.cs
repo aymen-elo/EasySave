@@ -5,13 +5,11 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-using EasySave_2._0;
 
 namespace EasySave.Models
 {
     public class IdentityManager
     {
-        private MainWindow _mainWindow = new MainWindow();
         private readonly string _path = Program.LogsDirectoryPath;
         public IdentityManager()
         {
