@@ -127,7 +127,7 @@ namespace EasySave.Controllers
             }
         }
         
-        public void AddJob(Logger logger, TranslationModel translation, Menu menu)
+        public void AddJob(Logger logger, TranslationModel translation)
         {
             Console.Clear();
 
