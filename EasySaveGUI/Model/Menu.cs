@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using EasySave.Controllers;
 using EasySave.Models;
 
@@ -10,15 +11,17 @@ namespace EasySave.Library
         private readonly JobsController _jobsController;
         private readonly Logger _logger;
         private readonly TranslationManager _translationManager;
+        private readonly BackgroundWorker _worker;
         private TranslationModel _translation; 
 
 
-        public Menu(TranslationController translationController, JobsController jobsController, Logger logger, TranslationManager translationManager)
+        public Menu(TranslationController translationController, JobsController jobsController, Logger logger, TranslationManager translationManager, BackgroundWorker worker)
         {
             _translationController = translationController;
             _jobsController = jobsController;
             _logger = logger;
             _translationManager = translationManager;
+            _worker = worker;
         }
 
         public void Run()
@@ -49,7 +52,7 @@ namespace EasySave.Library
                         ManageJobs();
                         break;
                     case "3":
-                        _jobsController.DisplayJobs(_translation, _logger, OperationType.Perform);
+                        _jobsController.DisplayJobs(_translation, _logger, OperationType.Perform, _worker);
                         break;
                     case "4":
                         return;
@@ -164,16 +167,16 @@ namespace EasySave.Library
                 switch (choice)
                 {
                     case "0":
-                        _jobsController.DisplayJobs(_translation, _logger, OperationType.Display);
+                        _jobsController.DisplayJobs(_translation, _logger, OperationType.Display, _worker);
                         break;
                     case "1":
                         _jobsController.AddJob(_logger, _translation, this);
                         break;
                     case "2":
-                        _jobsController.EditJob(_logger, _translation);
+                        _jobsController.EditJob(_logger, _translation, _worker);
                         break;
                     case "3":
-                        _jobsController.RemoveJob(_logger, _translation);
+                        _jobsController.RemoveJob(_logger, _translation, _worker);
                         break;
                     case "4":
                         continuer = false;
