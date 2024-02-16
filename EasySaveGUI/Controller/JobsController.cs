@@ -16,7 +16,7 @@ namespace EasySave.Controllers
     public class JobsController
     { 
         public List<Job> Jobs { get; private set; }
-        private Logger _logger;
+        public Logger _logger { get; set; }
         TranslationModel translation;
         
         public event EventHandler<string> FileSaved;
@@ -118,7 +118,7 @@ namespace EasySave.Controllers
                 job.State = JobState.Retired;
                 logger.LogState(job.Name, job.SourceFilePath, job.TargetFilePath, job.State, job.TotalFilesToCopy, job.TotalFilesSize , (job.TotalFilesToCopy - job.NbSavedFiles), ((job.NbSavedFiles * 100) / job.TotalFilesToCopy), job.Name);
                 Jobs.Remove(job);
-                Console.Clear();
+                
                 Console.WriteLine(translation.JobsController.JobDeletedSuccessfully);
             }
             else
@@ -127,82 +127,28 @@ namespace EasySave.Controllers
             }
         }
         
-        public void AddJob(Logger logger, TranslationModel translation, Menu menu)
+        public void AddJob(Logger logger, TranslationModel translation, string name, string source, string destination, BackupType backupType)
         {
-            Console.Clear();
+            // Créer un nouveau job
+            var job = new Job(name, backupType, source, destination);
+            Jobs.Add(job);
 
-            if (Jobs.Count >= 5)
-            {
-                Console.WriteLine(translation.JobsController.BackupFull);
-                return;
-            }
-            
-            /* Backup Name */
-            Regex rg = new Regex(@"^(?=.*[a-zA-Z0-9])[a-zA-Z0-9\s]*$");
-            Console.Write(translation.Messages.EnterBackupName);
-
-            string name = Console.ReadLine();
-            while (!PatternRegEx(name, rg) || name == string.Empty || JobExists(name))
-            {
-                Console.WriteLine(translation.Messages.InvalidBackupName);
-                Console.Write(translation.Messages.EnterBackupName);
-                name = Console.ReadLine();
-                Console.Clear();
-            }
-            
-            /* Backup Source */ 
-            rg = new Regex(@"^[a-zA-Z]:\\(?:[^<>:""/\\|?*]+\\)*[^<>:""/\\|?*]*$");
-            Console.Write(translation.Messages.SourceDirectory);
-
-            string source = Console.ReadLine();
-
-            bool pathExist = Directory.Exists(source);
-            
-            while (!PatternRegEx(source, rg) || !pathExist)
-            {
-                Console.WriteLine(translation.Messages.InvalidBackupDirectory);
-                Console.Write(translation.Messages.SourceDirectory);
-                source = Console.ReadLine();
-                pathExist = Directory.Exists(source);
-                Console.Clear();
-            }
-            
-            /* Backup Destination */
-            Console.Write(translation.Messages.DestinationDirectory);
-            string destination = Console.ReadLine();
-            pathExist = Directory.Exists(source);
-
-            while (!PatternRegEx(destination, rg) || !pathExist)
-            {
-                Console.WriteLine(translation.Messages.BackupPathNotFound);
-                Console.Write(translation.Messages.DestinationDirectory);
-                destination = Console.ReadLine();
-                pathExist = Directory.Exists(destination);
-                Console.Clear();
-            }
-
-            // Backup Type Choice
-            Console.WriteLine(translation.Messages.ChooseBackupType);
-            Console.WriteLine($"1. {translation.Messages.CompleteBackup}");
-            Console.WriteLine($"2. {translation.Messages.DifferentialBackup}");
-            Console.Write(translation.Messages.Choice);
-            string backupType = Console.ReadLine();
-            Console.Clear();
-
-            // Convert user choice (Full/Diff)
-            string type = backupType == "1" ? (translation.Messages.CompleteBackup) : backupType == "2" ? (translation.Messages.DifferentialBackup) : null;
-
-            if (type != null)
-            {
-                BackupType typeSave = type == "1" ? BackupType.Full : BackupType.Diff;                
-                var job = new Job(name, typeSave, source, destination);
-                Jobs.Add(job);
-            }
-            else
-            {
-                Console.WriteLine(translation.Messages.InvalidTypeChoice);
-            }
+            // Enregistrer la liste mise à jour dans un fichier JSON
+            SaveJobsToJson();
         }
+
+        private void SaveJobsToJson()
+        {
+            // Chemin du fichier JSON
+            string filePath = @"C:\Prosoft\EasySave\Logs\state.json";
+
+            // Sérialiser la liste des jobs au format JSON
+            string jsonJobs = JsonConvert.SerializeObject(Jobs, Formatting.Indented);
+
+            // Écrire les données JSON dans le fichier
+            File.WriteAllText(filePath, jsonJobs);
+        }
+
 
         public void LaunchJob(Job job, Logger logger, TranslationModel translation)
         {
@@ -237,7 +183,7 @@ namespace EasySave.Controllers
         /* Used to displayJobs & perform operations on jobs */
         public void DisplayJobs(TranslationModel translation, Logger logger, OperationType op)
         {
-            Console.Clear();
+            
             Console.WriteLine(translation.Messages.ListBackupJobs);
 
             if (Jobs.Count == 0)
@@ -311,7 +257,7 @@ namespace EasySave.Controllers
             {
                 Console.WriteLine(translation.JobsController.ReturnToMenu);
                 Console.ReadKey();
-                Console.Clear();
+                
                 return;
             }
 
@@ -330,7 +276,7 @@ namespace EasySave.Controllers
 
             if (choice == "0")
             {
-                Console.Clear();
+                
                 return;
             }
 
@@ -423,7 +369,7 @@ namespace EasySave.Controllers
             
             Console.WriteLine(translation.JobsController.ReturnToMenu);
             Console.ReadKey();
-            Console.Clear();
+            
         }
 
         public void EditJob( Logger logger, TranslationModel translation)
@@ -433,7 +379,7 @@ namespace EasySave.Controllers
             Console.WriteLine(translation.Messages.Choice);
             string choice = Console.ReadLine();
             
-            Console.Clear();
+            
 
             if (int.TryParse(choice, out int index) && index > 0 && index <= Jobs.Count)
             {
@@ -497,7 +443,7 @@ namespace EasySave.Controllers
 
             Console.WriteLine(translation.JobsController.ReturnToMenu);
             Console.ReadKey();
-            Console.Clear();
+            
         }
 
         public void RemoveJob( Logger logger, TranslationModel translation)
@@ -505,7 +451,7 @@ namespace EasySave.Controllers
             DisplayJobs(translation, logger, OperationType.Remove);
             Console.WriteLine(translation.JobsController.ReturnToMenu);
             Console.ReadKey();
-            Console.Clear();
+            
         }
         static bool PatternRegEx(string text, Regex pattern)
         {

@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using EasySave.Controllers;
 using EasySave.Models;
 
@@ -146,43 +147,62 @@ namespace EasySave.Library
         }
 
         private void ManageJobs()
+{
+    bool continuer = true;
+    while (continuer)
+    {
+        Console.WriteLine(_translation.Menu.BackupManage);
+        Console.WriteLine($"0. {_translation.Menu.DisplayJobs}");
+        Console.WriteLine($"1. {_translation.Menu.AddBackupJob}");
+        Console.WriteLine($"2. {_translation.Menu.EditBackupJob}");
+        Console.WriteLine($"3. {_translation.Menu.DeleteBackupJob}");
+        Console.WriteLine($"4. {_translation.Menu.ReturnToMainMenu}");
+
+        Console.Write(_translation.Messages.Choice);
+        string choice = Console.ReadLine();
+        Console.Clear();
+
+        switch (choice)
         {
-            bool continuer = true;
-            while (continuer)
-            {
-                Console.WriteLine(_translation.Menu.BackupManage);
-                Console.WriteLine($"0. {_translation.Menu.DisplayJobs}");
-                Console.WriteLine($"1. {_translation.Menu.AddBackupJob}");
-                Console.WriteLine($"2. {_translation.Menu.EditBackupJob}");
-                Console.WriteLine($"3. {_translation.Menu.DeleteBackupJob}");
-                Console.WriteLine($"4. {_translation.Menu.ReturnToMainMenu}");
+            case "0":
+                _jobsController.DisplayJobs(_translation, _logger, OperationType.Display);
+                break;
+            case "1":
+                AddBackupJob(); // Appel de la méthode locale pour ajouter un job
+                break;
+            case "2":
+                _jobsController.EditJob(_logger, _translation);
+                break;
+            case "3":
+                _jobsController.RemoveJob(_logger, _translation);
+                break;
+            case "4":
+                continuer = false;
+                break;
+            default:
+                Console.WriteLine(_translation.Messages.InvalidChoice);
+                break;
+        }
+    } 
+}
 
-                Console.Write(_translation.Messages.Choice);
-                string choice = Console.ReadLine();
-                Console.Clear();
+        // Méthode locale pour ajouter un job
+        private void AddBackupJob()
+        {
+            Console.WriteLine(_translation.Messages.EnterBackupName);
+            string name = Console.ReadLine();
+            Console.WriteLine(_translation.Messages.SourceDirectory);
+            string source = Console.ReadLine();
+            Console.WriteLine(_translation.Messages.DestinationDirectory);
+            string destination = Console.ReadLine();
+            Console.WriteLine(_translation.Messages.ChooseBackupType);
+            string backupType = Console.ReadLine();
 
-                switch (choice)
-                {
-                    case "0":
-                        _jobsController.DisplayJobs(_translation, _logger, OperationType.Display);
-                        break;
-                    case "1":
-                        _jobsController.AddJob(_logger, _translation, this);
-                        break;
-                    case "2":
-                        _jobsController.EditJob(_logger, _translation);
-                        break;
-                    case "3":
-                        _jobsController.RemoveJob(_logger, _translation);
-                        break;
-                    case "4":
-                        continuer = false;
-                        break;
-                    default:
-                        Console.WriteLine(_translation.Messages.InvalidChoice);
-                        break;
-                }
-            }
+            // Convertir le type de sauvegarde en BackupType
+            BackupType typeSave = (backupType == "Full") ? BackupType.Full : BackupType.Diff;
+
+            // Appeler la méthode AddJob du contrôleur de jobs avec les paramètres nécessaires
+            _jobsController.AddJob(_logger, _translation, name, source, destination, typeSave);
         }
     }
 }
