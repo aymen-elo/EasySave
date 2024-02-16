@@ -8,21 +8,20 @@
         Title="MainWindow" Height="450" Width="800">
     <Grid>
         <Grid Background="#FFE9EEF3">
-            <DataGrid ItemsSource="{Binding Jobs}" AutoGenerateColumns="False" Margin="38,142,38,142">
+            <DataGrid x:Name="dgJobList"  ItemsSource="{Binding Jobs}" AutoGenerateColumns="False" Margin="38,142,38,142" SelectionChanged="dgJobList_SelectionChanged">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Id" Binding="{Binding Id}" />
                     <DataGridTextColumn Header="Nom" Binding="{Binding Name}" />
                     <DataGridTextColumn Header="Type de sauvegarde" Binding="{Binding BackupType}" />
                     <DataGridTextColumn Header="Chemin source" Binding="{Binding SourceFilePath}" />
                     <DataGridTextColumn Header="Chemin destination" Binding="{Binding TargetFilePath}" />
-                    <!-- Ajoutez autant de colonnes que nécessaire pour afficher d'autres propriétés de Job -->
                 </DataGrid.Columns>
             </DataGrid>
+        </Grid>
+
             <TextBlock x:Name="tboxEvent" HorizontalAlignment="Center" Height="60" Margin="0,337,0,0" TextWrapping="Wrap" Text="Ici event " VerticalAlignment="Top" Width="724" Background="White" ScrollViewer.VerticalScrollBarVisibility="Visible"/>
             <Label x:Name="labelEvents" Content="Events" HorizontalAlignment="Left" Margin="38,311,0,0" VerticalAlignment="Top"/>
             <Label x:Name="lblVersion" Content="Version 2.0" HorizontalAlignment="Left" Margin="742,411,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.891,0.888" FontSize="10"/>
-        </Grid>
-        <Button Name="btnNewJob" Content="New Job" HorizontalAlignment="Left" Margin="21,23,0,0" VerticalAlignment="Top" Height="42" Width="66" Click="btnNewJob_Click"/>
+        <Button x:Name="btnNewJob" Content="New Job" HorizontalAlignment="Left" Margin="21,23,0,0" VerticalAlignment="Top" Height="42" Width="66" Click="btnNewJob_Click"/>
         <Button x:Name="btnRunJob" Content="Run Job" HorizontalAlignment="Left" Margin="124,23,0,0" VerticalAlignment="Top" Height="42" Width="66" Click="btnRunJob_Click"/>
         <Button x:Name="btnRemoveJob" Content="Remove Job" HorizontalAlignment="Left" Margin="228,23,0,0" VerticalAlignment="Top" Height="42" Width="66" Click="btnRemoveJob_Click"/>
         <Button x:Name="btnEditJob" Content="Edit Job" HorizontalAlignment="Left" Margin="342,23,0,0" VerticalAlignment="Top" Height="42" Width="66" Click="btnEditJob_Click"/>

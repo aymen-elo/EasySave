@@ -26,15 +26,52 @@ namespace EasySave_2._0
         {
             InitializeComponent();
             DataContext = new MainViewModel();
+            btnRunJob.IsEnabled = false;
 
         }
 
         private void btnNewJob_Click(object sender, RoutedEventArgs e) { }
-        private void btnRunJob_Click(object sender, RoutedEventArgs e) { }
+
+        private void btnRunJob_Click(object sender, RoutedEventArgs e)
+        {
+            Job selectedJob = dgJobList.SelectedItem as Job;
+            if (selectedJob != null)
+            {
+                /*
+                // Instancier le contrôleur de jobs
+                JobsController jobsController = new JobsController();
+        
+                // Appeler la méthode LaunchJob avec le job sélectionné
+                jobsController.LaunchJob(selectedJob, new Logger(), new TranslationModel());
+
+                // Afficher un message ou effectuer toute autre action nécessaire
+                */
+                MessageBox.Show($"Job '{selectedJob.Name}' is running.");
+            }
+            else
+            {
+                // Afficher un message d'erreur si aucun job n'est sélectionné
+                MessageBox.Show("Please select a job to run.");
+            }
+        }
         private void btnRemoveJob_Click(object sender, RoutedEventArgs e) { }
         private void btnEditJob_Click(object sender, RoutedEventArgs e) { }
         private void btnPlayPause_Click(object sender, RoutedEventArgs e) { }
         private void btnStopJob_Click(object sender, RoutedEventArgs e) { }
         private void btnLogs_Click(object sender, RoutedEventArgs e) { }
+
+        private void dgJobList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Job job = (Job)(dgJobList.SelectedItem);
+            if (job != null)
+            {
+                btnRunJob.IsEnabled = true;
+            }
+            else
+            {
+                btnRunJob.IsEnabled = true;
+            }
+            
+        }
     }
 }
