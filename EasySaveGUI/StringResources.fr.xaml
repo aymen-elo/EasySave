@@ -1,0 +1,19 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+                    xmlns:system="clr-namespace:System;assembly=System.Runtime">
+
+    <system:String x:Key="StrButtonNewJob">Nouveau Travail</system:String>
+    <system:String x:Key="StrButtonRunJob">Exécuter Travail</system:String>
+    <system:String x:Key="StrButtonRemoveJob">Supprimer Travail</system:String>
+    <system:String x:Key="StrButtonEditJob">Éditer Travail</system:String>
+    <system:String x:Key="StrButtonPlayPause">Lancer/Pause</system:String>
+    <system:String x:Key="StrButtonStopJob">Arrêter Travail</system:String>
+    <system:String x:Key="StrButtonLogs">Log de Journalisation</system:String>
+    <system:String x:Key="StrButtonOption">Option</system:String>
+    <system:String x:Key="StrSearchJob">Rechercher un travail</system:String>
+
+    <system:String x:Key="StrMainMenu">Menu</system:String>
+    <system:String x:Key="StrMainEnglish">Anglais</system:String>
+    <system:String x:Key="StrMainFrench">Français</system:String>
+
+</ResourceDictionary>

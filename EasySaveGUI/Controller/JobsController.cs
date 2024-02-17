@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using EasySave.Library;
 using EasySave.Models;
 using Newtonsoft.Json;
@@ -135,6 +136,7 @@ namespace EasySave.Controllers
 
             // Enregistrer la liste mise à jour dans un fichier JSON
             SaveJobsToJson();
+            SaveJobsXml();
         }
 
         private void SaveJobsToJson()
@@ -147,6 +149,39 @@ namespace EasySave.Controllers
 
             // Écrire les données JSON dans le fichier
             File.WriteAllText(filePath, jsonJobs);
+        }
+        
+        private void SaveJobsXml()
+        {
+            // Chemin du fichier XML
+            string filePath = @"C:\Prosoft\EasySave\Logs\state.xml";
+
+            // Créer un élément racine
+            XElement jobsElement = new XElement("Jobs");
+
+            // Ajouter chaque job en tant qu'élément dans le document XML
+            foreach (var job in Jobs)
+            {
+                XElement jobElement = new XElement("Job",
+                    new XElement("Name", job.Name),
+                    new XElement("BackupType", job.BackupType),
+                    new XElement("Source", job.SourceFilePath),
+                    new XElement("Destination", job.TargetFilePath),
+                    new XElement("State", job.State.ToString()),
+                    new XElement("TotalFilesToCopy", job.NbSavedFiles),
+                    new XElement("TotalFilesSize", job.TotalFilesSize),
+                    new XElement("NbFilesLeftToDo", job.NbFilesLeftToDo),
+                    new XElement("Progression", job.Progression)
+                    // Ajoutez d'autres éléments pour d'autres propriétés du job si nécessaire
+                    );
+                    jobsElement.Add(jobElement);
+            }
+
+            // Créer un document XML avec l'élément racine
+            XDocument doc = new XDocument(jobsElement);
+
+            // Écrire les données XML dans le fichier
+            doc.Save(filePath);
         }
 
 

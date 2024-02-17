@@ -24,7 +24,7 @@ namespace EasySave.Library
 
         public void Run()
         {
-            _translationController.Run();
+            //_translationController.Run();
             _translation = _translationManager.LoadTranslation(_translationController.Language); // Assigner la traduction au champ de classe
 
             bool continuer = true;

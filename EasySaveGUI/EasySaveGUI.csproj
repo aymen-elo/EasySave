@@ -17,4 +17,11 @@
     <ProjectReference Include="..\EasySave\EasySave.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Page Update="StringResources.fr.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+
 </Project>

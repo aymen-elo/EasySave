@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Globalization;
+using System.Windows;
+using System.Windows.Controls;
 using EasySave.Models;
 using EasySave.Views;
 
@@ -8,6 +11,7 @@ namespace EasySave.Controllers
     {
         private readonly TranslationManager _translationManager;
         private readonly TranslationView _translationView;
+        public MessagesTranslations _messagesTranslations;
         TranslationModel translation;
 
 
@@ -17,26 +21,9 @@ namespace EasySave.Controllers
         {
             _translationManager = new TranslationManager();
             _translationView = new TranslationView();
+            _messagesTranslations = new MessagesTranslations();
         }
 
-        public void Run()
-        {
-            _translationView.DisplayMessage("Please choose a language (en/fr): ");
-            string lang = Console.ReadLine().ToLower();
-
-            if (lang == "en" || lang == "fr")
-            {
-                Language = lang;
-
-                translation = _translationManager.LoadTranslation(lang);
-                _translationView.DisplayMessage(translation.Messages.LanguageUpdated);
-            }
-            else
-            {
-                Console.WriteLine("Invalid language choice");
-                Console.Clear();
-                Run();
-            }
-        }
+        
     }
 }
