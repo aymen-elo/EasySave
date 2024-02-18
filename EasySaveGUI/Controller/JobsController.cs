@@ -93,9 +93,11 @@ namespace EasySave.Controllers
                 var _fileCopier = new CopyController();
                 DirectoryInfo diSource = new DirectoryInfo(job.SourceFilePath);
                 long totalFilesSize = _fileCopier._fileGetter.DirSize(diSource);
+                int totalFilesToCopy = _fileCopier._fileGetter.GetAllFiles(job.SourceFilePath).Count;
                 
                 job.TotalFilesSize = totalFilesSize;
-                job.NbFilesLeftToDo = totalFilesSize;
+                job.NbFilesLeftToDo = totalFilesToCopy;
+                job.TotalFilesToCopy = totalFilesToCopy;
                 job.NbSavedFiles = 0;
 
                 logger.LogState(job.Name, job.SourceFilePath, job.TargetFilePath, job.State, job.TotalFilesToCopy, job.TotalFilesSize , (job.TotalFilesToCopy - job.NbSavedFiles), ((job.NbSavedFiles * 100) / job.TotalFilesToCopy), name);
@@ -131,22 +133,21 @@ namespace EasySave.Controllers
         {
             // Créer un nouveau job
             var job = new Job(name, backupType, source, destination);
+                
+            // Using helpers to calculate the new directory's size info
+            var _fileCopier = new CopyController();
+            DirectoryInfo diSource = new DirectoryInfo(job.SourceFilePath);
+            long totalFilesSize = _fileCopier._fileGetter.DirSize(diSource);
+            int totalFilesToCopy = _fileCopier._fileGetter.GetAllFiles(job.SourceFilePath).Count;
+                
+            job.TotalFilesSize = totalFilesSize;
+            job.NbFilesLeftToDo = totalFilesToCopy;
+            job.TotalFilesToCopy = totalFilesToCopy;
+            job.NbSavedFiles = 0;
+                
             Jobs.Add(job);
+            logger.LogState(job.Name, job.SourceFilePath, job.TargetFilePath, job.State, job.TotalFilesToCopy, job.TotalFilesSize , (job.TotalFilesToCopy - job.NbSavedFiles), ((job.NbSavedFiles * 100) / job.TotalFilesToCopy), name);
 
-            // Enregistrer la liste mise à jour dans un fichier JSON
-            SaveJobsToJson();
-        }
-
-        private void SaveJobsToJson()
-        {
-            // Chemin du fichier JSON
-            string filePath = @"C:\Prosoft\EasySave\Logs\state.json";
-
-            // Sérialiser la liste des jobs au format JSON
-            string jsonJobs = JsonConvert.SerializeObject(Jobs, Formatting.Indented);
-
-            // Écrire les données JSON dans le fichier
-            File.WriteAllText(filePath, jsonJobs);
         }
 
 
