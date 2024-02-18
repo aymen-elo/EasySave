@@ -93,9 +93,11 @@ namespace EasySave.Controllers
                 var _fileCopier = new CopyController();
                 DirectoryInfo diSource = new DirectoryInfo(job.SourceFilePath);
                 long totalFilesSize = _fileCopier._fileGetter.DirSize(diSource);
-                
+                int totalFilesToCopy = _fileCopier._fileGetter.GetAllFiles(job.SourceFilePath).Count;
+
                 job.TotalFilesSize = totalFilesSize;
-                job.NbFilesLeftToDo = totalFilesSize;
+                job.NbFilesLeftToDo = totalFilesToCopy;
+                job.TotalFilesToCopy = totalFilesToCopy;
                 job.NbSavedFiles = 0;
 
                 logger.LogState(job.Name, job.SourceFilePath, job.TargetFilePath, job.State, job.TotalFilesToCopy, job.TotalFilesSize , (job.TotalFilesToCopy - job.NbSavedFiles), ((job.NbSavedFiles * 100) / job.TotalFilesToCopy), name);
@@ -196,7 +198,20 @@ namespace EasySave.Controllers
             {
                 BackupType typeSave = type == "1" ? BackupType.Full : BackupType.Diff;                
                 var job = new Job(name, typeSave, source, destination);
+
+                // Using helpers to calculate the new directory's size info
+                var _fileCopier = new CopyController();
+                DirectoryInfo diSource = new DirectoryInfo(job.SourceFilePath);
+                long totalFilesSize = _fileCopier._fileGetter.DirSize(diSource);
+                int totalFilesToCopy = _fileCopier._fileGetter.GetAllFiles(job.SourceFilePath).Count;
+
+                job.TotalFilesSize = totalFilesSize;
+                job.NbFilesLeftToDo = totalFilesToCopy;
+                job.TotalFilesToCopy = totalFilesToCopy;
+                job.NbSavedFiles = 0;
+
                 Jobs.Add(job);
+                logger.LogState(job.Name, job.SourceFilePath, job.TargetFilePath, job.State, job.TotalFilesToCopy, job.TotalFilesSize , (job.TotalFilesToCopy - job.NbSavedFiles), ((job.NbSavedFiles * 100) / job.TotalFilesToCopy), name);
             }
             else
             {
