@@ -23,7 +23,7 @@ namespace EasySave.Library
 
         public void Run()
         {
-            _translationController.Run();
+            //_translationController.Run();
             _translation = _translationManager.LoadTranslation(_translationController.Language); // Assigner la traduction au champ de classe
 
             bool continuer = true;
@@ -167,7 +167,7 @@ namespace EasySave.Library
                         _jobsController.DisplayJobs(_translation, _logger, OperationType.Display);
                         break;
                     case "1":
-                        _jobsController.AddJob(_logger, _translation, this);
+                        AddBackupJob(); // Appel de la méthode locale pour ajouter un job
                         break;
                     case "2":
                         _jobsController.EditJob(_logger, _translation);
@@ -182,7 +182,8 @@ namespace EasySave.Library
                         Console.WriteLine(_translation.Messages.InvalidChoice);
                         break;
                 }
-            }
+            } 
         }
+        private void AddBackupJob() { }
     }
 }

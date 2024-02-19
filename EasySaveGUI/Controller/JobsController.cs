@@ -2,13 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using EasySave.Library;
+using System.Xml.Linq;
 using EasySave.Models;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace EasySave.Controllers
 {
@@ -16,7 +13,7 @@ namespace EasySave.Controllers
     public class JobsController
     { 
         public List<Job> Jobs { get; private set; }
-        private Logger _logger;
+        public Logger _logger { get; set; }
         TranslationModel translation;
         
         public event EventHandler<string> FileSaved;
@@ -127,92 +124,26 @@ namespace EasySave.Controllers
             }
         }
         
-        public void AddJob(Logger logger, TranslationModel translation, Menu menu)
+        public void AddJob(Logger logger, TranslationModel translation, string name, string source, string destination, BackupType backupType)
         {
-            
-
-            if (Jobs.Count >= 5)
-            {
-                Console.WriteLine(translation.JobsController.BackupFull);
-                return;
-            }
-            
-            /* Backup Name */
-            Regex rg = new Regex(@"^(?=.*[a-zA-Z0-9])[a-zA-Z0-9\s]*$");
-            Console.Write(translation.Messages.EnterBackupName);
-
-            string name = Console.ReadLine();
-            while (!PatternRegEx(name, rg) || name == string.Empty || JobExists(name))
-            {
-                Console.WriteLine(translation.Messages.InvalidBackupName);
-                Console.Write(translation.Messages.EnterBackupName);
-                name = Console.ReadLine();
+            // Créer un nouveau job
+            var job = new Job(name, backupType, source, destination);
                 
-            }
-            
-            /* Backup Source */ 
-            rg = new Regex(@"^[a-zA-Z]:\\(?:[^<>:""/\\|?*]+\\)*[^<>:""/\\|?*]*$");
-            Console.Write(translation.Messages.SourceDirectory);
-
-            string source = Console.ReadLine();
-
-            bool pathExist = Directory.Exists(source);
-            
-            while (!PatternRegEx(source, rg) || !pathExist)
-            {
-                Console.WriteLine(translation.Messages.InvalidBackupDirectory);
-                Console.Write(translation.Messages.SourceDirectory);
-                source = Console.ReadLine();
-                pathExist = Directory.Exists(source);
+            // Using helpers to calculate the new directory's size info
+            var _fileCopier = new CopyController();
+            DirectoryInfo diSource = new DirectoryInfo(job.SourceFilePath);
+            long totalFilesSize = _fileCopier._fileGetter.DirSize(diSource);
+            int totalFilesToCopy = _fileCopier._fileGetter.GetAllFiles(job.SourceFilePath).Count;
                 
-            }
-            
-            /* Backup Destination */
-            Console.Write(translation.Messages.DestinationDirectory);
-            string destination = Console.ReadLine();
-            pathExist = Directory.Exists(source);
-
-            while (!PatternRegEx(destination, rg) || !pathExist)
-            {
-                Console.WriteLine(translation.Messages.BackupPathNotFound);
-                Console.Write(translation.Messages.DestinationDirectory);
-                destination = Console.ReadLine();
-                pathExist = Directory.Exists(destination);
+            job.TotalFilesSize = totalFilesSize;
+            job.NbFilesLeftToDo = totalFilesToCopy;
+            job.TotalFilesToCopy = totalFilesToCopy;
+            job.NbSavedFiles = 0;
                 
-            }
+            Jobs.Add(job);
+            logger.LogState(job.Name, job.SourceFilePath, job.TargetFilePath, job.State, job.TotalFilesToCopy, job.TotalFilesSize , (job.TotalFilesToCopy - job.NbSavedFiles), ((job.NbSavedFiles * 100) / job.TotalFilesToCopy), name);
 
-            // Backup Type Choice
-            Console.WriteLine(translation.Messages.ChooseBackupType);
-            Console.WriteLine($"1. {translation.Messages.CompleteBackup}");
-            Console.WriteLine($"2. {translation.Messages.DifferentialBackup}");
-            Console.Write(translation.Messages.Choice);
-            string backupType = Console.ReadLine();
-            
-
-            // Convert user choice (Full/Diff)
-            string type = backupType == "1" ? (translation.Messages.CompleteBackup) : backupType == "2" ? (translation.Messages.DifferentialBackup) : null;
-
-            if (type != null)
-            {
-                BackupType typeSave = type == "1" ? BackupType.Full : BackupType.Diff;                
-                var job = new Job(name, typeSave, source, destination);
-                
-                // Using helpers to calculate the new directory's size info
-                var _fileCopier = new CopyController();
-                DirectoryInfo diSource = new DirectoryInfo(job.SourceFilePath);
-                long totalFilesSize = _fileCopier._fileGetter.DirSize(diSource);
-                int totalFilesToCopy = _fileCopier._fileGetter.GetAllFiles(job.SourceFilePath).Count;
-                
-                job.TotalFilesSize = totalFilesSize;
-                job.NbFilesLeftToDo = totalFilesToCopy;
-                job.TotalFilesToCopy = totalFilesToCopy;
-                job.NbSavedFiles = 0;
-                
-                Jobs.Add(job);
-                logger.LogState(job.Name, job.SourceFilePath, job.TargetFilePath, job.State, job.TotalFilesToCopy, job.TotalFilesSize , (job.TotalFilesToCopy - job.NbSavedFiles), ((job.NbSavedFiles * 100) / job.TotalFilesToCopy), name);
-            }
         }
-
         public void LaunchJob(Job job, Logger logger, TranslationModel translation)
         {
             if (job.State == JobState.Finished || job.State == JobState.Pending)
@@ -246,9 +177,6 @@ namespace EasySave.Controllers
         /* Used to displayJobs & perform operations on jobs */
         public void DisplayJobs(TranslationModel translation, Logger logger, OperationType op)
         {
-            
-            
-
             if (Jobs.Count == 0)
             {
 

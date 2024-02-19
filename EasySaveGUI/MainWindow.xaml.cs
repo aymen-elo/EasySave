@@ -1,19 +1,13 @@
-﻿using EasySave.Controllers;
+﻿
+using EasySave.Controllers;
 using EasySave.Models;
+
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Globalization;
 using System.Windows;
+
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using Menu = EasySave.Library.Menu;
 
 namespace EasySave_2._0
 {
@@ -22,15 +16,71 @@ namespace EasySave_2._0
     /// </summary>
     public partial class MainWindow : Window
     {
+        private readonly JobsController _jobsController;
+        private readonly Menu _Menu;
+        private Logger _logger;
+        private TranslationController _translationController;
+
         public MainWindow()
         {
             InitializeComponent();
             DataContext = new MainViewModel();
             btnRunJob.IsEnabled = false;
-
+            SwitchLanguage("fr");
+            _jobsController = new JobsController(_logger);
+            string LogsDirectoryPath = @"C:\Prosoft\EasySave\Logs";
+            // Définir la langue par défaut en fonction de la langue du PC
+            CultureInfo.DefaultThreadCurrentCulture = CultureInfo.CurrentCulture;
+            CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.CurrentCulture;
         }
 
-        private void btnNewJob_Click(object sender, RoutedEventArgs e) { }
+        private void btnNewJob_Click(object sender, RoutedEventArgs e)
+        {
+            AddJobWindow addJobWindow = new AddJobWindow();
+            addJobWindow.ShowDialog();
+            RefreshJobList();
+        }
+
+        public void RefreshJobList()
+        {
+            var logger = new Logger();
+            JobsController jobsController = new JobsController(logger);
+            dgJobList.ItemsSource = jobsController.GetJobs();
+        }
+
+        private void btnOption_Click(object sender, RoutedEventArgs e)
+        {
+            OptionWindow optionWindow = new OptionWindow();
+            optionWindow.ShowDialog();
+        }
+        
+        
+        /* Language Management */
+        
+        private void menuItemLang_Click(object sender, RoutedEventArgs e) { }
+        private void menuItemLangFr_Click(object sender, RoutedEventArgs e) { SwitchLanguage("fr"); }
+        private void menuItemLangEn_Click(object sender, RoutedEventArgs e) { SwitchLanguage("en"); }
+        private void SwitchLanguage(string languageCode) 
+        {
+            ResourceDictionary dictionary = new ResourceDictionary();
+            switch (languageCode)
+            {
+                case "en":
+                    dictionary.Source = new Uri("..\\StringResources.en.xaml", UriKind.Relative);
+                    break;
+
+                case "fr":
+                    dictionary.Source = new Uri("..\\StringResources.fr.xaml", UriKind.Relative);
+                    break;
+                default:
+                    dictionary.Source = new Uri("..\\StringResources.en.xaml", UriKind.Relative);
+                    break;
+            }
+            this.Resources.MergedDictionaries.Add(dictionary);
+      
+        }
+        
+        /* ******************* */
 
         private void btnRunJob_Click(object sender, RoutedEventArgs e)
         {
@@ -68,7 +118,7 @@ namespace EasySave_2._0
                 jobsController.DeleteJob(dgJobList.Items.IndexOf(job), translation, logger);
             }
             
-            dgJobList.ItemsSource = jobsController.GetJobs();
+            RefreshJobList();
         }
         private void btnEditJob_Click(object sender, RoutedEventArgs e) { }
         private void btnPlayPause_Click(object sender, RoutedEventArgs e) { }

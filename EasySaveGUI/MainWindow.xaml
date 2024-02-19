@@ -8,6 +8,9 @@
         Title="MainWindow" Height="450" Width="800">
     <Grid>
         <Grid Background="#FFE9EEF3">
+            
+  
+            
             <DataGrid x:Name="dgJobList"  ItemsSource="{Binding JobsCollection}" AutoGenerateColumns="False" Margin="38,142,38,142" SelectionChanged="dgJobList_SelectionChanged">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Nom" Binding="{Binding Name}" />
@@ -17,17 +20,39 @@
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>
-
             <TextBlock x:Name="tboxEvent" HorizontalAlignment="Center" Height="60" Margin="0,337,0,0" TextWrapping="Wrap" Text="Ici event " VerticalAlignment="Top" Width="724" Background="White" ScrollViewer.VerticalScrollBarVisibility="Visible"/>
             <Label x:Name="labelEvents" Content="Events" HorizontalAlignment="Left" Margin="38,311,0,0" VerticalAlignment="Top"/>
             <Label x:Name="lblVersion" Content="Version 2.0" HorizontalAlignment="Left" Margin="742,411,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.891,0.888" FontSize="10"/>
-        <Button x:Name="btnNewJob" Content="New Job" HorizontalAlignment="Left" Margin="21,23,0,0" VerticalAlignment="Top" Height="42" Width="66" Click="btnNewJob_Click"/>
-        <Button x:Name="btnRunJob" Content="Run Job" HorizontalAlignment="Left" Margin="124,23,0,0" VerticalAlignment="Top" Height="42" Width="66" Click="btnRunJob_Click"/>
-        <Button x:Name="btnRemoveJob" Content="Remove Job" HorizontalAlignment="Left" Margin="228,23,0,0" VerticalAlignment="Top" Height="42" Width="66" Click="btnRemoveJob_Click"/>
-        <Button x:Name="btnEditJob" Content="Edit Job" HorizontalAlignment="Left" Margin="342,23,0,0" VerticalAlignment="Top" Height="42" Width="66" Click="btnEditJob_Click"/>
-        <Button x:Name="btnPlayPause" Content="Play/Pause" HorizontalAlignment="Left" Margin="458,23,0,0" VerticalAlignment="Top" Height="42" Width="66" Click="btnPlayPause_Click"/>
-        <Button x:Name="btnStopJob" Content="Stop Job" HorizontalAlignment="Left" Margin="574,23,0,0" VerticalAlignment="Top" Height="42" Width="66" Click="btnStopJob_Click"/>
-        <Button x:Name="btnLogs" Content="Jogs" HorizontalAlignment="Left" Margin="686,23,0,0" VerticalAlignment="Top" Height="42" Width="66" Click="btnLogs_Click"/>
-        <TextBox x:Name="tboxSearch" HorizontalAlignment="Left" Margin="46,100,0,0" TextWrapping="Wrap" Text="Search a job" VerticalAlignment="Top" Width="120"/>
+        <Button x:Name="btnNewJob" Content="{DynamicResource StrButtonNewJob}" HorizontalAlignment="Left" Margin="21,23,0,0" VerticalAlignment="Top" Height="42" Width="90" Click="btnNewJob_Click"/>
+        <Button x:Name="btnRunJob" Content="{DynamicResource StrButtonRunJob}" HorizontalAlignment="Left" Margin="124,23,0,0" VerticalAlignment="Top" Height="42" Width="90" Click="btnRunJob_Click"/>
+        <Button x:Name="btnRemoveJob" Content="{DynamicResource StrButtonRemoveJob}" HorizontalAlignment="Left" Margin="228,23,0,0" VerticalAlignment="Top" Height="42" Width="90" Click="btnRemoveJob_Click"/>
+        <Button x:Name="btnEditJob" Content="{DynamicResource StrButtonEditJob}" HorizontalAlignment="Left" Margin="342,23,0,0" VerticalAlignment="Top" Height="42" Width="90" Click="btnEditJob_Click"/>
+        <Button x:Name="btnPlayPause" Content="{DynamicResource StrButtonPlayPause}" HorizontalAlignment="Left" Margin="458,23,0,0" VerticalAlignment="Top" Height="42" Width="90" Click="btnPlayPause_Click"/>
+        <Button x:Name="btnStopJob" Content="{DynamicResource StrButtonStopJob}" HorizontalAlignment="Left" Margin="574,23,0,0" VerticalAlignment="Top" Height="42" Width="90" Click="btnStopJob_Click"/>
+        <Button x:Name="btnLogs" Content="{DynamicResource StrButtonLogs}" HorizontalAlignment="Left" Margin="686,23,0,0" VerticalAlignment="Top" Height="42" Width="90" Click="btnLogs_Click"/>
+        <Button x:Name="btnOption" Content="{DynamicResource StrButtonOption}" HorizontalAlignment="Left" Margin="686,23,0,0" VerticalAlignment="Top" Height="42" Width="90" Click="btnOption_Click"/>
+        <TextBox x:Name="tboxSearch" HorizontalAlignment="Left" Margin="46,100,0,0" TextWrapping="Wrap" Text="{DynamicResource StrSearchJob}" VerticalAlignment="Top" Width="120"/>
+        <StackPanel>
+            <Menu>
+                <MenuItem Header="Language" Click="menuItemLang_Click">
+                    <MenuItem Header="{DynamicResource StrMainEnglish}" Click="menuItemLangEn_Click">
+                        <MenuItem.Style>
+                            <Style TargetType="MenuItem">
+                                <Setter Property="Foreground" Value="Black"/>
+                                <Setter Property="FontSize" Value="14"/>
+                            </Style>
+                        </MenuItem.Style>
+                    </MenuItem>
+                    <MenuItem Header="{DynamicResource StrMainFrench}" Click="menuItemLangFr_Click">
+                        <MenuItem.Style>
+                            <Style TargetType="MenuItem">
+                                <Setter Property="Foreground" Value="Black"/>
+                                <Setter Property="FontSize" Value="14"/>
+                            </Style>
+                        </MenuItem.Style>
+                    </MenuItem>
+                </MenuItem>
+            </Menu>
+        </StackPanel>
     </Grid>
 </Window>

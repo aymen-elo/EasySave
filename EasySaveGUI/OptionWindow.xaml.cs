@@ -1,0 +1,35 @@
+﻿using System.Windows;
+using EasySave.Models;
+namespace EasySave_2._0
+{
+    public partial class OptionWindow : Window
+    {
+        // Propriétés pour stocker le choix de l'utilisateur
+        public bool IsJsonSelected { get; private set; }
+        public bool IsXmlSelected { get; private set; }
+
+        public OptionWindow()
+        {
+            InitializeComponent();
+        }
+
+        private void btnSave_Click(object sender, RoutedEventArgs e)
+        {
+            if (rbJson.IsChecked == true)
+            {
+                // Enregistrer le choix Json dans la classe Logger
+                Logger.GetInstance()._logFormat = "json";
+            }
+            else if (rbXml.IsChecked == true)
+            {
+                // Enregistrer le choix Xml dans la classe Logger
+                Logger.GetInstance()._logFormat = "xml";
+            }
+
+            // Fermer la fenêtre OptionsWindow
+            this.Close();
+        }
+    }
+
+    
+}
