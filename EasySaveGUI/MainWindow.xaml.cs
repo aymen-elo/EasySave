@@ -1,19 +1,14 @@
 ﻿using EasySave.Controllers;
 using EasySave.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using static EasySave_2._0.MainViewModel;
 
 namespace EasySave_2._0
 {
@@ -26,15 +21,18 @@ namespace EasySave_2._0
         public static readonly Logger logger = Logger.GetInstance();
         private JobsController _jobsController = new JobsController(logger);
         private TranslationModel translation = new TranslationModel();
-
+        private DataModel _dataModel = new DataModel();
+        MainViewModel mainViewModel = new MainViewModel();
 
         public MainWindow()
         {
             InitializeComponent();
-            DataContext = new MainViewModel();
+            MainViewModel mainViewModel = new MainViewModel();
+            this.DataContext = mainViewModel;
             btnRunJob.IsEnabled = false;
 
         }
+
         public Job SelectedJob
         {
             get { return _selectedJob; }
@@ -44,33 +42,38 @@ namespace EasySave_2._0
                 btnRunJob.IsEnabled = (_selectedJob != null);
             }
         }
-
-
-        private void btnNewJob_Click(object sender, RoutedEventArgs e) { }
-
-        private void btnRunJob_Click(object sender, RoutedEventArgs e)
-        {
-            // Utilisez Dispatcher.Invoke pour créer ProgressBarGUI sur le thread STA
-            this.Dispatcher.Invoke(() =>
-            {
-                ProgressBarGUI progressBar = new ProgressBarGUI();
-                progressBar.ShowDialog();
-            });
-        }
-
-
-        private void btnRemoveJob_Click(object sender, RoutedEventArgs e) { }
-        private void btnEditJob_Click(object sender, RoutedEventArgs e) { }
-        private void btnPlayPause_Click(object sender, RoutedEventArgs e) { }
-        private void btnStopJob_Click(object sender, RoutedEventArgs e) { }
-        private void btnLogs_Click(object sender, RoutedEventArgs e) { }
-
-        private void dgJobList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void dgJobList_SelectionChanged(object sender, SelectionChangedEventArgs e) 
         {
             if (dgJobList.SelectedItem != null)
             {
                 SelectedJob = (Job)dgJobList.SelectedItem;
             }
         }
+
+        private void btnNewJob_Click(object sender, RoutedEventArgs e)
+        {
+            this.DataContext = mainViewModel.refreshGrid();
+        }
+
+        private void btnRunJob_Click(object sender, RoutedEventArgs e)
+        {
+            List<int> selectedIndices = new List<int>();
+            foreach (var selectedItem in dgJobList.SelectedItems)
+            {
+                int index = dgJobList.Items.IndexOf(selectedItem);
+                selectedIndices.Add(index);
+                Job selectedJob = (Job)dgJobList.Items[index];
+                _jobsController.LaunchJob(selectedJob, logger, translation);
+            }
+        }
+        
+        
+        
+        private void btnRemoveJob_Click(object sender, RoutedEventArgs e){}
+        private void btnEditJob_Click(object sender, RoutedEventArgs e){}
+        private void btnPlayPause_Click(object sender, RoutedEventArgs e){}
+        private void btnStopJob_Click(object sender, RoutedEventArgs e) {}
+        private void btnLogs_Click(object sender, RoutedEventArgs e) {}
+        
     }
 }

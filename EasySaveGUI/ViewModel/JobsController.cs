@@ -218,7 +218,7 @@ namespace EasySave.Controllers
             }
         }
 
-        public void LaunchJob(Job job, Logger logger, TranslationModel translation, BackgroundWorker worker)
+        public void LaunchJob(Job job, Logger logger, TranslationModel translation)
         {
             if (job.State == JobState.Finished || job.State == JobState.Pending)
             {
@@ -232,7 +232,7 @@ namespace EasySave.Controllers
             var fileCopier = new CopyController();
             
 
-            fileCopier.CopyDirectory(job, translation, worker);
+            fileCopier.CopyDirectory(job, translation);
             
             if (job.Progression >= 100)
             {
@@ -241,17 +241,17 @@ namespace EasySave.Controllers
 
         }
 
-        public void LaunchAllJobs(Logger logger, TranslationModel translation, BackgroundWorker worker)
+        public void LaunchAllJobs(Logger logger, TranslationModel translation)
         {
             foreach (var job in Jobs)
             {
-                LaunchJob(job, logger, translation, worker);
+                LaunchJob(job, logger, translation);
             }
         }
 
 
         /* Used to displayJobs & perform operations on jobs */
-        public void DisplayJobs(TranslationModel translation, Logger logger, OperationType op, BackgroundWorker worker)
+        public void DisplayJobs(TranslationModel translation, Logger logger, OperationType op)
         {
             Console.Clear();
             Console.WriteLine(translation.Messages.ListBackupJobs);
@@ -369,7 +369,7 @@ namespace EasySave.Controllers
                     
                     for (int k = begin; k <= end; k++)
                     {
-                        LaunchJob(Jobs[k - 1], logger, translation, worker);
+                        LaunchJob(Jobs[k - 1], logger, translation);
                     }
                 }
                 // Specific set of Jobs : x, z => Backup(x,z)
@@ -397,7 +397,7 @@ namespace EasySave.Controllers
                         {
                             if (choiceArray.Contains(it))
                             {
-                                LaunchJob(job, logger, translation, worker);
+                                LaunchJob(job, logger, translation);
                             }
     
                             it++;
@@ -414,7 +414,7 @@ namespace EasySave.Controllers
                     
                     isValid = true;
                     
-                    LaunchAllJobs(logger, translation, worker);
+                    LaunchAllJobs(logger, translation);
                 }
                 // One and only one job to perform
                 else if (Regex.IsMatch(choice, @"^[1-9]\d*$"))
@@ -427,7 +427,7 @@ namespace EasySave.Controllers
                     
                     isValid = true;
                     
-                    LaunchJob(Jobs[int.Parse(choice) - 1], logger, translation, worker);
+                    LaunchJob(Jobs[int.Parse(choice) - 1], logger, translation);
                 }
                 else
                 {
@@ -442,9 +442,9 @@ namespace EasySave.Controllers
             Console.Clear();
         }
 
-        public void EditJob( Logger logger, TranslationModel translation, BackgroundWorker worker)
+        public void EditJob( Logger logger, TranslationModel translation)
         {
-            DisplayJobs(translation, logger, OperationType.Edit, worker);
+            DisplayJobs(translation, logger, OperationType.Edit);
 
             Console.WriteLine(translation.Messages.Choice);
             string choice = Console.ReadLine();
@@ -516,9 +516,9 @@ namespace EasySave.Controllers
             Console.Clear();
         }
 
-        public void RemoveJob( Logger logger, TranslationModel translation, BackgroundWorker worker)
+        public void RemoveJob( Logger logger, TranslationModel translation)
         {
-            DisplayJobs(translation, logger, OperationType.Remove, worker);
+            DisplayJobs(translation, logger, OperationType.Remove);
             Console.WriteLine(translation.JobsController.ReturnToMenu);
             Console.ReadKey();
             Console.Clear();

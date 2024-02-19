@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using EasySave.Models;
+using Newtonsoft.Json;
 using EasySave.Controllers;
 
 namespace EasySave_2._0
@@ -29,6 +30,22 @@ namespace EasySave_2._0
             {
                 Jobs.Add(new Job(travail.Name, travail.BackupType, travail.SourceFilePath, travail.TargetFilePath));
             }
+        }
+
+        public MainViewModel refreshGrid()
+        {
+            MainViewModel mainViewModel = new MainViewModel();
+            return mainViewModel;
+        }
+        
+        public class DataModel
+        {
+            public string Name { get; set; }
+            public string FileSource { get; set; }
+            public string FileTarget { get; set; }
+            public int FileSize { get; set; }
+            public TimeSpan FileTransferTime { get; set; }
+            public DateTime Time { get; set; }
         }
     }
 }

@@ -1,9 +1,0 @@
-﻿<Window x:Class="EasySave_2._0.ProgressBarGUI"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="ProgressBarTaskOnUiThread" Height="100" Width="300"
-        ContentRendered="Window_ContentRendered">
-    <Grid Margin="20">
-        <ProgressBar Minimum="0" Maximum="100" x:Name="pbCopy"/>
-    </Grid>
-</Window>
