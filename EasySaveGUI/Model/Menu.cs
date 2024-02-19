@@ -1,8 +1,8 @@
 ﻿using System;
-using EasySave.Controllers;
-using EasySave.Models;
+using EasySaveGUI.Controller;
+using EasySaveGUI.Model.Translation;
 
-namespace EasySave.Library
+namespace EasySaveGUI.Model
 {
     public class Menu
     {

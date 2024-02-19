@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Xml.Linq;
-using EasySave.Models;
+using EasySaveGUI.Model;
+using EasySaveGUI.Model.Translation;
 using Newtonsoft.Json;
 
-namespace EasySave.Controllers
+namespace EasySaveGUI.Controller
 {
     public enum OperationType { Display, Perform, Remove, Edit}
     public class JobsController

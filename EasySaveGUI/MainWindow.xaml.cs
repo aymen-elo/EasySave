@@ -1,15 +1,14 @@
-﻿
-using EasySave.Controllers;
-using EasySave.Models;
-
-using System;
+﻿using System;
 using System.Globalization;
 using System.Windows;
 
 using System.Windows.Controls;
-using Menu = EasySave.Library.Menu;
+using EasySaveGUI.Controller;
+using EasySaveGUI.Model;
+using EasySaveGUI.Model.Translation;
+using Menu = EasySaveGUI.Model.Menu;
 
-namespace EasySave_2._0
+namespace EasySaveGUI
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

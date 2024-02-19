@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using EasySaveGUI.Model.Translation;
 using Microsoft.VisualBasic.FileIO;
 using SearchOption = System.IO.SearchOption;
 
-namespace EasySave.Models
+namespace EasySaveGUI.Model.CopyHelper
 {
     public class FileGetter
     {

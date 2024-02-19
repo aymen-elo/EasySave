@@ -1,4 +1,4 @@
-﻿namespace EasySave.Models
+﻿namespace EasySaveGUI.Model.Translation
 {
     public class FileCopierTranslation
     {

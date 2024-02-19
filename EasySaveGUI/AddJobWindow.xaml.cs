@@ -1,10 +1,9 @@
 ﻿using System.Windows;
-using EasySave.Controllers;
-using EasySave.Library;
-using EasySave.Models;
-using EasySave_2._0;
+using EasySaveGUI.Controller;
+using EasySaveGUI.Model;
+using EasySaveGUI.Model.Translation;
 
-namespace EasySave_2._0
+namespace EasySaveGUI
 {
     public partial class AddJobWindow : Window
     {

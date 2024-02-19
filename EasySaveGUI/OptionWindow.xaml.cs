@@ -1,6 +1,7 @@
 ﻿using System.Windows;
-using EasySave.Models;
-namespace EasySave_2._0
+using EasySaveGUI.Model;
+
+namespace EasySaveGUI
 {
     public partial class OptionWindow : Window
     {
