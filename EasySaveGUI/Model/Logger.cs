@@ -9,23 +9,24 @@ namespace EasySaveGUI.Model
 {
     public class Logger
     {
-        private readonly string _path = Program.LogsDirectoryPath;
-        private static Logger _instance;
-        public string _logFormat { get; set; }
+        private readonly string _dirPath = Program.LogsDirectoryPath;
+        
+        private static Logger? _instance;
+        public string LogFormat { get; set; }
 
         public Logger()
         {
-            _logFormat = "json";
+            LogFormat = "json";
 
-            if (!Directory.Exists(_path))
+            if (!Directory.Exists(_dirPath))
             {
-                Directory.CreateDirectory(_path);
+                Directory.CreateDirectory(_dirPath);
             }
 
-            string statePath = Path.Combine(_path, "state.json");
-            if (!File.Exists(statePath))
+            string stateFilePath = Path.Combine(_dirPath, "state.json");
+            if (!File.Exists(stateFilePath))
             {
-                File.WriteAllText(statePath, ""); 
+                File.WriteAllText(stateFilePath, ""); 
             }
         }
         
@@ -40,18 +41,14 @@ namespace EasySaveGUI.Model
 
         public void LogAction(string name, string fileSource, string fileTarget, long fileSize, TimeSpan fileTransferTime)
         {
-            if (_logFormat == "json")
-            {
-                LogActionJson( name,  fileSource,  fileTarget,  fileSize,  fileTransferTime);
-            } else if (_logFormat == "xml")
+            if (LogFormat == "xml")
             {
                 LogActionXml(name, fileSource, fileTarget, fileSize, fileTransferTime);
-            } else
+            } 
+            else
             {
                 LogActionJson( name,  fileSource,  fileTarget,  fileSize,  fileTransferTime);
             }
-
-            
         }
 
         public void LogActionJson(string name, string fileSource, string fileTarget, long fileSize,
@@ -66,7 +63,7 @@ namespace EasySaveGUI.Model
                                 $" \"Time\": \"{DateTime.Now:dd/MM/yyyy HH:mm:ss}\"\n" +
                                 $" }}";
             
-            string jsonFilePath = Path.Combine(_path, $"{DateTime.Now:yyyy-MM-dd}.json");
+            string jsonFilePath = Path.Combine(_dirPath, $"{DateTime.Now:yyyy-MM-dd}.json");
 
             if (!File.Exists(jsonFilePath))
             {
@@ -89,7 +86,7 @@ namespace EasySaveGUI.Model
                 new XElement("FileTransferTime", transferTimeString),
                 new XElement("Time", DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss")));
 
-            string xmlFilePath = Path.Combine(_path, $"{DateTime.Now:yyyy-MM-dd}.xml");
+            string xmlFilePath = Path.Combine(_dirPath, $"{DateTime.Now:yyyy-MM-dd}.xml");
 
             if (!File.Exists(xmlFilePath))
             {
@@ -107,7 +104,7 @@ namespace EasySaveGUI.Model
         public void LogState(string name, string sourcePath, string targetPath, JobState state, long nbFileToCopy,
             long fileSize, long nbFileLeftToDo, int progression, string newName)
         {
-            string statePath = _path + @"\state.json";
+            string statePath = _dirPath + @"\state.json";
             
             string jsonContent = File.ReadAllText(statePath);
 
@@ -116,7 +113,7 @@ namespace EasySaveGUI.Model
                 if (jsonContent != string.Empty)
                 {
                     JArray jsonArray = JArray.Parse(jsonContent);
-                    JObject jobEntry = jsonArray.Children<JObject>()
+                    JObject? jobEntry = jsonArray.Children<JObject>()
                         .FirstOrDefault(obj => obj["Name"]?.ToString() == name);
 
                     if (jobEntry != null)
@@ -174,7 +171,7 @@ namespace EasySaveGUI.Model
             long fileSize, long nbFileLeftToDo, int progression)
         {
             // Chemin du fichier XML de log d'état
-            string xmlFilePath = _path + @"\state.xml";
+            string xmlFilePath = _dirPath + @"\state.xml";
 
             // Vérification de l'existence du fichier XML
             if (!File.Exists(xmlFilePath) || new FileInfo(xmlFilePath).Length == 0)
@@ -216,7 +213,7 @@ namespace EasySaveGUI.Model
             }
             else
             {
-                XElement existingLogElement = logsElement.Elements("Log")
+                XElement? existingLogElement = logsElement.Elements("Log")
                     .FirstOrDefault(e => e.Element("Name")?.Value == name);
 
                 if (existingLogElement != null)
@@ -237,7 +234,7 @@ namespace EasySaveGUI.Model
 
         public void DisplayLog()
         {
-            string logContents = File.ReadAllText(_path);
+            string logContents = File.ReadAllText(_dirPath);
             Console.WriteLine(logContents);
         }
     }

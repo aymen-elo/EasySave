@@ -19,12 +19,12 @@ namespace EasySaveGUI
             if (rbJson.IsChecked == true)
             {
                 // Enregistrer le choix Json dans la classe Logger
-                Logger.GetInstance()._logFormat = "json";
+                Logger.GetInstance().LogFormat = "json";
             }
             else if (rbXml.IsChecked == true)
             {
                 // Enregistrer le choix Xml dans la classe Logger
-                Logger.GetInstance()._logFormat = "xml";
+                Logger.GetInstance().LogFormat = "xml";
             }
 
             // Fermer la fenêtre OptionsWindow

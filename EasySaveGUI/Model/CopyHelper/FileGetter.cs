@@ -9,7 +9,6 @@ namespace EasySaveGUI.Model.CopyHelper
 {
     public class FileGetter
     {
-        TranslationModel translation;
         public string GetRelativePath(string sourceDir, string filePath)
         {
             return filePath.Substring(sourceDir.Length + 1); // +1 pour enlever le séparateur de dossier
@@ -56,8 +55,7 @@ namespace EasySaveGUI.Model.CopyHelper
             }
             catch (Exception ex)
             {
-                // TO DO : ADD LOG
-                Console.WriteLine(translation.Messages.Error + ex.Message);
+                // TODO : Log error
             }
         }
         public void CompareAndDeleteDirectories(string targetDir, string sourceDir)
@@ -120,7 +118,7 @@ namespace EasySaveGUI.Model.CopyHelper
             }
             catch (Exception ex)
             {
-                Console.WriteLine(translation.Messages.Error + ex.Message);
+                //TODO : Log error
             }
             return 0;
         }

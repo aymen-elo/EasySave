@@ -19,7 +19,7 @@ namespace EasySaveGUI.Controller
 
         public CopyController() { }
 
-        public void CopyDirectory(Job job, TranslationModel translation)
+        public void CopyDirectory(Job job)
         {
             job.StartTime = DateTime.Now;
             job.State = JobState.Active;
@@ -39,9 +39,9 @@ namespace EasySaveGUI.Controller
             Console.WriteLine(_progressBar.UpdateProgress(0, job.Name, job.TotalFilesToCopy, job.NbSavedFiles));
             
             if (job.BackupType == BackupType.Diff)
-                CopyDiff(job, allFiles, allowedHashes, loadedHashes, translation);
+                CopyDiff(job, allFiles, allowedHashes, loadedHashes);
             else
-                CopyFull(job, allFiles, allowedHashes, translation);
+                CopyFull(job, allFiles, allowedHashes);
 
             stopWatch.Stop();
             job.Duration = stopWatch.Elapsed;
@@ -51,7 +51,7 @@ namespace EasySaveGUI.Controller
             
         }
 
-        private void CopyDiff(Job job, List<string> allFiles, HashSet<string> allowedHashes, HashSet<string> loadedHashes, TranslationModel translation)
+        private void CopyDiff(Job job, List<string> allFiles, HashSet<string> allowedHashes, HashSet<string> loadedHashes)
         {
             DirectoryInfo diSource = new DirectoryInfo(job.SourceFilePath);
             long totalFilesSize = _fileGetter.DirSize(diSource);
@@ -91,7 +91,7 @@ namespace EasySaveGUI.Controller
             _fileGetter.CompareAndDeleteDirectories(job.TargetFilePath, job.SourceFilePath);
         }
 
-        private void CopyFull(Job job, List<string> allFiles, HashSet<string> allowedHashes, TranslationModel translation)
+        private void CopyFull(Job job, List<string> allFiles, HashSet<string> allowedHashes)
         {
             DirectoryInfo diSource = new DirectoryInfo(job.SourceFilePath);
             long totalFilesSize = _fileGetter.DirSize(diSource);

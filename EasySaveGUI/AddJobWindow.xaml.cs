@@ -24,7 +24,7 @@ namespace EasySaveGUI
             string backupType = cmbBackupType.SelectedItem.ToString();
             JobsController jobsController = new JobsController(_logger);
             BackupType typeSave = (backupType == "Full") ? BackupType.Full : BackupType.Diff;
-            jobsController.AddJob(_logger, _translation, jobName, sourcePath, destinationPath, typeSave);
+            jobsController.AddJob( jobName, sourcePath, destinationPath, typeSave);
             
             this.Close();
         }

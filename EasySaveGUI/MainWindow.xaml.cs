@@ -114,7 +114,7 @@ namespace EasySaveGUI
             
             if (job != null)
             {
-                jobsController.DeleteJob(dgJobList.Items.IndexOf(job), translation, logger);
+                jobsController.DeleteJob(dgJobList.Items.IndexOf(job));
             }
             
             RefreshJobList();

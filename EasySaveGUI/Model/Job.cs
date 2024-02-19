@@ -32,6 +32,7 @@ namespace EasySaveGUI.Model
         public DateTime EndTime { get; set; }
         public int Progression { get; set; }
         
+        public Job() { }
 
         public Job(string name, BackupType type, string src, string dest) 
         {
@@ -50,8 +51,6 @@ namespace EasySaveGUI.Model
             _nextPos++;
         }
         
-        public Job() {}
-        
         /* Helper constructor for state.json */
         public Job(string name, JobState jobState, string src, string dest, int totalFilesToCopy, long nbFilesLeftToDo, long totalFilesSize) 
         {
@@ -68,11 +67,6 @@ namespace EasySaveGUI.Model
 
             _nextId++;
             _nextPos++;
-        }
-
-        public bool Begin(string name, string source, string target, int type) 
-        {
-            return true; // si pas erreur lors lancement, renvoyé 1
         }
     }
 }
