@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using EasySave.Controllers;
 using EasySave.Library;
 using EasySave.Models;
@@ -10,15 +11,17 @@ namespace EasySave_2._0
     {
         Logger _logger = new Logger();
         private TranslationModel _translation;
+
+
         public AddJobWindow()
         {
             InitializeComponent();
             _translation = new TranslationModel();
+
         }
 
         public void btnAdd_Click(object sender, RoutedEventArgs e)
         {
-
             string jobName = txtJobName.Text;
             string sourcePath = txtSourcePath.Text;
             string destinationPath = txtDestinationPath.Text;

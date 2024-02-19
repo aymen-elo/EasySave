@@ -6,6 +6,9 @@
         xmlns:local="clr-namespace:EasySave_2._0"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
+    <Window.Resources>
+        <local:LangueSettingsViewModels x:Key="LangueSettingsViewModelInstance"/>
+    </Window.Resources>
     <Grid>
         <Grid Background="#FFE9EEF3">
             
@@ -34,23 +37,18 @@
         <TextBox x:Name="tboxSearch" HorizontalAlignment="Left" Margin="46,100,0,0" TextWrapping="Wrap" Text="{DynamicResource StrSearchJob}" VerticalAlignment="Top" Width="120"/>
         <StackPanel>
             <Menu>
-                <MenuItem Header="Language" Click="menuItemLang_Click">
-                    <MenuItem Header="{DynamicResource StrMainEnglish}" Click="menuItemLangEn_Click">
+                <MenuItem Header= "{DynamicResource StrMainLanguage}" Click="menuItemLang_Click">
+                    <MenuItem Header="{DynamicResource StrMainEnglish}" Command="{Binding ChangeLanguageCommand, Source={StaticResource LangueSettingsViewModelInstance}}" CommandParameter="en"/>
+                        <MenuItem Header="{DynamicResource StrMainFrench}" Command="{Binding ChangeLanguageCommand, Source={StaticResource LangueSettingsViewModelInstance}}" CommandParameter="fr"/>
+
                         <MenuItem.Style>
                             <Style TargetType="MenuItem">
                                 <Setter Property="Foreground" Value="Black"/>
                                 <Setter Property="FontSize" Value="14"/>
                             </Style>
                         </MenuItem.Style>
-                    </MenuItem>
-                    <MenuItem Header="{DynamicResource StrMainFrench}" Click="menuItemLangFr_Click">
-                        <MenuItem.Style>
-                            <Style TargetType="MenuItem">
-                                <Setter Property="Foreground" Value="Black"/>
-                                <Setter Property="FontSize" Value="14"/>
-                            </Style>
-                        </MenuItem.Style>
-                    </MenuItem>
+                    
+                    
                 </MenuItem>
             </Menu>
         </StackPanel>

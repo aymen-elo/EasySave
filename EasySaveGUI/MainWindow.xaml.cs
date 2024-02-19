@@ -17,21 +17,24 @@ namespace EasySave_2._0
     public partial class MainWindow : Window
     {
         private readonly JobsController _jobsController;
-        private readonly Menu _Menu;
-        private Logger _logger;
-        private TranslationController _translationController;
-
+        private readonly Menu _menu;
+        private readonly Logger _logger;
+        private readonly TranslationController _translationController;
+        private string _currentLanguageCode;
+        private ResourceDictionary _languageDictionary;
+        private AddJobWindow addJobWindow; 
+        public LangueSettingsViewModels _language = new();
+        
         public MainWindow()
         {
             InitializeComponent();
             DataContext = new MainViewModel();
             btnRunJob.IsEnabled = false;
-            SwitchLanguage("fr");
             _jobsController = new JobsController(_logger);
-            string LogsDirectoryPath = @"C:\Prosoft\EasySave\Logs";
-            // Définir la langue par défaut en fonction de la langue du PC
-            CultureInfo.DefaultThreadCurrentCulture = CultureInfo.CurrentCulture;
-            CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.CurrentCulture;
+            string logsDirectoryPath = @"C:\Prosoft\EasySave\Logs";
+            _languageDictionary = new ResourceDictionary();
+            _language.ChangeLanguage("fr");
+            
         }
 
         private void btnNewJob_Click(object sender, RoutedEventArgs e)
@@ -40,7 +43,7 @@ namespace EasySave_2._0
             addJobWindow.ShowDialog();
             RefreshJobList();
         }
-
+        
         public void RefreshJobList()
         {
             var logger = new Logger();
@@ -58,27 +61,7 @@ namespace EasySave_2._0
         /* Language Management */
         
         private void menuItemLang_Click(object sender, RoutedEventArgs e) { }
-        private void menuItemLangFr_Click(object sender, RoutedEventArgs e) { SwitchLanguage("fr"); }
-        private void menuItemLangEn_Click(object sender, RoutedEventArgs e) { SwitchLanguage("en"); }
-        private void SwitchLanguage(string languageCode) 
-        {
-            ResourceDictionary dictionary = new ResourceDictionary();
-            switch (languageCode)
-            {
-                case "en":
-                    dictionary.Source = new Uri("..\\StringResources.en.xaml", UriKind.Relative);
-                    break;
-
-                case "fr":
-                    dictionary.Source = new Uri("..\\StringResources.fr.xaml", UriKind.Relative);
-                    break;
-                default:
-                    dictionary.Source = new Uri("..\\StringResources.en.xaml", UriKind.Relative);
-                    break;
-            }
-            this.Resources.MergedDictionaries.Add(dictionary);
-      
-        }
+        
         
         /* ******************* */
 

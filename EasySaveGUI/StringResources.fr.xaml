@@ -15,5 +15,13 @@
     <system:String x:Key="StrMainMenu">Menu</system:String>
     <system:String x:Key="StrMainEnglish">Anglais</system:String>
     <system:String x:Key="StrMainFrench">Français</system:String>
+    
+    <system:String x:Key="StrJobNameLabel">Nom du travail</system:String>
+    <system:String x:Key="StrSourcePathLabel">Chemin source</system:String>
+    <system:String x:Key="StrDestinationPathLabel">Chemin de destination</system:String>
+    <system:String x:Key="StrBackupTypeLabel">Type de sauvegarde</system:String>
+    <system:String x:Key="StrFullBackupType">Complète</system:String>
+    <system:String x:Key="StrDifferentialBackupType">Différentielle</system:String>
+
 
 </ResourceDictionary>

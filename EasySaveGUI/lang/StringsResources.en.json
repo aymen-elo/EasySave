@@ -1,0 +1,21 @@
+﻿{
+  "StrButtonNewJob": "New Job",
+  "StrButtonRunJob": "Run Job",
+  "StrButtonRemoveJob": "Remove Job",
+  "StrButtonEditJob": "Edit Job",
+  "StrButtonPlayPause": "Play/Pause",
+  "StrButtonStopJob": "Stop Job",
+  "StrButtonLogs": "Logs",
+  "StrSearchJob": "Search Job",
+  "StrButtonOption": "Option",
+  "StrMainMenu": "ENMenu",
+  "StrMainEnglish": "English",
+  "StrMainFrench": "French",
+  "StrJobNameLabel": "Job Name",
+  "StrSourcePathLabel": "Source Path",
+  "StrDestinationPathLabel": "Destination Path",
+  "StrBackupTypeLabel": "Backup Type",
+  "StrFullBackupType": "Full",
+  "StrDifferentialBackupType": "Differential",
+  "StrMainLanguage": "Language"
+}
