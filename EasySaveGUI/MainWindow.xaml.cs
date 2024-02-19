@@ -52,7 +52,8 @@ namespace EasySave_2._0
 
         private void btnNewJob_Click(object sender, RoutedEventArgs e)
         {
-            this.DataContext = mainViewModel.refreshGrid();
+            dgJobList.ItemsSource = _jobsController.GetJobs();
+
         }
 
         private void btnRunJob_Click(object sender, RoutedEventArgs e)
@@ -63,7 +64,13 @@ namespace EasySave_2._0
                 int index = dgJobList.Items.IndexOf(selectedItem);
                 selectedIndices.Add(index);
                 Job selectedJob = (Job)dgJobList.Items[index];
+                string message = string.Format($"La sauvegarde {selectedJob.Name} va commencer");
+                eventList.ItemsSource = mainViewModel.PrintEvents(message);
+                
                 _jobsController.LaunchJob(selectedJob, logger, translation);
+                
+                message = string.Format($"La sauvegarde {0} viens de se finir", selectedJob.Name);
+                eventList.ItemsSource = mainViewModel.PrintEvents(message);
             }
         }
         

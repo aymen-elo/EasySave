@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
+using EasySave;
 using EasySave.Models;
 using Newtonsoft.Json;
 using EasySave.Controllers;
@@ -12,6 +15,8 @@ namespace EasySave_2._0
         JobsController jobsController = new JobsController(logger);
         TranslationController translationController = new TranslationController();
         TranslationManager translationManager = new TranslationManager();
+        private readonly string _path = Program.LogsDirectoryPath;
+
         
         private ObservableCollection<Job> _jobs;
         public ObservableCollection<Job> Jobs
@@ -22,8 +27,23 @@ namespace EasySave_2._0
                 _jobs = value;
             }
         }
-
+        
+        
         public MainViewModel()
+        {
+            PrintJobs();
+            PrintEvents("Start");
+        }
+
+        public ObservableCollection<string> PrintEvents(string evenement)
+        {
+            ObservableCollection<string> eventEntries = new ObservableCollection<string>();
+            eventEntries.Add(evenement);
+            return eventEntries;
+        }
+
+
+        public void PrintJobs()
         {
             Jobs = new ObservableCollection<Job>();
             foreach (var travail in jobsController.GetJobs())
@@ -31,8 +51,9 @@ namespace EasySave_2._0
                 Jobs.Add(new Job(travail.Name, travail.BackupType, travail.SourceFilePath, travail.TargetFilePath));
             }
         }
+        
 
-        public MainViewModel refreshGrid()
+        public MainViewModel RefreshGrid()
         {
             MainViewModel mainViewModel = new MainViewModel();
             return mainViewModel;
