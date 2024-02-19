@@ -33,7 +33,7 @@ namespace EasySave.Models
             stopWatch.Start();
 
             // TODO : JobID /!\
-            Console.Clear();
+            
             Console.WriteLine(_progressBar.UpdateProgress(0, job.Name, job.TotalFilesToCopy, job.NbSavedFiles));
             
             if (job.BackupType == BackupType.Diff)
@@ -129,7 +129,7 @@ namespace EasySave.Models
             job.NbSavedFiles++;
 
             // TODO : JobID /!\
-            Console.Clear();
+            
             Console.WriteLine(_progressBar.UpdateProgress(0, job.Name, job.TotalFilesToCopy, job.NbSavedFiles));
 
             long fileSize = new System.IO.FileInfo(targetFilePath).Length;

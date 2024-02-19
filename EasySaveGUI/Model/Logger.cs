@@ -13,7 +13,7 @@ namespace EasySave.Models
         private static Logger _instance;
         public string _logFormat { get; set; }
 
-        private Logger()
+        public Logger()
         {
             _logFormat = "json";
 

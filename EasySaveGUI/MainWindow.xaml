@@ -8,7 +8,7 @@
         Title="MainWindow" Height="450" Width="800">
     <Grid>
         <Grid Background="#FFE9EEF3">
-            <DataGrid x:Name="dgJobList"  ItemsSource="{Binding Jobs}" AutoGenerateColumns="False" Margin="38,142,38,142" SelectionChanged="dgJobList_SelectionChanged">
+            <DataGrid x:Name="dgJobList"  ItemsSource="{Binding JobsCollection}" AutoGenerateColumns="False" Margin="38,142,38,142" SelectionChanged="dgJobList_SelectionChanged">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Nom" Binding="{Binding Name}" />
                     <DataGridTextColumn Header="Type de sauvegarde" Binding="{Binding BackupType}" />

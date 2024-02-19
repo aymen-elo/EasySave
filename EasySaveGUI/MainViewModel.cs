@@ -11,23 +11,15 @@ namespace EasySave_2._0
         JobsController jobsController = new JobsController(logger);
         TranslationController translationController = new TranslationController();
         TranslationManager translationManager = new TranslationManager();
-        
-        private ObservableCollection<Job> _jobs;
-        public ObservableCollection<Job> Jobs
-        {
-            get { return _jobs; }
-            set
-            {
-                _jobs = value;
-            }
-        }
+
+        public ObservableCollection<Job> JobsCollection { get; set; }
 
         public MainViewModel()
         {
-            Jobs = new ObservableCollection<Job>();
+            JobsCollection = new ObservableCollection<Job>();
             foreach (var travail in jobsController.GetJobs())
             {
-                Jobs.Add(new Job(travail.Name, travail.BackupType, travail.SourceFilePath, travail.TargetFilePath));
+                JobsCollection.Add(new Job(travail.Name, travail.BackupType, travail.SourceFilePath, travail.TargetFilePath));
             }
         }
     }

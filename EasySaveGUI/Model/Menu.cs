@@ -29,7 +29,7 @@ namespace EasySave.Library
             bool continuer = true;
             while (continuer)
             {
-                Console.Clear();
+                
                 Console.WriteLine(_translation.Menu.PrincipalMenu);
                 Console.WriteLine($"1. {_translation.Menu.Option}");
                 Console.WriteLine($"2. {_translation.Menu.BackupManage}");
@@ -38,7 +38,7 @@ namespace EasySave.Library
 
                 Console.Write(_translation.Messages.Choice);
                 string choice = Console.ReadLine();
-                Console.Clear();
+                
 
                 switch (choice)
                 {
@@ -74,7 +74,7 @@ namespace EasySave.Library
 
             Console.Write(_translation.Messages.Choice);
             string choice = Console.ReadLine();
-            Console.Clear();
+            
 
             switch (choice)
             {
@@ -159,7 +159,7 @@ namespace EasySave.Library
 
                 Console.Write(_translation.Messages.Choice);
                 string choice = Console.ReadLine();
-                Console.Clear();
+                
 
                 switch (choice)
                 {

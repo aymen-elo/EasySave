@@ -54,7 +54,22 @@ namespace EasySave_2._0
                 MessageBox.Show("Please select a job to run.");
             }
         }
-        private void btnRemoveJob_Click(object sender, RoutedEventArgs e) { }
+
+        private void btnRemoveJob_Click(object sender, RoutedEventArgs e)
+        {
+            var logger = new Logger();
+            var translation = new TranslationModel();
+            JobsController jobsController = new JobsController(logger);
+            
+            var job = dgJobList?.SelectedItem as Job;
+            
+            if (job != null)
+            {
+                jobsController.DeleteJob(dgJobList.Items.IndexOf(job), translation, logger);
+            }
+            
+            dgJobList.ItemsSource = jobsController.GetJobs();
+        }
         private void btnEditJob_Click(object sender, RoutedEventArgs e) { }
         private void btnPlayPause_Click(object sender, RoutedEventArgs e) { }
         private void btnStopJob_Click(object sender, RoutedEventArgs e) { }
@@ -70,6 +85,15 @@ namespace EasySave_2._0
             else
             {
                 btnRunJob.IsEnabled = true;
+            }
+            // if several jobs are selected, the button is disabled
+            if (dgJobList.SelectedItems.Count > 1 || dgJobList.SelectedItems.Count == 0)
+            {
+                btnRemoveJob.IsEnabled = false;
+            }
+            else
+            {
+                btnRemoveJob.IsEnabled = true;
             }
             
         }
