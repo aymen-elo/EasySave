@@ -11,6 +11,20 @@
     <system:String x:Key="StrButtonLogs">Logs</system:String>
     <system:String x:Key="StrSearchJob">Search Job</system:String>
     <system:String x:Key="StrButtonOption">Option</system:String>
+    <system:String x:Key="AddJobWindowTitle">Add Job</system:String>
+    <system:String x:Key="JobNameLabel">Job Name</system:String>
+    <system:String x:Key="SourcePathLabel">Source Path</system:String>
+    <system:String x:Key="DestinationPathLabel">Destination Path</system:String>
+    <system:String x:Key="BackupTypeLabel">Backup Type</system:String>
+    <system:String x:Key="FullBackupType">Full</system:String>
+    <system:String x:Key="DifferentialBackupType">Differential</system:String>
+    <system:String x:Key="AddButtonLabel">Add</system:String>
+    
+    <system:String x:Key="StrErrorMessageAllFieldsMustBeCompleted">All fields must be completed.</system:String>
+    <system:String x:Key="StrErrorMessageInvalidPath">The source and/or destination paths are invalid.</system:String>
+    <system:String x:Key="StrErrorMessageGeneric">There is an error.</system:String>
+
+
 
     <system:String x:Key="StrMainMenu">FRMenu</system:String>
     <system:String x:Key="StrMainEnglish">English</system:String>

@@ -5,7 +5,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="clr-namespace:EasySave_2._0"
         mc:Ignorable="d"
-        Title="AddJobWindow" Height="450" Width="800">
+        Title="{DynamicResource AddJobWindowTitle}" Height="450" Width="800">
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -15,24 +15,28 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Text="Nom du job :" Grid.Row="0" Margin="0,0,0,5"/>
+        <TextBlock Text="{DynamicResource StrJobNameLabel}" Grid.Row="0" Margin="0,0,0,5"/>
         <TextBox x:Name="txtJobName" Grid.Row="1" Margin="0,0,0,10"/>
 
-        <TextBlock Text="Chemin source :" Grid.Row="2" Margin="0,0,0,5"/>
+        <!-- TextBlock pour le chemin source -->
+        <TextBlock Text="{DynamicResource StrSourcePathLabel}" Grid.Row="2" Margin="0,0,0,5"/>
         <TextBox x:Name="txtSourcePath" Grid.Row="3" Margin="0,0,0,10"/>
 
-        <TextBlock Text="Chemin destination :" Grid.Row="4" Margin="0,0,0,5"/>
+        <!-- TextBlock pour le chemin destination -->
+        <TextBlock Text="{DynamicResource StrDestinationPathLabel}" Grid.Row="4" Margin="0,0,0,5"/>
         <TextBox x:Name="txtDestinationPath" Grid.Row="5" Margin="0,0,0,10"/>
 
-        <!-- Ajoutez un ComboBox pour sélectionner le type de sauvegarde -->
-        <TextBlock Text="Type de sauvegarde :" Grid.Row="6" Margin="0,0,0,5"/>
+        <!-- ComboBox pour le type de sauvegarde -->
+        <TextBlock Text="{DynamicResource StrBackupTypeLabel}" Grid.Row="6" Margin="0,0,0,5"/>
         <ComboBox x:Name="cmbBackupType" Grid.Row="7" Margin="0,0,0,5">
-            <ComboBoxItem Content="Full" />
-            <ComboBoxItem Content="Differential" />
+            <ComboBoxItem Content="{DynamicResource StrFullBackupType}" />
+            <ComboBoxItem Content="{DynamicResource StrDifferentialBackupType}" />
         </ComboBox>  
 
-        <Button Content="Ajouter" Click="btnAdd_Click" Grid.Row="8" HorizontalAlignment="Left" Margin="686,23,0,0" VerticalAlignment="Top" Height="42" Width="66"/>
+        <!-- Bouton pour ajouter le job -->
+        <Button Content="{DynamicResource StrButtonNewJob}" Click="btnAdd_Click" Grid.Row="8" HorizontalAlignment="Left" Margin="686,23,0,0" VerticalAlignment="Top" Height="42" Width="66"/>
     </Grid>
 </Window>

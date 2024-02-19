@@ -14,6 +14,7 @@ namespace EasySave_2._0
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
+    
     public partial class MainWindow : Window
     {
         private readonly JobsController _jobsController;
@@ -21,6 +22,7 @@ namespace EasySave_2._0
         private Logger _logger;
         private TranslationController _translationController;
 
+        
         public MainWindow()
         {
             InitializeComponent();

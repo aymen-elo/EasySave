@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using System;
+using System.IO;
+using System.Windows;
 using EasySave.Controllers;
 using EasySave.Library;
 using EasySave.Models;
@@ -9,6 +11,7 @@ namespace EasySave_2._0
     {
         Logger _logger = new Logger();
         private TranslationModel _translation;
+
         public AddJobWindow()
         {
             InitializeComponent();
@@ -17,23 +20,43 @@ namespace EasySave_2._0
 
         private void btnAdd_Click(object sender, RoutedEventArgs e)
         {
-            // Récupérer les valeurs saisies par l'utilisateur
-            string jobName = txtJobName.Text;
-            string sourcePath = txtSourcePath.Text;
-            string destinationPath = txtDestinationPath.Text;
-            string backupType = cmbBackupType.SelectedItem.ToString(); // Récupérer le type de sauvegarde sélectionné
+            try
+            {
+                string jobName = txtJobName.Text;
+                string sourcePath = txtSourcePath.Text;
+                string destinationPath = txtDestinationPath.Text;
+                string backupType =
+                    cmbBackupType.SelectedItem?.ToString(); 
 
-            // Transmettre les valeurs à votre JobsController pour l'ajout du job à la liste des jobs
-            JobsController jobsController = new JobsController(_logger);
+                // Vérifier si toutes les entrées sont valides
+                if (string.IsNullOrWhiteSpace(jobName) || string.IsNullOrWhiteSpace(sourcePath) ||
+                    string.IsNullOrWhiteSpace(destinationPath) || string.IsNullOrWhiteSpace(backupType))
+                {
+                    throw new ArgumentException("All fields must be completed.");
+                }
+                
+                if (!Directory.Exists(sourcePath) || !Directory.Exists(destinationPath))
+                {
+                    throw new ArgumentException("Les chemins source et/ou destination sont invalides.");
+                }
 
-            // Convertir la chaîne de type de sauvegarde en BackupType
-            BackupType typeSave = (backupType == "Full") ? BackupType.Full : BackupType.Diff;
+                JobsController jobsController = new JobsController(_logger);
 
-            // Ajouter le nouveau job en utilisant la méthode AddJob du JobsController
-            jobsController.AddJob(_logger, _translation, jobName, sourcePath, destinationPath, typeSave);
+                BackupType typeSave = (backupType == "Full") ? BackupType.Full : BackupType.Diff;
 
-            // Fermer la fenêtre
-            this.Close();
+                jobsController.AddJob(_logger, _translation, jobName, sourcePath, destinationPath, typeSave);
+
+                this.Close();
+            }
+            catch (ArgumentException ex)
+            {
+                MessageBox.Show($"Error : {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"There is an error : {ex.Message}", "Error", MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
         }
     }
 }

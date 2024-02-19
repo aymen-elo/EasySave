@@ -9,9 +9,21 @@
     <system:String x:Key="StrButtonPlayPause">Lancer/Pause</system:String>
     <system:String x:Key="StrButtonStopJob">Arrêter Travail</system:String>
     <system:String x:Key="StrButtonLogs">Log de Journalisation</system:String>
-    <system:String x:Key="StrButtonOption">Option</system:String>
     <system:String x:Key="StrSearchJob">Rechercher un travail</system:String>
-
+    <system:String x:Key="StrButtonOption">Option</system:String>
+    <system:String x:Key="AddJobWindowTitle">Ajouter un Job</system:String>
+    <system:String x:Key="JobNameLabel">Nom du Job</system:String>
+    <system:String x:Key="SourcePathLabel">Chemin Source</system:String>
+    <system:String x:Key="DestinationPathLabel">Chemin Destination</system:String>
+    <system:String x:Key="BackupTypeLabel">Type de Sauvegarde</system:String>
+    <system:String x:Key="FullBackupType">Complet</system:String>
+    <system:String x:Key="DifferentialBackupType">Différentiel</system:String>
+    <system:String x:Key="AddButtonLabel">Ajouter</system:String>
+    
+    <system:String x:Key="StrErrorMessageAllFieldsMustBeCompleted">All fields must be completed.</system:String>
+    <system:String x:Key="StrErrorMessageInvalidPath">The source and/or destination paths are invalid.</system:String>
+    <system:String x:Key="StrErrorMessageGeneric">There is an error.</system:String>
+    
     <system:String x:Key="StrMainMenu">Menu</system:String>
     <system:String x:Key="StrMainEnglish">Anglais</system:String>
     <system:String x:Key="StrMainFrench">Français</system:String>
