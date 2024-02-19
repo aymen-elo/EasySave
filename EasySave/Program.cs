@@ -7,13 +7,9 @@
  * (A3 FISA - 2023/2024 - CESI)
  */
 
-using EasySave.Models;
-using EasySave.Views;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using EasySave.Controllers;
-using EasySave.Library;
+using EasySave.Model;
+using EasySave.Controller;
+using EasySave.Model.Translation;
 
 namespace EasySave
 {

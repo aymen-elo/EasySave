@@ -1,13 +1,9 @@
-﻿using EasySave.Views;
+﻿using EasySave.View;
 using System.Text.Json;
 using System.IO;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace EasySave.Models
+namespace EasySave.Model.Translation
 {
     public class TranslationManager
     {

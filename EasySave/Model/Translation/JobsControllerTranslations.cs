@@ -1,4 +1,4 @@
-﻿namespace EasySave.Models
+﻿namespace EasySave.Model.Translation
 {
     public class JobsControllerTranslations
     {
