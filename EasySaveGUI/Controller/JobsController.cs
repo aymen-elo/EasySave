@@ -2,14 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Xml.Linq;
-using EasySave.Library;
 using EasySave.Models;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace EasySave.Controllers
 {
@@ -80,6 +76,7 @@ namespace EasySave.Controllers
         }
 
         // Editing a job that exists -> used in another method EditJob(logger, translation)
+        // Editing a job that exists -> used in another method EditJob(logger, translation)
         public void EditJob(int i, string name, string source, string destination, BackupType backupType, Logger logger)
         {
             Job job = Jobs[i];
@@ -94,9 +91,11 @@ namespace EasySave.Controllers
                 var _fileCopier = new CopyController();
                 DirectoryInfo diSource = new DirectoryInfo(job.SourceFilePath);
                 long totalFilesSize = _fileCopier._fileGetter.DirSize(diSource);
+                int totalFilesToCopy = _fileCopier._fileGetter.GetAllFiles(job.SourceFilePath).Count;
                 
                 job.TotalFilesSize = totalFilesSize;
-                job.NbFilesLeftToDo = totalFilesSize;
+                job.NbFilesLeftToDo = totalFilesToCopy;
+                job.TotalFilesToCopy = totalFilesToCopy;
                 job.NbSavedFiles = 0;
 
                 logger.LogState(job.Name, job.SourceFilePath, job.TargetFilePath, job.State, job.TotalFilesToCopy, job.TotalFilesSize , (job.TotalFilesToCopy - job.NbSavedFiles), ((job.NbSavedFiles * 100) / job.TotalFilesToCopy), name);
@@ -132,59 +131,22 @@ namespace EasySave.Controllers
         {
             // Créer un nouveau job
             var job = new Job(name, backupType, source, destination);
+                
+            // Using helpers to calculate the new directory's size info
+            var _fileCopier = new CopyController();
+            DirectoryInfo diSource = new DirectoryInfo(job.SourceFilePath);
+            long totalFilesSize = _fileCopier._fileGetter.DirSize(diSource);
+            int totalFilesToCopy = _fileCopier._fileGetter.GetAllFiles(job.SourceFilePath).Count;
+                
+            job.TotalFilesSize = totalFilesSize;
+            job.NbFilesLeftToDo = totalFilesToCopy;
+            job.TotalFilesToCopy = totalFilesToCopy;
+            job.NbSavedFiles = 0;
+                
             Jobs.Add(job);
+            logger.LogState(job.Name, job.SourceFilePath, job.TargetFilePath, job.State, job.TotalFilesToCopy, job.TotalFilesSize , (job.TotalFilesToCopy - job.NbSavedFiles), ((job.NbSavedFiles * 100) / job.TotalFilesToCopy), name);
 
-            // Enregistrer la liste mise à jour dans un fichier JSON
-            SaveJobsToJson();
-            SaveJobsXml();
         }
-
-        private void SaveJobsToJson()
-        {
-            // Chemin du fichier JSON
-            string filePath = @"C:\Prosoft\EasySave\Logs\state.json";
-
-            // Sérialiser la liste des jobs au format JSON
-            string jsonJobs = JsonConvert.SerializeObject(Jobs, Formatting.Indented);
-
-            // Écrire les données JSON dans le fichier
-            File.WriteAllText(filePath, jsonJobs);
-        }
-        
-        private void SaveJobsXml()
-        {
-            // Chemin du fichier XML
-            string filePath = @"C:\Prosoft\EasySave\Logs\state.xml";
-
-            // Créer un élément racine
-            XElement jobsElement = new XElement("Jobs");
-
-            // Ajouter chaque job en tant qu'élément dans le document XML
-            foreach (var job in Jobs)
-            {
-                XElement jobElement = new XElement("Job",
-                    new XElement("Name", job.Name),
-                    new XElement("BackupType", job.BackupType),
-                    new XElement("Source", job.SourceFilePath),
-                    new XElement("Destination", job.TargetFilePath),
-                    new XElement("State", job.State.ToString()),
-                    new XElement("TotalFilesToCopy", job.NbSavedFiles),
-                    new XElement("TotalFilesSize", job.TotalFilesSize),
-                    new XElement("NbFilesLeftToDo", job.NbFilesLeftToDo),
-                    new XElement("Progression", job.Progression)
-                    // Ajoutez d'autres éléments pour d'autres propriétés du job si nécessaire
-                    );
-                    jobsElement.Add(jobElement);
-            }
-
-            // Créer un document XML avec l'élément racine
-            XDocument doc = new XDocument(jobsElement);
-
-            // Écrire les données XML dans le fichier
-            doc.Save(filePath);
-        }
-
-
         public void LaunchJob(Job job, Logger logger, TranslationModel translation)
         {
             if (job.State == JobState.Finished || job.State == JobState.Pending)
