@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using EasySave.Models;
-using EasySave.Controllers;
+﻿using System.Collections.ObjectModel;
+using EasySaveGUI.Controller;
+using EasySaveGUI.Model;
+using EasySaveGUI.Model.Translation;
 
-namespace EasySave_2._0
+namespace EasySaveGUI
 {
     public class MainViewModel
     {

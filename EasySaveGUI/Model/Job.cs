@@ -1,12 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Diagnostics;
-using System.IO;
 
-namespace EasySave.Models
+namespace EasySaveGUI.Model
 {
 
     /* Pending = Hasn't started yet */
@@ -38,6 +32,7 @@ namespace EasySave.Models
         public DateTime EndTime { get; set; }
         public int Progression { get; set; }
         
+        public Job() { }
 
         public Job(string name, BackupType type, string src, string dest) 
         {
@@ -56,8 +51,6 @@ namespace EasySave.Models
             _nextPos++;
         }
         
-        public Job() {}
-        
         /* Helper constructor for state.json */
         public Job(string name, JobState jobState, string src, string dest, int totalFilesToCopy, long nbFilesLeftToDo, long totalFilesSize) 
         {
@@ -74,11 +67,6 @@ namespace EasySave.Models
 
             _nextId++;
             _nextPos++;
-        }
-
-        public bool Begin(string name, string source, string target, int type) 
-        {
-            return true; // si pas erreur lors lancement, renvoyé 1
         }
     }
 }

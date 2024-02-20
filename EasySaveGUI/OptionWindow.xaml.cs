@@ -1,6 +1,7 @@
 ﻿using System.Windows;
-using EasySave.Models;
-namespace EasySave_2._0
+using EasySaveGUI.Model;
+
+namespace EasySaveGUI
 {
     public partial class OptionWindow : Window
     {
@@ -18,12 +19,12 @@ namespace EasySave_2._0
             if (rbJson.IsChecked == true)
             {
                 // Enregistrer le choix Json dans la classe Logger
-                Logger.GetInstance()._logFormat = "json";
+                Logger.GetInstance().LogFormat = "json";
             }
             else if (rbXml.IsChecked == true)
             {
                 // Enregistrer le choix Xml dans la classe Logger
-                Logger.GetInstance()._logFormat = "xml";
+                Logger.GetInstance().LogFormat = "xml";
             }
 
             // Fermer la fenêtre OptionsWindow

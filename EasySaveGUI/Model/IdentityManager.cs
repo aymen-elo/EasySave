@@ -1,21 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace EasySave.Models
+namespace EasySaveGUI.Model
 {
     public class IdentityManager
     {
-        private readonly string _path = Program.LogsDirectoryPath;
+        private readonly string _logDirPath = Program.LogsDirectoryPath;
         public IdentityManager()
         {
-            if (!Directory.Exists(_path))
+            if (!Directory.Exists(_logDirPath))
             {
-                Directory.CreateDirectory(_path);
+                Directory.CreateDirectory(_logDirPath);
             }
         }
         
@@ -32,7 +29,7 @@ namespace EasySave.Models
         }
         public HashSet<string> LoadAllowedHashes(string jobName)
         {
-            string filePath = Path.Combine(_path, string.Format( @"\{0}-AlreadyCopiedHashes.json", jobName));
+            string filePath = Path.Combine(_logDirPath, string.Format( @"\{0}-AlreadyCopiedHashes.json", jobName));
             
             // Créer un HashSet pour stocker les hachages
             HashSet<string> allowedHashes = new HashSet<string>();
@@ -43,7 +40,7 @@ namespace EasySave.Models
                 // Lire le fichier JSON ligne par ligne
                 using (StreamReader reader = new StreamReader(filePath))
                 {
-                    string line;
+                    string? line;
                     while ((line = reader.ReadLine()) != null)
                     {
                         // Ajouter chaque hachage à la liste
@@ -56,7 +53,7 @@ namespace EasySave.Models
         }
         public void SaveAllowedHashes(HashSet<string> allowedHashes, string jobName)
         {
-            string filePath = _path + string.Format( @"\{0}-AlreadyCopiedHashes.json", jobName);
+            string filePath = _logDirPath + string.Format( @"\{0}-AlreadyCopiedHashes.json", jobName);
             
             // Écrire chaque hachage dans le fichier JSON
             using (StreamWriter writer = new StreamWriter(filePath))
@@ -69,7 +66,7 @@ namespace EasySave.Models
         }
         public void DeleteAllowedHashes(string jobName)
         {
-            string filePath = Path.Combine(_path, string.Format( @"\{0}-AlreadyCopiedHashes.json", jobName));
+            string filePath = Path.Combine(_logDirPath, string.Format( @"\{0}-AlreadyCopiedHashes.json", jobName));
             File.Delete(filePath);
         }
     }

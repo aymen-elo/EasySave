@@ -1,8 +1,8 @@
 ﻿using System;
-using EasySave.Models;
-using EasySave.Views;
+using EasySave.Model.Translation;
+using EasySave.View;
 
-namespace EasySave.Controllers
+namespace EasySave.Controller
 {
     public class TranslationController
     {

@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using EasySave.Models;
+using EasySave.Model.Translation;
 
-namespace EasySave.Views
+namespace EasySave.View
 {
     public class TranslationView
     {

@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using EasySave.Library;
-using EasySave.Views;
+using EasySave.Model;
+using EasySave.Model.CopyHelper;
+using EasySave.Model.Translation;
+using EasySave.View;
 
-namespace EasySave.Models
+namespace EasySave.Controller
 {
     public class CopyController
     {

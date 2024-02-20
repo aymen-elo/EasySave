@@ -2,15 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using EasySave.Library;
-using EasySave.Models;
+using EasySave.Model;
+using EasySave.Model.Translation;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
-namespace EasySave.Controllers
+namespace EasySave.Controller
 {
     public enum OperationType { Display, Perform, Remove, Edit}
     public class JobsController

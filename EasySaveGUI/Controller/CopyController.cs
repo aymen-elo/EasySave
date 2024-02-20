@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using EasySave.Library;
-using EasySave.Views;
+using EasySaveGUI.Model;
+using EasySaveGUI.Model.CopyHelper;
+using EasySaveGUI.Model.Translation;
+using EasySaveGUI.View;
 
-namespace EasySave.Models
+namespace EasySaveGUI.Controller
 {
     public class CopyController
     {
@@ -17,7 +19,7 @@ namespace EasySave.Models
 
         public CopyController() { }
 
-        public void CopyDirectory(Job job, TranslationModel translation)
+        public void CopyDirectory(Job job)
         {
             job.StartTime = DateTime.Now;
             job.State = JobState.Active;
@@ -37,9 +39,9 @@ namespace EasySave.Models
             Console.WriteLine(_progressBar.UpdateProgress(0, job.Name, job.TotalFilesToCopy, job.NbSavedFiles));
             
             if (job.BackupType == BackupType.Diff)
-                CopyDiff(job, allFiles, allowedHashes, loadedHashes, translation);
+                CopyDiff(job, allFiles, allowedHashes, loadedHashes);
             else
-                CopyFull(job, allFiles, allowedHashes, translation);
+                CopyFull(job, allFiles, allowedHashes);
 
             stopWatch.Stop();
             job.Duration = stopWatch.Elapsed;
@@ -49,7 +51,7 @@ namespace EasySave.Models
             
         }
 
-        private void CopyDiff(Job job, List<string> allFiles, HashSet<string> allowedHashes, HashSet<string> loadedHashes, TranslationModel translation)
+        private void CopyDiff(Job job, List<string> allFiles, HashSet<string> allowedHashes, HashSet<string> loadedHashes)
         {
             DirectoryInfo diSource = new DirectoryInfo(job.SourceFilePath);
             long totalFilesSize = _fileGetter.DirSize(diSource);
@@ -89,7 +91,7 @@ namespace EasySave.Models
             _fileGetter.CompareAndDeleteDirectories(job.TargetFilePath, job.SourceFilePath);
         }
 
-        private void CopyFull(Job job, List<string> allFiles, HashSet<string> allowedHashes, TranslationModel translation)
+        private void CopyFull(Job job, List<string> allFiles, HashSet<string> allowedHashes)
         {
             DirectoryInfo diSource = new DirectoryInfo(job.SourceFilePath);
             long totalFilesSize = _fileGetter.DirSize(diSource);

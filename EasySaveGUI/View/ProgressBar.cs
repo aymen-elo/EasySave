@@ -1,4 +1,4 @@
-﻿namespace EasySave.Views
+﻿namespace EasySaveGUI.View
 {
     public class ProgressBar
     {
