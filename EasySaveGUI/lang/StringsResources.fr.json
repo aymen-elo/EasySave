@@ -17,6 +17,7 @@
   "StrBackupTypeLabel": "Type de Sauvegarde",
   "StrFullBackupType": "Complète",
   "StrDifferentialBackupType": "Différentielle",
+  "StrLogFormat":"Choisissez un format pour logguer",
   "StrMainLanguage": "Langue"
 
 }

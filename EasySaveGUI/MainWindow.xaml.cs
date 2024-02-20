@@ -20,12 +20,13 @@ namespace EasySaveGUI
     {
         private readonly JobsController _jobsController;
         private readonly Menu _menu;
-        private readonly Logger _logger;
         private readonly TranslationController _translationController;
         private string _currentLanguageCode;
         private ResourceDictionary _languageDictionary;
         private AddJobWindow addJobWindow; 
         public LangueSettingsViewModels _language = new();
+        Logger _logger = new Logger();
+
         
         public MainWindow()
         {
@@ -35,7 +36,6 @@ namespace EasySaveGUI
             _jobsController = new JobsController(_logger);
             string logsDirectoryPath = @"C:\Prosoft\EasySave\Logs";
             _languageDictionary = new ResourceDictionary();
-            _language.ChangeLanguage("fr");
             
         }
 
@@ -55,7 +55,7 @@ namespace EasySaveGUI
 
         private void btnOption_Click(object sender, RoutedEventArgs e)
         {
-            OptionWindow optionWindow = new OptionWindow();
+            FormatLog optionWindow = new FormatLog();
             optionWindow.ShowDialog();
         }
         
@@ -95,10 +95,7 @@ namespace EasySaveGUI
             RefreshJobList();
         }
         private void btnEditJob_Click(object sender, RoutedEventArgs e) { }
-
-        private void btnPlayPause_Click(object sender, RoutedEventArgs e)
-        {
-        }
+        private void btnPlayPause_Click(object sender, RoutedEventArgs e) { }
         private void btnStopJob_Click(object sender, RoutedEventArgs e) { }
         private void btnLogs_Click(object sender, RoutedEventArgs e) { }
 
