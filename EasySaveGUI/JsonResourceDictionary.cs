@@ -53,9 +53,9 @@ namespace EasySaveGUI
 
             switch (languageCode)
             {
-                case "en":
+                case "language:en":
                     return new Uri(Path.Combine(langFolderPath, "StringsResources.en.json"));
-                case "fr":
+                case "language:fr":
                     return new Uri(Path.Combine(langFolderPath, "StringsResources.fr.json"));
                 default:
                     return new Uri(Path.Combine(langFolderPath, "StringsResources.en.json"));

@@ -1,4 +1,6 @@
 ﻿using System.IO;
+using System.Net;
+
 namespace EasySaveGUI.Model
 {
     public class ConfigManager
@@ -7,11 +9,21 @@ namespace EasySaveGUI.Model
         private const string ConfigFileName = "config.conf";
         private static string ConfigFilePath => Path.Combine(LogsDirectoryPath, ConfigFileName);
 
+        public ConfigManager()
+        {
+            if (!File.Exists(ConfigFilePath))
+            {
+                using (StreamWriter sw = File.CreateText(ConfigFilePath))
+                {
+                    sw.WriteLine("language:en");
+                }
+                
+            }
+        }
         public static void SaveLanguage(string languageCode)
         {
-            Directory.CreateDirectory(LogsDirectoryPath);
-            string configContent = $"language:{languageCode}";
-            File.WriteAllText(ConfigFilePath, configContent);
+            Directory.CreateDirectory(LogsDirectoryPath); // Assurez-vous que le répertoire existe
+            File.WriteAllText(ConfigFilePath, languageCode);
         }
 
         public static string GetSavedLanguage()

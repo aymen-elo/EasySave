@@ -38,8 +38,8 @@
         <StackPanel>
             <Menu>
                 <MenuItem Header= "{DynamicResource StrMainLanguage}" Click="menuItemLang_Click">
-                    <MenuItem Header="{DynamicResource StrMainEnglish}" Command="{Binding ChangeLanguageCommand, Source={StaticResource LangueSettingsViewModelInstance}}" CommandParameter="en"/>
-                        <MenuItem Header="{DynamicResource StrMainFrench}" Command="{Binding ChangeLanguageCommand, Source={StaticResource LangueSettingsViewModelInstance}}" CommandParameter="fr"/>
+                    <MenuItem Header="{DynamicResource StrMainEnglish}" Command="{Binding ChangeLanguageCommand, Source={StaticResource LangueSettingsViewModelInstance}}" CommandParameter="language:en"/>
+                        <MenuItem Header="{DynamicResource StrMainFrench}" Command="{Binding ChangeLanguageCommand, Source={StaticResource LangueSettingsViewModelInstance}}" CommandParameter="language:fr"/>
 
                         <MenuItem.Style>
                             <Style TargetType="MenuItem">

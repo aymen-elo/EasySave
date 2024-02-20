@@ -25,10 +25,12 @@ namespace EasySaveGUI
         private AddJobWindow addJobWindow; 
         public LangueSettingsViewModels _language = new();
         Logger _logger = new Logger();
+        public ConfigManager _configManager;
 
         
         public MainWindow()
         {
+            _configManager = new ConfigManager();
             InitializeComponent();
             DataContext = new MainViewModel();
             btnRunJob.IsEnabled = false;
@@ -36,6 +38,7 @@ namespace EasySaveGUI
             string logsDirectoryPath = @"C:\Prosoft\EasySave\Logs";
             _languageDictionary = new ResourceDictionary();
             
+
         }
 
         private void btnNewJob_Click(object sender, RoutedEventArgs e)
