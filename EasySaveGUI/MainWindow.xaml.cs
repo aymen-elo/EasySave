@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Windows;
 
 using System.Windows.Controls;
+using EasySaveGUI;
 using EasySaveGUI.Controller;
 using EasySaveGUI.Model;
 using EasySaveGUI.Model.Translation;

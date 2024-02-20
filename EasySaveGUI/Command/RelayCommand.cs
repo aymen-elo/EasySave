@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace EasySave_2._0.Command
+namespace EasySaveGUI.Command
 {
     public class RelayCommand : ICommand
     {

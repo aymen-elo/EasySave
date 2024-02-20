@@ -1,10 +1,11 @@
 ﻿using System;
+using System.IO;
 using System.Windows;
 using System.Windows.Input;
-using EasySave_2._0.Command;
+using EasySaveGUI.Command;
 using Newtonsoft.Json.Linq;
 
-namespace EasySave_2._0
+namespace EasySaveGUI
 {
     
     public class LangueSettingsViewModels 
@@ -18,7 +19,15 @@ namespace EasySave_2._0
 
         public void ChangeLanguage(string languageCode)
         {
-            ResourceDictionary dictionary = new JsonResourceDictionary(GetResourceUri(languageCode));
+            Uri resourceUri = GetResourceUri(languageCode);
+
+            if (resourceUri == null)
+            {
+                MessageBox.Show("Chemin du fichier JSON invalide.");
+                return;
+            }
+
+            ResourceDictionary dictionary = new JsonResourceDictionary(resourceUri);
             Application.Current.Resources.MergedDictionaries.Add(dictionary);       
         }
 
@@ -46,7 +55,13 @@ namespace EasySave_2._0
         {
             try
             {
-                var jsonString = System.IO.File.ReadAllText(uri.LocalPath);
+                if (!File.Exists(uri.LocalPath))
+                {
+                    MessageBox.Show("Le fichier JSON spécifié n'existe pas.");
+                    return;
+                }
+
+                var jsonString = File.ReadAllText(uri.LocalPath);
                 var jsonObject = JObject.Parse(jsonString);
 
                 foreach (var property in jsonObject)
@@ -56,7 +71,7 @@ namespace EasySave_2._0
             }
             catch (Exception ex)
             {
-                // Gérer les erreurs de chargement de fichier
+                // Gérer les autres erreurs de chargement de fichier JSON
                 MessageBox.Show($"Erreur lors du chargement du fichier JSON : {ex.Message}");
             }
         }
