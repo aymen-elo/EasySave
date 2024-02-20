@@ -11,66 +11,50 @@ namespace EasySaveGUI.Model
 
         public ConfigManager()
         {
-            if (!File.Exists(ConfigFilePath))
+            if (File.Exists(ConfigFilePath)) { return;}
+            
+            using (var sw = File.CreateText(ConfigFilePath))
             {
-                using (StreamWriter sw = File.CreateText(ConfigFilePath))
-                {
-                    sw.WriteLine("language:en");
-                    sw.WriteLine("logformat:json");
-                }
-                
+                sw.WriteLine("language:en");
+                sw.WriteLine("logformat:json");
             }
         }
+        
+        /* POSSIBLE REFACTOR FOR THE 3 METHODS */
         public static void SaveLanguage(string languageCode)
         {
-            if (!Directory.Exists(LogsDirectoryPath))
-            {
-                Directory.CreateDirectory(LogsDirectoryPath);   
-            }
-
-            if (!File.Exists(LogsDirectoryPath + @"\config.conf"))
-            {
-                ///   TODO
-            }
+            var lines = File.ReadAllLines(ConfigFilePath);
             
-            string[] lines = File.ReadAllLines(ConfigFilePath);
-            for (int i = 0; i < lines.Length; i++)
-            {
-                if (lines[i].Contains("logformat"))
-                {
-                    lines[i] = $"logformat:{logFormat}";
-                }
-            }
+            var i = 0;
+            while (i < lines.Length && !lines[i].Contains("language")) { i++; }
+            lines[i] = $"language:{languageCode}";
+            
             File.WriteAllLines(ConfigFilePath, lines);
-            
-            File.WriteAllText(ConfigFilePath, languageCode);
         }
         
         public static void SaveLogFormat(string logFormat)
         {
-            Directory.CreateDirectory(LogsDirectoryPath); 
-    
-            if (File.Exists(ConfigFilePath))
-            {
-                string[] lines = File.ReadAllLines(ConfigFilePath);
-                for (int i = 0; i < lines.Length; i++)
-                {
-                    if (lines[i].Contains("logformat"))
-                    {
-                        lines[i] = $"logformat:{logFormat}";
-                    }
-                }
-                File.WriteAllLines(ConfigFilePath, lines);
-            }
+            var lines = File.ReadAllLines(ConfigFilePath);
+            
+            var i = 0;
+            while (i < lines.Length && !lines[i].Contains("logformat")) { i++; }
+            lines[i] = $"logformat:{logFormat}";
+            
+            File.WriteAllLines(ConfigFilePath, lines);
         }
 
-        public static string GetSavedLanguage()
+        public static string? GetSavedLanguage()
         {
-            if (File.Exists(ConfigFilePath))
-            {
-                return File.ReadAllText(ConfigFilePath);
-            }
-            return null; // Aucune langue enregistrée
+            if (!File.Exists(ConfigFilePath)) { return null; }
+
+            var lines = File.ReadAllLines(ConfigFilePath);
+            
+            var i = 0;
+            while (i < lines.Length && !lines[i].Contains("language")) { i++; }
+            var lang = lines[i].Split(":")[1];
+
+            return lang;
         }
+        /****************************************/
     }
 }

@@ -34,7 +34,8 @@ namespace EasySaveGUI
 
             if (resourceUri == null)
             {
-                MessageBox.Show("Chemin du fichier JSON invalide.");
+                // TOFIX : What's the logic here? (P) - spam pop up
+                // MessageBox.Show("Chemin du fichier JSON invalide.");
                 return;
             }
 
@@ -53,9 +54,9 @@ namespace EasySaveGUI
 
             switch (languageCode)
             {
-                case "language:en":
+                case "en":
                     return new Uri(Path.Combine(langFolderPath, "StringsResources.en.json"));
-                case "language:fr":
+                case "fr":
                     return new Uri(Path.Combine(langFolderPath, "StringsResources.fr.json"));
                 default:
                     return new Uri(Path.Combine(langFolderPath, "StringsResources.en.json"));
@@ -75,7 +76,8 @@ namespace EasySaveGUI
                 {
                     if (!File.Exists(uri.LocalPath))
                     {
-                        MessageBox.Show("Le fichier JSON spécifié n'existe pas.");
+                        // TOFIX ; What's the logic here? (P) - spam pop up
+                        //MessageBox.Show("Le fichier JSON spécifié n'existe pas.");
                         return;
                     }
 
