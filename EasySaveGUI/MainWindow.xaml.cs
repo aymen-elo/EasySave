@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Windows;
 
@@ -67,24 +69,13 @@ namespace EasySaveGUI
 
         private void btnRunJob_Click(object sender, RoutedEventArgs e)
         {
-            Job selectedJob = dgJobList.SelectedItem as Job;
-            if (selectedJob != null)
+            List<int> selectedIndices = new List<int>();
+            foreach (var selectedItem in dgJobList.SelectedItems)
             {
-                /*
-                // Instancier le contrôleur de jobs
-                JobsController jobsController = new JobsController();
-        
-                // Appeler la méthode LaunchJob avec le job sélectionné
-                jobsController.LaunchJob(selectedJob, new Logger(), new TranslationModel());
-
-                // Afficher un message ou effectuer toute autre action nécessaire
-                */
-                MessageBox.Show($"Job '{selectedJob.Name}' is running.");
-            }
-            else
-            {
-                // Afficher un message d'erreur si aucun job n'est sélectionné
-                MessageBox.Show("Please select a job to run.");
+                int index = dgJobList.Items.IndexOf(selectedItem);
+                selectedIndices.Add(index);
+                Job selectedJob = (Job)dgJobList.Items[index];
+                _jobsController.LaunchJob(selectedJob);
             }
         }
 
@@ -104,7 +95,10 @@ namespace EasySaveGUI
             RefreshJobList();
         }
         private void btnEditJob_Click(object sender, RoutedEventArgs e) { }
-        private void btnPlayPause_Click(object sender, RoutedEventArgs e) { }
+
+        private void btnPlayPause_Click(object sender, RoutedEventArgs e)
+        {
+        }
         private void btnStopJob_Click(object sender, RoutedEventArgs e) { }
         private void btnLogs_Click(object sender, RoutedEventArgs e) { }
 
@@ -129,6 +123,29 @@ namespace EasySaveGUI
                 btnRemoveJob.IsEnabled = true;
             }
             
+        }
+
+        public void cipherCryptoSoft(string sourcePath, string targetPath, string key)
+        {
+            string arguments = sourcePath + " " + targetPath + " " + key;
+            Process process = new Process()
+            {
+                StartInfo = new ProcessStartInfo()
+                {
+                    FileName = "../../../../CryptoSoft/bin/Debug/net5.0/CryptoSoft.exe",
+                    Arguments = arguments,
+                    UseShellExecute = false,
+                    RedirectStandardOutput = true,
+                    CreateNoWindow = true,
+                }
+            };
+            process.Start();
+            while (!process.StandardOutput.EndOfStream)
+            {
+                string line = process.StandardOutput.ReadLine();
+                Console.WriteLine(line);
+            }
+            process.Close();
         }
     }
 }
