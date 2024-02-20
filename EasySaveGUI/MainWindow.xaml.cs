@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Windows;
 
@@ -75,10 +76,9 @@ namespace EasySaveGUI
             foreach (var selectedItem in dgJobList.SelectedItems)
             {
                 int index = dgJobList.Items.IndexOf(selectedItem);
-                JobsController jobsController = new JobsController(_logger);
                 selectedIndices.Add(index);
                 Job selectedJob = (Job)dgJobList.Items[index];
-                jobsController.LaunchJob(selectedJob);
+                _jobsController.LaunchJob(selectedJob);
             }
         }
 
@@ -123,6 +123,29 @@ namespace EasySaveGUI
                 btnRemoveJob.IsEnabled = true;
             }
             
+        }
+
+        public void cipherCryptoSoft(string sourcePath, string targetPath, string key)
+        {
+            string arguments = sourcePath + " " + targetPath + " " + key;
+            Process process = new Process()
+            {
+                StartInfo = new ProcessStartInfo()
+                {
+                    FileName = "../../../../CryptoSoft/bin/Debug/net5.0/CryptoSoft.exe",
+                    Arguments = arguments,
+                    UseShellExecute = false,
+                    RedirectStandardOutput = true,
+                    CreateNoWindow = true,
+                }
+            };
+            process.Start();
+            while (!process.StandardOutput.EndOfStream)
+            {
+                string line = process.StandardOutput.ReadLine();
+                Console.WriteLine(line);
+            }
+            process.Close();
         }
     }
 }
