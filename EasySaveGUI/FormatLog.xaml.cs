@@ -19,15 +19,15 @@ namespace EasySaveGUI
             if (rbXml.IsChecked == true)
             {
                 Logger.GetInstance().LogFormat = "xml";
+                ConfigManager.SaveLogFormat("xml");
             }
             else if (rbJson.IsChecked == true)
             {
                 Logger.GetInstance().LogFormat = "json";
+                ConfigManager.SaveLogFormat("json");
             }
- 
+
             this.Close();
         }
     }
-
-    
 }

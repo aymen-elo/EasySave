@@ -15,7 +15,7 @@ namespace EasySaveGUI
 
         public LangueSettingsViewModels()
         {
-            InitializeLanguage(); // Ajout pour récupérer la dernière langue utilisée
+            InitializeLanguage(); 
             ChangeLanguageCommand = new RelayCommand(ChangeLanguage);
         }
 

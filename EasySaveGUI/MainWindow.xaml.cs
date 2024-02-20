@@ -65,7 +65,7 @@ namespace EasySaveGUI
         
         /* Language Management */
         
-        private void menuItemLang_Click(object sender, RoutedEventArgs e) { }
+        //private void menuItemLang_Click(object sender, RoutedEventArgs e) { }
         
         
         /* ******************* */

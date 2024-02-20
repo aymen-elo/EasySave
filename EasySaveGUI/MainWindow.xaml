@@ -37,7 +37,7 @@
         <TextBox x:Name="tboxSearch" HorizontalAlignment="Left" Margin="46,100,0,0" TextWrapping="Wrap" Text="{DynamicResource StrSearchJob}" VerticalAlignment="Top" Width="120"/>
         <StackPanel>
             <Menu>
-                <MenuItem Header= "{DynamicResource StrMainLanguage}" Click="menuItemLang_Click">
+                <MenuItem Header= "{DynamicResource StrMainLanguage}" >
                     <MenuItem Header="{DynamicResource StrMainEnglish}" Command="{Binding ChangeLanguageCommand, Source={StaticResource LangueSettingsViewModelInstance}}" CommandParameter="language:en"/>
                         <MenuItem Header="{DynamicResource StrMainFrench}" Command="{Binding ChangeLanguageCommand, Source={StaticResource LangueSettingsViewModelInstance}}" CommandParameter="language:fr"/>
 
