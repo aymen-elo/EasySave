@@ -17,5 +17,6 @@
   "StrBackupTypeLabel": "Backup Type",
   "StrFullBackupType": "Full",
   "StrDifferentialBackupType": "Differential",
+  "StrLogFormat": "Choose a log format",
   "StrMainLanguage": "Language"
 }

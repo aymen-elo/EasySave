@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Windows;
 
@@ -18,12 +19,13 @@ namespace EasySaveGUI
     {
         private readonly JobsController _jobsController;
         private readonly Menu _menu;
-        private readonly Logger _logger;
         private readonly TranslationController _translationController;
         private string _currentLanguageCode;
         private ResourceDictionary _languageDictionary;
         private AddJobWindow addJobWindow; 
         public LangueSettingsViewModels _language = new();
+        Logger _logger = new Logger();
+
         
         public MainWindow()
         {
@@ -33,7 +35,6 @@ namespace EasySaveGUI
             _jobsController = new JobsController(_logger);
             string logsDirectoryPath = @"C:\Prosoft\EasySave\Logs";
             _languageDictionary = new ResourceDictionary();
-            _language.ChangeLanguage("fr");
             
         }
 
@@ -53,7 +54,7 @@ namespace EasySaveGUI
 
         private void btnOption_Click(object sender, RoutedEventArgs e)
         {
-            OptionWindow optionWindow = new OptionWindow();
+            FormatLog optionWindow = new FormatLog();
             optionWindow.ShowDialog();
         }
         
@@ -67,24 +68,14 @@ namespace EasySaveGUI
 
         private void btnRunJob_Click(object sender, RoutedEventArgs e)
         {
-            Job selectedJob = dgJobList.SelectedItem as Job;
-            if (selectedJob != null)
+            List<int> selectedIndices = new List<int>();
+            foreach (var selectedItem in dgJobList.SelectedItems)
             {
-                /*
-                // Instancier le contrôleur de jobs
-                JobsController jobsController = new JobsController();
-        
-                // Appeler la méthode LaunchJob avec le job sélectionné
-                jobsController.LaunchJob(selectedJob, new Logger(), new TranslationModel());
-
-                // Afficher un message ou effectuer toute autre action nécessaire
-                */
-                MessageBox.Show($"Job '{selectedJob.Name}' is running.");
-            }
-            else
-            {
-                // Afficher un message d'erreur si aucun job n'est sélectionné
-                MessageBox.Show("Please select a job to run.");
+                int index = dgJobList.Items.IndexOf(selectedItem);
+                JobsController jobsController = new JobsController(_logger);
+                selectedIndices.Add(index);
+                Job selectedJob = (Job)dgJobList.Items[index];
+                jobsController.LaunchJob(selectedJob);
             }
         }
 

@@ -44,10 +44,10 @@ namespace EasySaveGUI.Model
             if (LogFormat == "xml")
             {
                 LogActionXml(name, fileSource, fileTarget, fileSize, fileTransferTime);
-            } 
+            }
             else
             {
-                LogActionJson( name,  fileSource,  fileTarget,  fileSize,  fileTransferTime);
+                LogActionJson(name, fileSource, fileTarget, fileSize, fileTransferTime);
             }
         }
 
