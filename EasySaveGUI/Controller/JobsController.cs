@@ -81,6 +81,18 @@ namespace EasySaveGUI.Controller
             Logger.LogState(job.Name, job.SourceFilePath, job.TargetFilePath, job.State, job.TotalFilesToCopy, job.TotalFilesSize , (job.TotalFilesToCopy - job.NbSavedFiles), ((job.NbSavedFiles * 100) / job.TotalFilesToCopy), job.Name);
             Jobs.Remove(job);
         }
+
+        /* Variant deletion by Name method */
+        public void DeleteJob(string name)
+        {
+            var job = Jobs.Find(j => j.Name == name);
+            if (job != null)
+            {
+                job.State = JobState.Retired;
+                Logger.LogState(job.Name, job.SourceFilePath, job.TargetFilePath, job.State, job.TotalFilesToCopy, job.TotalFilesSize , (job.TotalFilesToCopy - job.NbSavedFiles), ((job.NbSavedFiles * 100) / job.TotalFilesToCopy), job.Name);
+                Jobs.Remove(job);
+            }
+        }
         
         public void AddJob(string name, string source, string destination, BackupType backupType)
         {

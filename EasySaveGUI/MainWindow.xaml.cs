@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
+using System.Linq;
 using System.Windows;
 
 using System.Windows.Controls;
@@ -72,11 +73,11 @@ namespace EasySaveGUI
 
         private void btnRunJob_Click(object sender, RoutedEventArgs e)
         {
-            List<int> selectedIndices = new List<int>();
+            List<int> selectedIndexes = new List<int>();
             foreach (var selectedItem in dgJobList.SelectedItems)
             {
                 int index = dgJobList.Items.IndexOf(selectedItem);
-                selectedIndices.Add(index);
+                selectedIndexes.Add(index);
                 Job selectedJob = (Job)dgJobList.Items[index];
                 _jobsController.LaunchJob(selectedJob);
             }
@@ -84,15 +85,13 @@ namespace EasySaveGUI
 
         private void btnRemoveJob_Click(object sender, RoutedEventArgs e)
         {
-            var logger = new Logger();
-            var translation = new TranslationModel();
-            JobsController jobsController = new JobsController(logger);
-            
-            var job = dgJobList?.SelectedItem as Job;
-            
-            if (job != null)
+            var selectedJobs = dgJobList?.SelectedItems.Cast<Job>().ToList();
+            if (selectedJobs != null)
             {
-                jobsController.DeleteJob(dgJobList.Items.IndexOf(job));
+                foreach (var job in selectedJobs)
+                {
+                    _jobsController.DeleteJob(job.Name);
+                }
             }
             
             RefreshJobList();
@@ -113,16 +112,6 @@ namespace EasySaveGUI
             {
                 btnRunJob.IsEnabled = true;
             }
-            // if several jobs are selected, the button is disabled
-            if (dgJobList.SelectedItems.Count > 1 || dgJobList.SelectedItems.Count == 0)
-            {
-                btnRemoveJob.IsEnabled = false;
-            }
-            else
-            {
-                btnRemoveJob.IsEnabled = true;
-            }
-            
         }
 
         public void cipherCryptoSoft(string sourcePath, string targetPath, string key)

@@ -22,7 +22,21 @@
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
                                     <Button x:Name="btnRunJob" Content="{DynamicResource StrButtonRunJob}" Click="btnRunJob_Click"/>
-                                    <Button x:Name="btnRemoveJob" Content="{DynamicResource StrButtonRemoveJob}" Click="btnRemoveJob_Click"/>
+                                    <Button x:Name="btnRemoveJob" Content="{DynamicResource StrButtonRemoveJob}" Click="btnRemoveJob_Click">
+                                        <Button.Style>
+                                            <Style TargetType="Button">
+                                                <Setter Property="IsEnabled" Value="False"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding SelectedItems.Count, ElementName=dgJobList}" Value="1">
+                                                        <Setter Property="IsEnabled" Value="True"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding SelectedItems.Count, ElementName=dgJobList}" Value="0">
+                                                        <Setter Property="IsEnabled" Value="False"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
                                 </StackPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
