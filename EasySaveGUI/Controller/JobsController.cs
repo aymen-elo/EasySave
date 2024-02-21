@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
+using System.Runtime.CompilerServices;
 using EasySaveGUI.Model;
 using Newtonsoft.Json;
 
@@ -12,10 +15,12 @@ namespace EasySaveGUI.Controller
         public Logger Logger { get; set; }
         public event EventHandler<string> FileSaved;
         private CopyController _copyController;
-
+        public ObservableCollection<Job> JobsCollection { get; set; }
+        
         public JobsController(Logger logger)
         {
             Jobs = new List<Job>();
+            JobsCollection = new ObservableCollection<Job>();
             Logger = logger;
             _copyController = new CopyController();
             Initialize();
@@ -48,6 +53,7 @@ namespace EasySaveGUI.Controller
                         jobInfo.TotalFilesToCopy, jobInfo.NbFilesLeftToDo, jobInfo.TotalFilesSize);
                     
                     Jobs.Add(job);
+                    JobsCollection.Add(job);
                 }
             }
         }
@@ -91,6 +97,7 @@ namespace EasySaveGUI.Controller
                 job.State = JobState.Retired;
                 Logger.LogState(job.Name, job.SourceFilePath, job.TargetFilePath, job.State, job.TotalFilesToCopy, job.TotalFilesSize , (job.TotalFilesToCopy - job.NbSavedFiles), ((job.NbSavedFiles * 100) / job.TotalFilesToCopy), job.Name);
                 Jobs.Remove(job);
+                JobsCollection.Remove(job);
             }
         }
         
@@ -99,6 +106,7 @@ namespace EasySaveGUI.Controller
             var job = new Job(name, backupType, source, destination);
             UpdateJobData(name, job);
             Jobs.Add(job);
+            JobsCollection.Add(job);
         }
 
         public void LaunchJob(Job job)

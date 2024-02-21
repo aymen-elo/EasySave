@@ -24,29 +24,28 @@ namespace EasySaveGUI
         private readonly TranslationController _translationController;
         private string _currentLanguageCode;
         private ResourceDictionary _languageDictionary;
-        private AddJobWindow addJobWindow; 
+        private AddJobWindow addJobWindow;
         public LangueSettingsViewModels _language = new();
         Logger _logger = new Logger();
         public ConfigManager _configManager;
+        private MainViewModel _mainViewModel;
 
-        
         public MainWindow()
         {
             _configManager = new ConfigManager();
             InitializeComponent();
-            DataContext = new MainViewModel();
             btnRunJob.IsEnabled = false;
             btnRemoveJob.IsEnabled = false;
             _jobsController = new JobsController(_logger);
+            _mainViewModel = new MainViewModel(_jobsController);
+            DataContext = _mainViewModel;
             string logsDirectoryPath = @"C:\Prosoft\EasySave\Logs";
             _languageDictionary = new ResourceDictionary();
-            
-
         }
 
         private void btnNewJob_Click(object sender, RoutedEventArgs e)
         {
-            AddJobWindow addJobWindow = new AddJobWindow();
+            AddJobWindow addJobWindow = new AddJobWindow(_jobsController);
             addJobWindow.ShowDialog();
             RefreshJobList();
         }
@@ -54,8 +53,9 @@ namespace EasySaveGUI
         public void RefreshJobList()
         {
             var logger = new Logger();
-            JobsController jobsController = new JobsController(logger);
-            dgJobList.ItemsSource = jobsController.GetJobs();
+            var j = new JobsController(logger);
+            dgJobList.ItemsSource = null;
+            dgJobList.ItemsSource = _jobsController.JobsCollection;
         }
 
         private void btnOption_Click(object sender, RoutedEventArgs e)

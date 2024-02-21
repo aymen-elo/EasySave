@@ -8,19 +8,16 @@ namespace EasySaveGUI
     public class MainViewModel
     {
         static Logger logger = Logger.GetInstance();
-        JobsController jobsController = new JobsController(logger);
         TranslationController translationController = new TranslationController();
         TranslationManager translationManager = new TranslationManager();
 
+        private JobsController _jobsController;
         public ObservableCollection<Job> JobsCollection { get; set; }
 
-        public MainViewModel()
+        public MainViewModel(JobsController jobsController)
         {
-            JobsCollection = new ObservableCollection<Job>();
-            foreach (var travail in jobsController.GetJobs())
-            {
-                JobsCollection.Add(new Job(travail.Name, travail.BackupType, travail.SourceFilePath, travail.TargetFilePath));
-            }
+            _jobsController = jobsController;
+            JobsCollection = jobsController.JobsCollection;
         }
     }
 }
