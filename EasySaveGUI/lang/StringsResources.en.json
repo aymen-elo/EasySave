@@ -1,7 +1,7 @@
 ﻿{
   "StrButtonNewJob": "New Job",
-  "StrButtonRunJob": "Run Job",
-  "StrButtonRemoveJob": "Remove Job",
+  "StrButtonRunJob": "\u25B6",
+  "StrButtonRemoveJob": "\uD83D\uDDD1",
   "StrButtonEditJob": "Edit Job",
   "StrButtonPlayPause": "Play/Pause",
   "StrButtonStopJob": "Stop Job",

@@ -11,15 +11,22 @@
     </Window.Resources>
     <Grid>
         <Grid Background="#FFE9EEF3">
-            
-  
-            
-            <DataGrid x:Name="dgJobList"  ItemsSource="{Binding JobsCollection}" AutoGenerateColumns="False" Margin="38,142,38,142" SelectionChanged="dgJobList_SelectionChanged">
+            <DataGrid x:Name="dgJobList" ItemsSource="{Binding JobsCollection}" AutoGenerateColumns="False" Margin="38,142,38,142" SelectionChanged="dgJobList_SelectionChanged" IsReadOnly="True" CanUserReorderColumns="False">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Nom" Binding="{Binding Name}" />
                     <DataGridTextColumn Header="Type de sauvegarde" Binding="{Binding BackupType}" />
                     <DataGridTextColumn Header="Chemin source" Binding="{Binding SourceFilePath}" />
                     <DataGridTextColumn Header="Chemin destination" Binding="{Binding TargetFilePath}" />
+                    <DataGridTemplateColumn Header="Actions">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Button x:Name="btnRunJob" Content="{DynamicResource StrButtonRunJob}" Click="btnRunJob_Click"/>
+                                    <Button x:Name="btnRemoveJob" Content="{DynamicResource StrButtonRemoveJob}" Click="btnRemoveJob_Click"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>
