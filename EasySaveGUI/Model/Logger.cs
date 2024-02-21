@@ -16,7 +16,7 @@ namespace EasySaveGUI.Model
 
         public Logger()
         {
-            LogFormat = "json";
+            //LogFormat = "xml";
 
             if (!Directory.Exists(_dirPath))
             {
@@ -45,12 +45,11 @@ namespace EasySaveGUI.Model
             {
                 LogActionXml(name, fileSource, fileTarget, fileSize, fileTransferTime);
             }
-            else
+            else if (LogFormat == "json") // Assurez-vous que cette condition est dans le bloc else
             {
                 LogActionJson(name, fileSource, fileTarget, fileSize, fileTransferTime);
             }
         }
-
         public void LogActionJson(string name, string fileSource, string fileTarget, long fileSize,
             TimeSpan fileTransferTime)
         {
@@ -170,18 +169,14 @@ namespace EasySaveGUI.Model
         public void LogStateXml(string name, string sourcePath, string targetPath, JobState state, long nbFileToCopy,
             long fileSize, long nbFileLeftToDo, int progression)
         {
-            // Chemin du fichier XML de log d'état
             string xmlFilePath = _dirPath + @"\state.xml";
 
-            // Vérification de l'existence du fichier XML
             if (!File.Exists(xmlFilePath) || new FileInfo(xmlFilePath).Length == 0)
             {
-                // Si le fichier n'existe pas ou s'il est vide, créez un nouvel élément racine
                 XDocument newDoc = new XDocument(new XElement("Logs"));
                 newDoc.Save(xmlFilePath);
             }
 
-            // Chargement du fichier XML
             XDocument doc = XDocument.Load(xmlFilePath);
             XElement logsElement = doc.Root;
             if (logsElement == null)
@@ -190,7 +185,6 @@ namespace EasySaveGUI.Model
                 doc.Add(logsElement);
             }
 
-            // Vérification de l'existence d'un élément avec le même nom
             bool exists = logsElement.Elements("Log")
                 .Any(e => e.Element("Name")?.Value == name);
 
@@ -207,7 +201,6 @@ namespace EasySaveGUI.Model
                     new XElement("NbFilesLeftToDo", nbFileLeftToDo),
                     new XElement("Progression", progression));
 
-                // Ajout de l'élément XML au fichier
                 logsElement.Add(logElement);
                 doc.Save(xmlFilePath);
             }
@@ -230,8 +223,7 @@ namespace EasySaveGUI.Model
                 }
             }
         }
-
-
+        
         public void DisplayLog()
         {
             string logContents = File.ReadAllText(_dirPath);

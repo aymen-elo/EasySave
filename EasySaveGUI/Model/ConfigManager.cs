@@ -55,6 +55,20 @@ namespace EasySaveGUI.Model
 
             return lang;
         }
+        
+        public static string? GetLogFormat()
+        {
+            if (!File.Exists(ConfigFilePath)) { return null; }
+
+            var lines = File.ReadAllLines(ConfigFilePath);
+
+            var i = 0;
+            while (i < lines.Length && !lines[i].Contains("logformat")) { i++; }
+            var logFormat = lines[i].Split(":")[1];
+
+            return logFormat;
+        }
+
         /****************************************/
     }
 }
