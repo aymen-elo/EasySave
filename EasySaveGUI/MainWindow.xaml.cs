@@ -36,6 +36,7 @@ namespace EasySaveGUI
             InitializeComponent();
             DataContext = new MainViewModel();
             btnRunJob.IsEnabled = false;
+            btnRemoveJob.IsEnabled = false;
             _jobsController = new JobsController(_logger);
             string logsDirectoryPath = @"C:\Prosoft\EasySave\Logs";
             _languageDictionary = new ResourceDictionary();
@@ -107,10 +108,12 @@ namespace EasySaveGUI
             if (job != null)
             {
                 btnRunJob.IsEnabled = true;
+                btnRemoveJob.IsEnabled = true;
             }
             else
             {
-                btnRunJob.IsEnabled = true;
+                btnRunJob.IsEnabled = false;
+                btnRemoveJob.IsEnabled = false;
             }
         }
 
