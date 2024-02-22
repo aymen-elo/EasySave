@@ -6,9 +6,11 @@ using System.Linq;
 using System.Windows;
 
 using System.Windows.Controls;
-using EasySaveGUI;
 using EasySaveGUI.Controller;
 using EasySaveGUI.Model;
+using Job = EasySaveLib.Model.Job;
+using Logger = EasySaveLib.Model.Logger;
+using ConfigManager = EasySaveLib.Model.ConfigManager;
 
 namespace EasySaveGUI
 {
@@ -22,7 +24,7 @@ namespace EasySaveGUI
         private ResourceDictionary _languageDictionary;
         private AddJobWindow addJobWindow;
         public LangueSettingsViewModels _language = new();
-        Logger _logger = new Logger();
+        private Logger _logger;
         public ConfigManager _configManager;
         private MainViewModel _mainViewModel;
 
@@ -32,6 +34,7 @@ namespace EasySaveGUI
             InitializeComponent();
             btnRunJob.IsEnabled = false;
             btnRemoveJob.IsEnabled = false;
+            _logger = new Logger();
             _jobsController = new JobsController(_logger);
             _mainViewModel = new MainViewModel(_jobsController);
             DataContext = _mainViewModel;

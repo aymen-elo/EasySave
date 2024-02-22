@@ -5,11 +5,12 @@ using System.Xml.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace EasySaveGUI.Model
+namespace EasySaveLib.Model
 {
     public class Logger
     {
-        private readonly string _dirPath = Program.LogsDirectoryPath;
+        public static string LogsDirectoryPath = @"C:\Prosoft\EasySave\Logs";
+        private readonly string _dirPath = LogsDirectoryPath;
         
         private static Logger? _instance;
         public string LogFormat { get; set; }

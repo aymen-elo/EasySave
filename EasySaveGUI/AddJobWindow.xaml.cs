@@ -1,6 +1,6 @@
 using System.Windows;
 using EasySaveGUI.Controller;
-using EasySaveGUI.Model;
+using EasySaveLib.Model;
 
 namespace EasySaveGUI
 {

@@ -1,7 +1,6 @@
 ﻿using System.IO;
-using System.Net;
 
-namespace EasySaveGUI.Model
+namespace EasySaveLib.Model
 {
     public class ConfigManager
     {

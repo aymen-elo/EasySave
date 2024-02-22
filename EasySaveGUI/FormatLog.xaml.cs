@@ -1,5 +1,5 @@
 ﻿using System.Windows;
-using EasySaveGUI.Model;
+using EasySaveLib.Model;
 
 namespace EasySaveGUI
 {

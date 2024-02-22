@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Runtime.CompilerServices;
-using EasySaveGUI.Model;
+using EasySaveLib.Model;
 using Newtonsoft.Json;
 
 namespace EasySaveGUI.Controller
@@ -37,7 +37,7 @@ namespace EasySaveGUI.Controller
             
             /* Handling the already existing backup jobs (if they exist) */
             // Checking if the State logging file exists
-            var stateFile = Program.LogsDirectoryPath + @"\state.json";
+            var stateFile = Logger.LogsDirectoryPath + @"\state.json";
             if (File.Exists(stateFile) & new FileInfo(stateFile).Length != 0)
             {
                 string jsonContent = File.ReadAllText(stateFile);

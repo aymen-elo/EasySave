@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using EasySaveGUI.Model;
-using EasySaveGUI.Model.CopyHelper;
+using EasySaveLib.Model;
+using EasySaveLib.Model.CopyHelper;
 using EasySaveGUI.View;
 
 namespace EasySaveGUI.Controller
