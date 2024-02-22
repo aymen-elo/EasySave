@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using EasySaveGUI.Model;
 using EasySaveGUI.Model.CopyHelper;
-using EasySaveGUI.Model.Translation;
 using EasySaveGUI.View;
 
 namespace EasySaveGUI.Controller

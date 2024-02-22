@@ -9,8 +9,6 @@ using System.Windows.Controls;
 using EasySaveGUI;
 using EasySaveGUI.Controller;
 using EasySaveGUI.Model;
-using EasySaveGUI.Model.Translation;
-using Menu = EasySaveGUI.Model.Menu;
 
 namespace EasySaveGUI
 {
@@ -20,8 +18,6 @@ namespace EasySaveGUI
     public partial class MainWindow : Window
     {
         private readonly JobsController _jobsController;
-        private readonly Menu _menu;
-        private readonly TranslationController _translationController;
         private string _currentLanguageCode;
         private ResourceDictionary _languageDictionary;
         private AddJobWindow addJobWindow;
