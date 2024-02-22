@@ -5,6 +5,8 @@ using System.IO;
 using System.Linq;
 using EasySaveLib.Model;
 using EasySaveLib.Model.CopyHelper;
+using System.Threading;
+using EasySaveGUI.Model;
 using EasySaveGUI.View;
 
 namespace EasySaveGUI.Controller
@@ -144,6 +146,19 @@ namespace EasySaveGUI.Controller
                     
             copyTime.Stop();
             copyTime.Reset();
+            
+            List<string> processBlackList = new List<string>();
+            
+            processBlackList.Add("calc");
+            processBlackList.Add("CalculatorApp");
+            
+            ProcessBL.IsProcessRunning(processBlackList);
+            
+            while (MainWindow.IsPaused || ProcessBL.IsDetected)
+            {  
+                Thread.Sleep(100);
+                ProcessBL.IsProcessRunning(processBlackList);
+            }
         }
     }
 }

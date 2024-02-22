@@ -5,6 +5,8 @@ using System.ComponentModel;
 using System.IO;
 using System.Runtime.CompilerServices;
 using EasySaveLib.Model;
+using System.Threading.Tasks;
+using EasySaveGUI.Model;
 using Newtonsoft.Json;
 
 namespace EasySaveGUI.Controller
@@ -128,6 +130,12 @@ namespace EasySaveGUI.Controller
             }
 
         }
+        
+        public async void LaunchJobAsync(Job job)
+        {
+            await Task.Run(() => LaunchJob(job));
+        }
+        
         
         /* Update Job data in state.json -> Add()/Edit() */
         // TOFIX: Redundancy => Search for job by id instead of name
