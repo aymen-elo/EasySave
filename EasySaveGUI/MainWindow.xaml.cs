@@ -4,8 +4,8 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Windows;
-
 using System.Windows.Controls;
+using System.Windows.Media;
 using EasySaveGUI;
 using EasySaveGUI.Controller;
 using EasySaveGUI.Model;
@@ -29,7 +29,8 @@ namespace EasySaveGUI
         Logger _logger = new Logger();
         public ConfigManager _configManager;
         private MainViewModel _mainViewModel;
-
+        public static bool IsPaused;
+        public SolidColorBrush backgroundColor = new SolidColorBrush(Color.FromArgb(255, (byte)233, (byte)238, (byte)243));
         public MainWindow()
         {
             _configManager = new ConfigManager();
@@ -49,7 +50,7 @@ namespace EasySaveGUI
             addJobWindow.ShowDialog();
             RefreshJobList();
         }
-        
+
         public void RefreshJobList()
         {
             var logger = new Logger();
@@ -63,13 +64,13 @@ namespace EasySaveGUI
             FormatLog optionWindow = new FormatLog();
             optionWindow.ShowDialog();
         }
-        
-        
+
+
         /* Language Management */
-        
+
         //private void menuItemLang_Click(object sender, RoutedEventArgs e) { }
-        
-        
+
+
         /* ******************* */
 
         private void btnRunJob_Click(object sender, RoutedEventArgs e)
@@ -80,7 +81,7 @@ namespace EasySaveGUI
                 int index = dgJobList.Items.IndexOf(selectedItem);
                 selectedIndexes.Add(index);
                 Job selectedJob = (Job)dgJobList.Items[index];
-                _jobsController.LaunchJob(selectedJob);
+                _jobsController.LaunchJobAsync(selectedJob);
             }
         }
 
@@ -94,13 +95,35 @@ namespace EasySaveGUI
                     _jobsController.DeleteJob(job.Name);
                 }
             }
-            
+
             RefreshJobList();
         }
-        private void btnEditJob_Click(object sender, RoutedEventArgs e) { }
-        private void btnPlayPause_Click(object sender, RoutedEventArgs e) { }
-        private void btnStopJob_Click(object sender, RoutedEventArgs e) { }
-        private void btnLogs_Click(object sender, RoutedEventArgs e) { }
+
+        private void btnEditJob_Click(object sender, RoutedEventArgs e)
+        {
+        }
+
+        private void btnPlayPause_Click(object sender, RoutedEventArgs e)
+        {
+            if (!IsPaused)
+            {
+                IsPaused = true;
+                btnPlayPause.Background = Brushes.Red;
+            }
+            else
+            {
+                IsPaused = false;
+                btnPlayPause.Background = backgroundColor;
+            }
+        }
+
+        private void btnStopJob_Click(object sender, RoutedEventArgs e)
+        {
+        }
+
+        private void btnLogs_Click(object sender, RoutedEventArgs e)
+        {
+        }
 
         private void dgJobList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -137,6 +160,7 @@ namespace EasySaveGUI
                 string line = process.StandardOutput.ReadLine();
                 Console.WriteLine(line);
             }
+
             process.Close();
         }
     }

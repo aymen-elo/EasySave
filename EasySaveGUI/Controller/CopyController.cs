@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using EasySaveGUI.Model;
 using EasySaveGUI.Model.CopyHelper;
 using EasySaveGUI.Model.Translation;
@@ -145,6 +146,19 @@ namespace EasySaveGUI.Controller
                     
             copyTime.Stop();
             copyTime.Reset();
+            
+            List<string> processBlackList = new List<string>();
+            
+            processBlackList.Add("calc");
+            processBlackList.Add("CalculatorApp");
+            
+            ProcessBL.IsProcessRunning(processBlackList);
+            
+            while (MainWindow.IsPaused || ProcessBL.IsDetected)
+            {  
+                Thread.Sleep(100);
+                ProcessBL.IsProcessRunning(processBlackList);
+            }
         }
     }
 }
