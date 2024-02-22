@@ -6,7 +6,7 @@
         xmlns:easySaveGui="clr-namespace:EasySaveGUI"
         xmlns:model="clr-namespace:EasySaveGUI.Model"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="550" Width="1200">
     <Window.Resources>
         <model:LangueSettingsViewModels x:Key="LangueSettingsViewModelInstance" />
     </Window.Resources>
@@ -53,14 +53,16 @@
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>
-        <TextBlock x:Name="tboxEvent" HorizontalAlignment="Center" Height="60" Margin="0,337,0,0" TextWrapping="Wrap"
-                   Text="Ici event " VerticalAlignment="Top" Width="724" Background="White"
-                   ScrollViewer.VerticalScrollBarVisibility="Visible" />
-        <Label x:Name="labelEvents" Content="Events" HorizontalAlignment="Left" Margin="38,311,0,0"
-               VerticalAlignment="Top" />
-        <Label x:Name="lblVersion" Content="Version 2.0" HorizontalAlignment="Left" Margin="742,411,0,0"
-               VerticalAlignment="Top" RenderTransformOrigin="0.891,0.888" FontSize="10" />
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,10,0,0">
+        <Grid>
+            <Label x:Name="labelEvents" Content="Events" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="30,0,0,80" />
+            <TextBlock x:Name="tboxEvent" HorizontalAlignment="Stretch" Height="60" Margin="30,0,30,20" TextWrapping="Wrap"
+                       Text="Ici event " VerticalAlignment="Bottom" Width="Auto" Background="White"
+                       ScrollViewer.VerticalScrollBarVisibility="Visible" />
+            <Label x:Name="lblVersion" Content="Version 2.0" HorizontalAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Bottom" FontSize="10"/>
+        </Grid>
+
+
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10,30,0,0">
             <Button x:Name="btnNewJob" Content="{DynamicResource StrButtonNewJob}" Height="42" Width="90"
                     Click="btnNewJob_Click" />
             <Button x:Name="btnRunJob" Content="{DynamicResource StrButtonRunJob}" Height="42" Width="90"
@@ -77,6 +79,7 @@
                     Click="btnLogs_Click" />
             <Button x:Name="btnOption" Content="{DynamicResource StrButtonOption}" Height="42" Width="90"
                     Click="btnOption_Click" />
+
         </StackPanel>
         <StackPanel>
             <Menu>
