@@ -4,13 +4,15 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Windows;
+
 using System.Windows.Controls;
 using System.Windows.Media;
 using EasySaveGUI;
 using EasySaveGUI.Controller;
 using EasySaveGUI.Model;
-using EasySaveGUI.Model.Translation;
-using Menu = EasySaveGUI.Model.Menu;
+using Job = EasySaveLib.Model.Job;
+using Logger = EasySaveLib.Model.Logger;
+using ConfigManager = EasySaveLib.Model.ConfigManager;
 
 namespace EasySaveGUI
 {
@@ -20,13 +22,11 @@ namespace EasySaveGUI
     public partial class MainWindow : Window
     {
         private readonly JobsController _jobsController;
-        private readonly Menu _menu;
-        private readonly TranslationController _translationController;
         private string _currentLanguageCode;
         private ResourceDictionary _languageDictionary;
         private AddJobWindow addJobWindow;
         public LangueSettingsViewModels _language = new();
-        Logger _logger = new Logger();
+        private Logger _logger;
         public ConfigManager _configManager;
         private MainViewModel _mainViewModel;
         public static bool IsPaused;
@@ -38,6 +38,7 @@ namespace EasySaveGUI
             InitializeComponent();
             btnRunJob.IsEnabled = false;
             btnRemoveJob.IsEnabled = false;
+            _logger = new Logger();
             _jobsController = new JobsController(_logger);
             _mainViewModel = new MainViewModel(_jobsController);
             DataContext = _mainViewModel;
@@ -53,7 +54,7 @@ namespace EasySaveGUI
             addJobWindow.ShowDialog();
             RefreshJobList();
         }
-
+        
         public void RefreshJobList()
         {
             var logger = new Logger();
@@ -67,13 +68,13 @@ namespace EasySaveGUI
             FormatLog optionWindow = new FormatLog();
             optionWindow.ShowDialog();
         }
-
-
+        
+        
         /* Language Management */
-
+        
         //private void menuItemLang_Click(object sender, RoutedEventArgs e) { }
-
-
+        
+        
         /* ******************* */
 
         private void btnRunJob_Click(object sender, RoutedEventArgs e)
@@ -101,7 +102,7 @@ namespace EasySaveGUI
                     _jobsController.DeleteJob(job.Name);
                 }
             }
-
+            
             RefreshJobList();
         }
 
@@ -166,7 +167,6 @@ namespace EasySaveGUI
                 string line = process.StandardOutput.ReadLine();
                 Console.WriteLine(line);
             }
-
             process.Close();
         }
     }

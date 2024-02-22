@@ -13,6 +13,6 @@ namespace EasySaveGUI
     {
         
         // The directory where the log files & hashes will be saved
-        public static string LogsDirectoryPath = @"C:\Prosoft\EasySave\Logs";
+        
     }
 }

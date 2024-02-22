@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\EasySaveLib\EasySaveLib.csproj" />
     <ProjectReference Include="..\EasySave\EasySave.csproj" />
   </ItemGroup>
 

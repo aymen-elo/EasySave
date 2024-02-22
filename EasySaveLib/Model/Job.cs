@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace EasySaveGUI.Model
+namespace EasySaveLib.Model
 {
 
     /* Pending = Hasn't started yet */

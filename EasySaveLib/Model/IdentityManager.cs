@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
 
-namespace EasySaveGUI.Model
+namespace EasySaveLib.Model
 {
     public class IdentityManager
     {
-        private readonly string _logDirPath = Program.LogsDirectoryPath;
+        private readonly string _logDirPath = Logger.LogsDirectoryPath;
         public IdentityManager()
         {
             if (!Directory.Exists(_logDirPath))
