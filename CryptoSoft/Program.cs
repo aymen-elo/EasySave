@@ -1,27 +1,28 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 
 class Program
 {
     static void Main(string[] args)
     {
-        Stopwatch stopwatch = new Stopwatch();
-        stopwatch.Start();
-
-
-        string sourceFile = args[0];        //  [0] = source_file
-        string fileName = Path.GetFileName(sourceFile);
-        string targetFile = args[1];        //  [1] = target_file
-        string encryptionKey = args[2];     //  [2] = encryption_key
-
         try
         {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+
+
+            string sourceFile = args[0];        //  [0] = source_file
+            string fileName = Path.GetFileName(sourceFile);
+            string targetFile = args[1];        //  [1] = target_file
+            string encryptionKey = args[2];     //  [2] = encryption_key
             int timeElapsed;
+            
             if (Path.GetExtension(fileName) == ".cry")
             {
                 targetFile = targetFile + "\\" + Path.GetFileNameWithoutExtension(fileName);       //  [1] = target_directory for decrypting
-                timeElapsed = DecryptFile(sourceFile, targetFile, encryptionKey, stopwatch);
+                timeElapsed = EncryptFile(sourceFile, targetFile, encryptionKey, stopwatch);
             }
             else
             {
@@ -33,7 +34,6 @@ class Program
         catch (Exception e)
         {
             Console.WriteLine(1);
-            throw;
         }
     }
     
@@ -53,29 +53,6 @@ class Program
                 int encryptedValue = byteValue ^ keyValue;
 
                 writer.Write(Convert.ToChar(encryptedValue));
-
-                keyIndex = (keyIndex + 1) % key.Length;
-            }
-        }
-        stopwatch.Stop();
-        return stopwatch.Elapsed.Milliseconds;
-    }
-    
-    static int DecryptFile(string inputFile, string outputFile, string key, Stopwatch stopwatch)
-    {
-        using (FileStream inputStream = new FileStream(inputFile, FileMode.Open, FileAccess.Read))
-        using (FileStream outputStream = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
-        {
-            int keyIndex = 0;
-
-            while (inputStream.Position < inputStream.Length)
-            {
-                int encryptedValue = inputStream.ReadByte();
-                int keyValue = key[keyIndex];
-
-                int decryptedValue = encryptedValue ^ keyValue;
-
-                outputStream.WriteByte((byte)decryptedValue);
 
                 keyIndex = (keyIndex + 1) % key.Length;
             }

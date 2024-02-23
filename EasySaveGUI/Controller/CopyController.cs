@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Formats.Asn1;
 using System.IO;
 using System.Linq;
 using EasySaveLib.Model;
@@ -26,6 +27,24 @@ namespace EasySaveGUI.Controller
             job.State = JobState.Active;
             job.NbSavedFiles = 0;
             
+            
+            
+            string stringCipherList = ConfigManager.GetCipherList();
+            List<string> ciphList = new List<string>();
+            
+            if (!string.IsNullOrEmpty(stringCipherList))
+            {
+                string[] extensionsArray = stringCipherList.Split(',');
+
+                foreach (string extension in extensionsArray)
+                {
+                    string trimmedExtension = extension.Trim();
+                    ciphList.Add(trimmedExtension);
+                }
+            }
+
+            CryptoSoftCipher _cryptoSoftCipher = new CryptoSoftCipher();
+            
             List<string> allFiles = _fileGetter.GetAllFiles(job.SourceFilePath);
             HashSet<string> loadedHashes = _identity.LoadAllowedHashes(job.Name);
             HashSet<string> allowedHashes = new HashSet<string>();
@@ -40,9 +59,9 @@ namespace EasySaveGUI.Controller
             Console.WriteLine(_progressBar.UpdateProgress(0, job.Name, job.TotalFilesToCopy, job.NbSavedFiles));
             
             if (job.BackupType == BackupType.Diff)
-                CopyDiff(job, allFiles, allowedHashes, loadedHashes);
+                CopyDiff(job, allFiles, allowedHashes, loadedHashes, _cryptoSoftCipher, ciphList);
             else
-                CopyFull(job, allFiles, allowedHashes);
+                CopyFull(job, allFiles, allowedHashes, _cryptoSoftCipher, ciphList);
 
             stopWatch.Stop();
             job.Duration = stopWatch.Elapsed;
@@ -52,10 +71,12 @@ namespace EasySaveGUI.Controller
             
         }
 
-        private void CopyDiff(Job job, List<string> allFiles, HashSet<string> allowedHashes, HashSet<string> loadedHashes)
+        private void CopyDiff(Job job, List<string> allFiles, HashSet<string> allowedHashes, HashSet<string> loadedHashes, CryptoSoftCipher _cryptoSoftCipher, List<string> cipherList)
         {
             DirectoryInfo diSource = new DirectoryInfo(job.SourceFilePath);
             long totalFilesSize = _fileGetter.DirSize(diSource);
+            
+            string encryptionKey = ConfigManager.GetCipherList();
 
             foreach (string file in allFiles)
             {
@@ -92,12 +113,14 @@ namespace EasySaveGUI.Controller
             _fileGetter.CompareAndDeleteDirectories(job.TargetFilePath, job.SourceFilePath);
         }
 
-        private void CopyFull(Job job, List<string> allFiles, HashSet<string> allowedHashes)
+        private void CopyFull(Job job, List<string> allFiles, HashSet<string> allowedHashes, CryptoSoftCipher _cryptoSoftCipher, List<string> cipherList)
         {
             DirectoryInfo diSource = new DirectoryInfo(job.SourceFilePath);
             long totalFilesSize = _fileGetter.DirSize(diSource);
             
             _fileGetter.CleanTarget(job.TargetFilePath);
+
+            string encryptionKey = ConfigManager.GetEncryptionKey();
 
             foreach (string file in allFiles)
             {
@@ -106,12 +129,20 @@ namespace EasySaveGUI.Controller
                 string sourceHash = _identity.CalculateMD5(file);
                 allowedHashes.Add(sourceHash);
 
+                
                 string relativePath = _fileGetter.GetRelativePath(job.SourceFilePath, file);
                 string targetFilePath = Path.Combine(job.TargetFilePath, relativePath);
 
                 string targetFileDir = Path.GetDirectoryName(targetFilePath);
                 if (!Directory.Exists(targetFileDir))
                     Directory.CreateDirectory(targetFileDir);
+                
+                
+                if (cipherList.Contains(Path.GetExtension(file)))
+                {
+                    Console.WriteLine(_cryptoSoftCipher.sendToCryptoSoft(file, targetFileDir, encryptionKey));
+                    continue;
+                }
 
                 File.Copy(file, targetFilePath, true);
 

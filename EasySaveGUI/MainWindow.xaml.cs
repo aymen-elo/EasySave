@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Windows;
-
 using System.Windows.Controls;
 using System.Windows.Media;
 using EasySaveGUI;
@@ -30,7 +29,10 @@ namespace EasySaveGUI
         public ConfigManager _configManager;
         private MainViewModel _mainViewModel;
         public static bool IsPaused;
-        public SolidColorBrush backgroundColor = new SolidColorBrush(Color.FromArgb(255, (byte)233, (byte)238, (byte)243));
+        
+        public SolidColorBrush backgroundColor =
+            new SolidColorBrush(Color.FromArgb(255, (byte)233, (byte)238, (byte)243));
+
         public MainWindow()
         {
             _configManager = new ConfigManager();
@@ -51,7 +53,7 @@ namespace EasySaveGUI
             addJobWindow.ShowDialog();
             RefreshJobList();
         }
-        
+
         public void RefreshJobList()
         {
             var logger = new Logger();
@@ -65,13 +67,13 @@ namespace EasySaveGUI
             FormatLog optionWindow = new FormatLog();
             optionWindow.ShowDialog();
         }
-        
+
         
         /* Language Management */
-        
+
         //private void menuItemLang_Click(object sender, RoutedEventArgs e) { }
-        
-        
+
+
         /* ******************* */
 
         private void btnRunJob_Click(object sender, RoutedEventArgs e)
@@ -96,7 +98,7 @@ namespace EasySaveGUI
                     _jobsController.DeleteJob(job.Name);
                 }
             }
-            
+
             RefreshJobList();
         }
 
@@ -139,29 +141,6 @@ namespace EasySaveGUI
                 btnRunJob.IsEnabled = false;
                 btnRemoveJob.IsEnabled = false;
             }
-        }
-
-        public void cipherCryptoSoft(string sourcePath, string targetPath, string key)
-        {
-            string arguments = sourcePath + " " + targetPath + " " + key;
-            Process process = new Process()
-            {
-                StartInfo = new ProcessStartInfo()
-                {
-                    FileName = "../../../../CryptoSoft/bin/Debug/net5.0/CryptoSoft.exe",
-                    Arguments = arguments,
-                    UseShellExecute = false,
-                    RedirectStandardOutput = true,
-                    CreateNoWindow = true,
-                }
-            };
-            process.Start();
-            while (!process.StandardOutput.EndOfStream)
-            {
-                string line = process.StandardOutput.ReadLine();
-                Console.WriteLine(line);
-            }
-            process.Close();
         }
     }
 }
