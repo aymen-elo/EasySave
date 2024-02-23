@@ -17,6 +17,11 @@
   "StrBackupTypeLabel": "Backup Type",
   "StrFullBackupType": "Full",
   "StrDifferentialBackupType": "Differential",
+  "StrAddButtonLabel": "Save",
   "StrLogFormat": "Choose a log format",
-  "StrMainLanguage": "Language"
+  "StrMainLanguage": "Language",
+  "StrDgClName": "Name",
+  "StrDgClBackupType": "Backup Type",
+  "StrDgClSourceFilePath": "Source File Path",
+  "StrDgClTargetFilePath": "Target File Path"
 }
