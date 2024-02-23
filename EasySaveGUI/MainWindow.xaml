@@ -86,7 +86,6 @@
                     Click="btnLogs_Click" />
             <Button x:Name="btnOption" Content="{DynamicResource StrButtonOption}" Height="42" Width="90"
                     Click="btnOption_Click" />
-
         </StackPanel>
         <StackPanel>
             <Menu>

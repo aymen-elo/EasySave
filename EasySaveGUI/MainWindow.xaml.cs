@@ -103,7 +103,6 @@ namespace EasySaveGUI
         }
 
 
-
         private void btnRemoveJob_Click(object sender, RoutedEventArgs e)
         {
             var selectedJobs = dgJobList?.SelectedItems.Cast<Job>().ToList();

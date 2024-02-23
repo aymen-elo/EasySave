@@ -14,6 +14,7 @@ namespace EasySaveGUI.Model
     {
         private readonly Job _job;
         private readonly BackgroundWorker _backupWorker;
+        private readonly System.Windows.Controls.ProgressBar _progressBar; // Utilisation du même type de ProgressBar
 
         public BackupProcess(Job job)
         {
@@ -92,7 +93,8 @@ namespace EasySaveGUI.Model
                 return newFilePath;
             }
 
-            return filePath;
+            return filePath; 
         }
+
     }
 }
