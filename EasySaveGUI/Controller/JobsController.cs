@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using EasySaveLib.Model;
 using System.Threading.Tasks;
@@ -53,6 +54,10 @@ namespace EasySaveGUI.Controller
                     // Construct a new Job with the available data in the json and append it to the Jobs List
                     var job = new Job(jobInfo.Name, jobInfo.State, jobInfo.SourceFilePath, jobInfo.TargetFilePath, 
                         jobInfo.TotalFilesToCopy, jobInfo.NbFilesLeftToDo, jobInfo.TotalFilesSize);
+                    job.TotalFilesToCopy = 100;
+                    job.NbSavedFiles = 50;
+                    
+                    
                     
                     Jobs.Add(job);
                     JobsCollection.Add(job);

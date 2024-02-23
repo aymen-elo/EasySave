@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 
 namespace EasySaveLib.Model
 {
@@ -9,11 +10,18 @@ namespace EasySaveLib.Model
     public enum JobState { Pending, Active, Paused , Finished, Retired}
     public enum BackupType{ Full, Diff }
 
-    public class Job
+    public class Job : INotifyPropertyChanged
     {
         // Managing assignment of ids and positions
         private static int _nextId = 0;
         private static int _nextPos = 0;
+        
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
+        }
         
         private int Id { get; set; }
         public string Name { get; set; }
@@ -24,14 +32,45 @@ namespace EasySaveLib.Model
         public JobState State { get; set; }
     
         public long TotalFilesSize { get; set; }
-        public int TotalFilesToCopy { get; set; }
-        public int NbSavedFiles { get; set; }
+        private int _TotalFilesToCopy;
+        public int TotalFilesToCopy
+        {
+            get => _TotalFilesToCopy;
+            set
+            {
+                _TotalFilesToCopy = value;
+                OnPropertyChanged("TotalFilesToCopy");
+                OnPropertyChanged("Percentage");
+            }
+        }
+
+        public int _NbSavedFiles;
+
+        public int NbSavedFiles
+        {
+            get => _NbSavedFiles;
+            set
+            {
+                _NbSavedFiles = value;
+                OnPropertyChanged("NbSavedFiles");
+                OnPropertyChanged("Percentage");
+            }
+        }
+
         public long NbFilesLeftToDo { get; set; }
         public TimeSpan Duration { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
         public int Progression { get; set; }
-        
+
+        public double Percentage
+        {
+            get
+            {
+                return NbSavedFiles / (double)TotalFilesToCopy * 100;
+            }
+        }
+
         public Job() { }
 
         public Job(string name, BackupType type, string src, string dest) 

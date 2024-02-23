@@ -30,7 +30,8 @@ namespace EasySaveGUI
         public ConfigManager _configManager;
         private MainViewModel _mainViewModel;
         public static bool IsPaused;
-        private ProgressBar _progressBar;
+
+        
         public SolidColorBrush backgroundColor = new SolidColorBrush(Color.FromArgb(255, (byte)233, (byte)238, (byte)243));
         public MainWindow()
         {
@@ -44,7 +45,7 @@ namespace EasySaveGUI
             DataContext = _mainViewModel;
             string logsDirectoryPath = @"C:\Prosoft\EasySave\Logs";
             _languageDictionary = new ResourceDictionary();
-            _progressBar = ProgressProgressBar;
+          
 
         }
 
@@ -65,8 +66,17 @@ namespace EasySaveGUI
 
         private void btnOption_Click(object sender, RoutedEventArgs e)
         {
-            FormatLog optionWindow = new FormatLog();
-            optionWindow.ShowDialog();
+            foreach (var j in _jobsController.JobsCollection)
+            {
+                j.NbSavedFiles = 100;
+                j.TotalFilesToCopy = 100;
+            }
+            
+            
+
+            
+            //FormatLog optionWindow = new FormatLog();
+            //optionWindow.ShowDialog();
         }
         
         
@@ -86,10 +96,12 @@ namespace EasySaveGUI
                 selectedIndexes.Add(index);
                 Job selectedJob = (Job)dgJobList.Items[index];
 
-                BackupProcess backupProcess = new BackupProcess(selectedJob, ProgressProgressBar);
-                _jobsController.LaunchJobAsync(selectedJob, backupProcess);
+                    BackupProcess backupProcess = new BackupProcess(selectedJob); 
+                    _jobsController.LaunchJobAsync(selectedJob, backupProcess);
+                    
             }
         }
+
 
 
         private void btnRemoveJob_Click(object sender, RoutedEventArgs e)

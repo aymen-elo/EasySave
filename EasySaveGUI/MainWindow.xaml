@@ -24,22 +24,16 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
-                                    <Button x:Name="btnRunJob" Content="{DynamicResource StrButtonRunJob}"
-                                            Click="btnRunJob_Click" />
-                                    <Button x:Name="btnRemoveJob" Content="{DynamicResource StrButtonRemoveJob}"
-                                            Click="btnRemoveJob_Click">
+                                    <Button x:Name="btnRunJob" Content="{DynamicResource StrButtonRunJob}" Click="btnRunJob_Click" />
+                                    <Button x:Name="btnRemoveJob" Content="{DynamicResource StrButtonRemoveJob}" Click="btnRemoveJob_Click">
                                         <Button.Style>
                                             <Style TargetType="Button">
                                                 <Setter Property="IsEnabled" Value="False" />
                                                 <Style.Triggers>
-                                                    <DataTrigger
-                                                        Binding="{Binding SelectedItems.Count, ElementName=dgJobList}"
-                                                        Value="1">
+                                                    <DataTrigger Binding="{Binding SelectedItems.Count, ElementName=dgJobList}" Value="1">
                                                         <Setter Property="IsEnabled" Value="True" />
                                                     </DataTrigger>
-                                                    <DataTrigger
-                                                        Binding="{Binding SelectedItems.Count, ElementName=dgJobList}"
-                                                        Value="0">
+                                                    <DataTrigger Binding="{Binding SelectedItems.Count, ElementName=dgJobList}" Value="0">
                                                         <Setter Property="IsEnabled" Value="True" />
                                                     </DataTrigger>
                                                 </Style.Triggers>
@@ -50,11 +44,23 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
+
+                    <!-- Colonne pour la barre de progression -->
+                    <DataGridTemplateColumn Header="Progression">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <ProgressBar Name="ProgressBar" Minimum="0" Maximum="100" Value="{Binding Percentage,Mode=OneWay}" Width="200"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <!-- Fin de la colonne pour la barre de progression -->
+
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>
         <Grid>
-            <ProgressBar x:Name="ProgressProgressBar" Value="0" Minimum="0" Maximum="100"/>
             <Label x:Name="labelEvents" Content="Events" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="30,0,0,80" />
             <TextBlock x:Name="tboxEvent" HorizontalAlignment="Stretch" Height="60" Margin="30,0,30,20" TextWrapping="Wrap"
                        Text="Ici event " VerticalAlignment="Bottom" Width="Auto" Background="White"
