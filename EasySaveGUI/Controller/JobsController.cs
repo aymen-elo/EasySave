@@ -111,13 +111,16 @@ namespace EasySaveGUI.Controller
             JobsCollection.Add(job);
         }
 
-        public void LaunchJob(Job job)
+        private void LaunchJob(Job job, BackupProcess backupProcess)
         {
             if (job.State == JobState.Finished || job.State == JobState.Pending)
             {
                 job.Progression = 0;
                 job.State = JobState.Active;
                 job.NbFilesLeftToDo = job.TotalFilesToCopy;
+                
+                backupProcess.StartBackup();
+
             }
             
             Logger.LogAction(job.Name, job.SourceFilePath, job.TargetFilePath, 0, TimeSpan.Zero);
@@ -131,10 +134,11 @@ namespace EasySaveGUI.Controller
 
         }
         
-        public async void LaunchJobAsync(Job job)
+        public async void LaunchJobAsync(Job job, BackupProcess backupProcess)
         {
-            await Task.Run(() => LaunchJob(job));
+            await Task.Run(() => LaunchJob(job, backupProcess));
         }
+
         
         
         /* Update Job data in state.json -> Add()/Edit() */

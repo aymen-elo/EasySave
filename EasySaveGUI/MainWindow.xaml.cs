@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Windows;
+
 using System.Windows.Controls;
 using System.Windows.Media;
 using EasySaveGUI;
@@ -29,10 +30,10 @@ namespace EasySaveGUI
         public ConfigManager _configManager;
         private MainViewModel _mainViewModel;
         public static bool IsPaused;
+        private ProgressBar _progressBar;
         
         public SolidColorBrush backgroundColor =
             new SolidColorBrush(Color.FromArgb(255, (byte)233, (byte)238, (byte)243));
-
         public MainWindow()
         {
             _configManager = new ConfigManager();
@@ -45,6 +46,8 @@ namespace EasySaveGUI
             DataContext = _mainViewModel;
             string logsDirectoryPath = @"C:\Prosoft\EasySave\Logs";
             _languageDictionary = new ResourceDictionary();
+            _progressBar = ProgressProgressBar;
+
         }
 
         private void btnNewJob_Click(object sender, RoutedEventArgs e)
@@ -53,7 +56,7 @@ namespace EasySaveGUI
             addJobWindow.ShowDialog();
             RefreshJobList();
         }
-
+        
         public void RefreshJobList()
         {
             var logger = new Logger();
@@ -67,13 +70,13 @@ namespace EasySaveGUI
             FormatLog optionWindow = new FormatLog();
             optionWindow.ShowDialog();
         }
-
+        
         
         /* Language Management */
-
+        
         //private void menuItemLang_Click(object sender, RoutedEventArgs e) { }
-
-
+        
+        
         /* ******************* */
 
         private void btnRunJob_Click(object sender, RoutedEventArgs e)
@@ -84,7 +87,9 @@ namespace EasySaveGUI
                 int index = dgJobList.Items.IndexOf(selectedItem);
                 selectedIndexes.Add(index);
                 Job selectedJob = (Job)dgJobList.Items[index];
-                _jobsController.LaunchJobAsync(selectedJob);
+
+                BackupProcess backupProcess = new BackupProcess(selectedJob, ProgressProgressBar);
+                _jobsController.LaunchJobAsync(selectedJob, backupProcess);
             }
         }
 
@@ -98,7 +103,7 @@ namespace EasySaveGUI
                     _jobsController.DeleteJob(job.Name);
                 }
             }
-
+            
             RefreshJobList();
         }
 
