@@ -1,17 +1,17 @@
 using System.Windows;
 using EasySaveGUI.Controller;
+using EasySaveGUI.ViewModel;
 using EasySaveLib.Model;
 
 namespace EasySaveGUI
 {
     public partial class AddJobWindow : Window
     {
-        Logger _logger = new Logger();
-        private JobsController _jobsController;
-        public AddJobWindow(JobsController jobsController)
+        private readonly JobsViewModel _jobsViewModel;
+        public AddJobWindow(JobsViewModel jobsViewModel)
         {
             InitializeComponent();
-            _jobsController = jobsController;
+            _jobsViewModel = jobsViewModel;
         }
 
         public void btnAdd_Click(object sender, RoutedEventArgs e)
@@ -21,7 +21,7 @@ namespace EasySaveGUI
             string destinationPath = txtDestinationPath.Text;
             string backupType = cmbBackupType.SelectedItem.ToString();
             BackupType typeSave = (backupType == "Full") ? BackupType.Full : BackupType.Diff;
-            _jobsController.AddJob( jobName, sourcePath, destinationPath, typeSave);
+            _jobsViewModel.AddJob( jobName, sourcePath, destinationPath, typeSave);
             
             this.Close();
         }

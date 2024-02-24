@@ -10,6 +10,7 @@ using System.Windows.Media;
 using EasySaveGUI;
 using EasySaveGUI.Controller;
 using EasySaveGUI.Model;
+using EasySaveGUI.ViewModel;
 using Job = EasySaveLib.Model.Job;
 using Logger = EasySaveLib.Model.Logger;
 using ConfigManager = EasySaveLib.Model.ConfigManager;
@@ -21,7 +22,7 @@ namespace EasySaveGUI
     /// </summary>
     public partial class MainWindow : Window
     {
-        private readonly JobsController _jobsController;
+        private readonly JobsViewModel _jobsViewModel;
         private string _currentLanguageCode;
         private ResourceDictionary _languageDictionary;
         private AddJobWindow addJobWindow;
@@ -38,8 +39,8 @@ namespace EasySaveGUI
             btnRunJob.IsEnabled = false;
             btnRemoveJob.IsEnabled = false;
             _logger = new Logger();
-            _jobsController = new JobsController(_logger);
-            _mainViewModel = new MainViewModel(_jobsController);
+            _jobsViewModel = new JobsViewModel(_logger);
+            _mainViewModel = new MainViewModel(_jobsViewModel);
             DataContext = _mainViewModel;
             string logsDirectoryPath = @"C:\Prosoft\EasySave\Logs";
             _languageDictionary = new ResourceDictionary();
@@ -47,17 +48,8 @@ namespace EasySaveGUI
 
         private void btnNewJob_Click(object sender, RoutedEventArgs e)
         {
-            AddJobWindow addJobWindow = new AddJobWindow(_jobsController);
+            AddJobWindow addJobWindow = new AddJobWindow(_jobsViewModel);
             addJobWindow.ShowDialog();
-            RefreshJobList();
-        }
-        
-        public void RefreshJobList()
-        {
-            var logger = new Logger();
-            var j = new JobsController(logger);
-            dgJobList.ItemsSource = null;
-            dgJobList.ItemsSource = _jobsController.JobsCollection;
         }
 
         private void btnOption_Click(object sender, RoutedEventArgs e)
@@ -82,7 +74,7 @@ namespace EasySaveGUI
                 int index = dgJobList.Items.IndexOf(selectedItem);
                 selectedIndexes.Add(index);
                 Job selectedJob = (Job)dgJobList.Items[index];
-                _jobsController.LaunchJobAsync(selectedJob);
+                _jobsViewModel.LaunchJobAsync(selectedJob);
             }
         }
 
@@ -93,11 +85,9 @@ namespace EasySaveGUI
             {
                 foreach (var job in selectedJobs)
                 {
-                    _jobsController.DeleteJob(job.Name);
+                    _jobsViewModel.DeleteJob(job.Name);
                 }
             }
-            
-            RefreshJobList();
         }
 
         private void btnEditJob_Click(object sender, RoutedEventArgs e)

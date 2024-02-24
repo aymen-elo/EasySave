@@ -1,49 +1,41 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.IO;
-using System.Runtime.CompilerServices;
-using EasySaveLib.Model;
+using System.Linq;
 using System.Threading.Tasks;
-using EasySaveGUI.Model;
+using EasySaveGUI.Controller;
+using EasySaveLib.Model;
 using Newtonsoft.Json;
 
-namespace EasySaveGUI.Controller
+namespace EasySaveGUI.ViewModel
 {
-    public class JobsController
-    { 
-        public List<Job> Jobs { get; private set; }
-        public Logger Logger { get; set; }
-        public event EventHandler<string> FileSaved;
-        private CopyController _copyController;
-        public ObservableCollection<Job> JobsCollection { get; set; }
+    public class JobsViewModel : ViewModelBase
+    {
+        /* Instead of a Jobs list for data binding purposes */
+        private readonly ObservableCollection<Job> _jobs;
+        public ObservableCollection<Job> Jobs => _jobs;
         
-        public JobsController(Logger logger)
+        private Logger Logger { get; }
+        private readonly CopyController _copyController;
+        
+        public JobsViewModel(Logger logger)
         {
-            Jobs = new List<Job>();
-            JobsCollection = new ObservableCollection<Job>();
+            _jobs = new ObservableCollection<Job>();
             Logger = logger;
             _copyController = new CopyController();
             Initialize();
         }
 
-        public List<Job> GetJobs()
-        {
-            return Jobs;
-        }
-
         private void Initialize()
         {
-            FileSaved += HandleFileSaved;
-            
             /* Handling the already existing backup jobs (if they exist) */
             // Checking if the State logging file exists
             var stateFile = Logger.LogsDirectoryPath + @"\state.json";
             if (File.Exists(stateFile) & new FileInfo(stateFile).Length != 0)
             {
                 string jsonContent = File.ReadAllText(stateFile);
-                var content = JsonConvert.DeserializeObject<List<Job>>(jsonContent);
+                var content = JsonConvert.DeserializeObject<ObservableCollection<Job>>(jsonContent);
 
                 foreach (var jobInfo in content)
                 {
@@ -54,21 +46,15 @@ namespace EasySaveGUI.Controller
                     var job = new Job(jobInfo.Name, jobInfo.State, jobInfo.SourceFilePath, jobInfo.TargetFilePath, 
                         jobInfo.TotalFilesToCopy, jobInfo.NbFilesLeftToDo, jobInfo.TotalFilesSize);
                     
-                    Jobs.Add(job);
-                    JobsCollection.Add(job);
+                    _jobs.Add(job);
                 }
             }
-        }
-
-        private void HandleFileSaved(object sender, string fileName)
-        {
-            Logger.LogAction(fileName, "", "", 0, TimeSpan.Zero);
         }
 
         // Editing a job that exists -> used in another method EditJob(logger, translation)
         public void EditJob(int index, string name, string source, string destination, BackupType backupType)
         {
-            Job job = Jobs[index];
+            Job job = _jobs[index];
             if (job != null)
             {
                 job.SourceFilePath = source;
@@ -80,26 +66,16 @@ namespace EasySaveGUI.Controller
                 job.Name = name;
             }
         }
-        
-        public void DeleteJob(int index)
-        {
-            var job = Jobs[index];
 
-            job.State = JobState.Retired;
-            Logger.LogState(job.Name, job.SourceFilePath, job.TargetFilePath, job.State, job.TotalFilesToCopy, job.TotalFilesSize , (job.TotalFilesToCopy - job.NbSavedFiles), ((job.NbSavedFiles * 100) / job.TotalFilesToCopy), job.Name);
-            Jobs.Remove(job);
-        }
-
-        /* Variant deletion by Name method */
+        /* Job Deletion by Name method */
         public void DeleteJob(string name)
         {
-            var job = Jobs.Find(j => j.Name == name);
+            var job = _jobs.FirstOrDefault(j => j.Name == name);
             if (job != null)
             {
                 job.State = JobState.Retired;
                 Logger.LogState(job.Name, job.SourceFilePath, job.TargetFilePath, job.State, job.TotalFilesToCopy, job.TotalFilesSize , (job.TotalFilesToCopy - job.NbSavedFiles), ((job.NbSavedFiles * 100) / job.TotalFilesToCopy), job.Name);
-                Jobs.Remove(job);
-                JobsCollection.Remove(job);
+                _jobs.Remove(job);
             }
         }
         
@@ -107,8 +83,7 @@ namespace EasySaveGUI.Controller
         {
             var job = new Job(name, backupType, source, destination);
             UpdateJobData(name, job);
-            Jobs.Add(job);
-            JobsCollection.Add(job);
+            _jobs.Add(job);
         }
 
         public void LaunchJob(Job job)
@@ -168,7 +143,7 @@ namespace EasySaveGUI.Controller
         }
         private bool JobExists(string name)
         {
-            foreach (var job in Jobs)
+            foreach (var job in _jobs)
             {
                 if (job.Name == name)
                 {

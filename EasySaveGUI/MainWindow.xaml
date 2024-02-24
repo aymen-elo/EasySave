@@ -12,7 +12,7 @@
     </Window.Resources>
     <Grid>
         <Grid Background="#FFE9EEF3">
-            <DataGrid x:Name="dgJobList" ItemsSource="{Binding JobsCollection}" AutoGenerateColumns="False"
+            <DataGrid x:Name="dgJobList" ItemsSource="{Binding JobsViewModel.Jobs}" AutoGenerateColumns="False"
                       Margin="38,142,38,142" SelectionChanged="dgJobList_SelectionChanged" IsReadOnly="True"
                       CanUserReorderColumns="False">
                 <DataGrid.Columns>
