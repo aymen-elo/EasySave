@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Formats.Asn1;
 using System.IO;
 using System.Linq;
 using EasySaveLib.Model;
@@ -16,6 +17,7 @@ namespace EasySaveGUI.Controller
     public class CopyController
     {
         private readonly Logger _logger;
+        private readonly object _loggerLock = new object();
         private readonly IdentityManager _identity;
         public FileGetter _fileGetter;
         private readonly ProgressBar _progressBar;
@@ -43,6 +45,23 @@ namespace EasySaveGUI.Controller
             job.State = JobState.Active;
             job.NbSavedFiles = 0;
             
+            
+            List<string> ciphList = new List<string>();
+            string stringCipherList = ConfigManager.GetCipherList();
+            
+            if (!string.IsNullOrEmpty(stringCipherList))
+            {
+                string[] extensionsArray = stringCipherList.Split(',');
+
+                foreach (string extension in extensionsArray)
+                {
+                    string trimmedExtension = extension.Trim();
+                    ciphList.Add(trimmedExtension);
+                }
+            }
+
+            CryptoSoftCipher _cryptoSoftCipher = new CryptoSoftCipher();
+            
             List<string> allFiles = _fileGetter.GetAllFiles(job.SourceFilePath);
             HashSet<string> loadedHashes = _identity.LoadAllowedHashes(job.Name);
             var allowedHashes = new ConcurrentDictionary<string, byte>();
@@ -64,9 +83,9 @@ namespace EasySaveGUI.Controller
                 ThreadPool.QueueUserWorkItem(state =>
                 {
                     if (job.BackupType == BackupType.Diff)
-                        CopyDiff(job, chunk, allowedHashes, loadedHashes);
+                        CopyDiff(job, chunk, allowedHashes, loadedHashes, _cryptoSoftCipher, ciphList);
                     else
-                        CopyFull(job, chunk, allowedHashes);
+                        CopyFull(job, chunk, allowedHashes, _cryptoSoftCipher, ciphList);
                 });
             }
             WaitForThreadPoolCompletion();
@@ -76,14 +95,17 @@ namespace EasySaveGUI.Controller
 
             job.EndTime = DateTime.Now;
             job.State = JobState.Finished;
+            
         }
 
-        private void CopyDiff(Job job, List<string> allFiles, ConcurrentDictionary<string, byte> allowedHashes, HashSet<string> loadedHashes)
+        private void CopyDiff(Job job, List<string> chunk, ConcurrentDictionary<string, byte> allowedHashes, HashSet<string> loadedHashes, CryptoSoftCipher _cryptoSoftCipher, List<string> cipherList)
         {
             DirectoryInfo diSource = new DirectoryInfo(job.SourceFilePath);
             long totalFilesSize = _fileGetter.DirSize(diSource);
+            
+            string encryptionKey = ConfigManager.GetCipherList();
 
-            foreach (string file in allFiles)
+            foreach (string file in chunk)
             {
                 Stopwatch copyTime = new Stopwatch();
                 copyTime.Start();
@@ -118,13 +140,15 @@ namespace EasySaveGUI.Controller
             _fileGetter.CompareAndDeleteDirectories(job.TargetFilePath, job.SourceFilePath);
         }
 
-        private void CopyFull(Job job, List<string> chunk, ConcurrentDictionary<string, byte> allowedHashes)
+        private void CopyFull(Job job, List<string> chunk, ConcurrentDictionary<string, byte> allowedHashes, CryptoSoftCipher _cryptoSoftCipher, List<string> cipherList)
         {
             DirectoryInfo diSource = new DirectoryInfo(job.SourceFilePath);
             long totalFilesSize = _fileGetter.DirSize(diSource);
             
             // TODO : Warn about wiping off the Target
             _fileGetter.CleanTarget(job.TargetFilePath);
+
+            string encryptionKey = ConfigManager.GetEncryptionKey();
 
             foreach (string file in chunk)
             {
@@ -139,10 +163,17 @@ namespace EasySaveGUI.Controller
                 string targetFileDir = Path.GetDirectoryName(targetFilePath);
                 if (!Directory.Exists(targetFileDir))
                     Directory.CreateDirectory(targetFileDir);
+                
+                if (cipherList.Contains(Path.GetExtension(file)))
+                {
+                    Console.WriteLine(_cryptoSoftCipher.sendToCryptoSoft(file, targetFileDir, encryptionKey));
+                    continue;
+                }
 
                 File.Copy(file, targetFilePath, true);
 
                 EndFileCopy(job, targetFilePath, file, copyTime, totalFilesSize);
+                
             }
             chunk.Clear();
             
@@ -164,12 +195,18 @@ namespace EasySaveGUI.Controller
 
             long fileSize = new System.IO.FileInfo(targetFilePath).Length;
 
-            _logger.LogAction(job.Name, file, targetFilePath, fileSize, copyTime.Elapsed);
-
+            lock (_loggerLock)
+            {
+                _logger.LogAction(job.Name, file, targetFilePath, fileSize, copyTime.Elapsed);    
+            }
+            
             job.State = JobState.Active;
             job.Progression = ((job.NbSavedFiles * 100) / job.TotalFilesToCopy);
-            
-            _logger.LogState(job.Name, job.SourceFilePath, job.TargetFilePath, job.State, job.TotalFilesToCopy, totalFilesSize , (job.TotalFilesToCopy - job.NbSavedFiles), ((job.NbSavedFiles * 100) / job.TotalFilesToCopy), job.Name);
+
+            lock (_loggerLock)
+            {
+                _logger.LogState(job.Name, job.SourceFilePath, job.TargetFilePath, job.State, job.TotalFilesToCopy, totalFilesSize , (job.TotalFilesToCopy - job.NbSavedFiles), ((job.NbSavedFiles * 100) / job.TotalFilesToCopy), job.Name);   
+            }
                     
             copyTime.Stop();
             copyTime.Reset();

@@ -54,6 +54,15 @@ namespace EasySaveGUI
 
         private void btnOption_Click(object sender, RoutedEventArgs e)
         {
+            foreach (var j in _jobsViewModel.Jobs)
+            {
+                j.NbSavedFiles = 100;
+                j.TotalFilesToCopy = 100;
+            }
+            
+            
+
+            
             FormatLog optionWindow = new FormatLog();
             optionWindow.ShowDialog();
         }
@@ -74,7 +83,9 @@ namespace EasySaveGUI
                 int index = dgJobList.Items.IndexOf(selectedItem);
                 selectedIndexes.Add(index);
                 Job selectedJob = (Job)dgJobList.Items[index];
-                _jobsViewModel.LaunchJobAsync(selectedJob);
+                
+                BackupProcess backupProcess = new BackupProcess(selectedJob);
+                _jobsViewModel.LaunchJobAsync(selectedJob, backupProcess);
             }
         }
 

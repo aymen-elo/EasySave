@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using System.Windows;
 using EasySaveLib.Model;
 
 namespace EasySaveGUI
@@ -9,6 +11,8 @@ namespace EasySaveGUI
 
         public bool IsJsonSelected { get; private set; }
         public bool IsXmlSelected { get; private set; }
+        public string encryptionKey { get; private set; }
+        public string prioList { get; private set; }
 
         public FormatLog()
         {
@@ -22,6 +26,7 @@ namespace EasySaveGUI
             {
                 rbJson.IsChecked = true;
             }
+            
         }
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
@@ -37,6 +42,13 @@ namespace EasySaveGUI
                 ConfigManager.SaveLogFormat("json");
                 logger.LogFormat = "json";
             }
+
+            string BigFileSize = tboxBigFile.Text;
+            
+            ConfigManager.SaveEncryptionKey(tboxEncryptionKey.Text);
+            ConfigManager.SaveCipherList(tboxCipherList.Text);
+            prioList = tboxPrioList.Text;
+
 
             this.Close();
         }

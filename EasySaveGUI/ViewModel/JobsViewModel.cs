@@ -3,7 +3,11 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using EasySaveLib.Model;
+using System.Linq;
 using System.Threading.Tasks;
+using EasySaveGUI.Model;
 using EasySaveGUI.Controller;
 using EasySaveLib.Model;
 using Newtonsoft.Json;
@@ -45,6 +49,8 @@ namespace EasySaveGUI.ViewModel
                     // Construct a new Job with the available data in the json and append it to the Jobs List
                     var job = new Job(jobInfo.Name, jobInfo.State, jobInfo.SourceFilePath, jobInfo.TargetFilePath, 
                         jobInfo.TotalFilesToCopy, jobInfo.NbFilesLeftToDo, jobInfo.TotalFilesSize);
+                    job.TotalFilesToCopy = 100;
+                    job.NbSavedFiles = 50;
                     
                     _jobs.Add(job);
                 }
@@ -86,13 +92,15 @@ namespace EasySaveGUI.ViewModel
             _jobs.Add(job);
         }
 
-        public void LaunchJob(Job job)
+        private void LaunchJob(Job job, BackupProcess backupProcess)
         {
             if (job.State == JobState.Finished || job.State == JobState.Pending)
             {
                 job.Progression = 0;
                 job.State = JobState.Active;
                 job.NbFilesLeftToDo = job.TotalFilesToCopy;
+                
+                backupProcess.StartBackup();
             }
             
             Logger.LogAction(job.Name, job.SourceFilePath, job.TargetFilePath, 0, TimeSpan.Zero);
@@ -106,9 +114,9 @@ namespace EasySaveGUI.ViewModel
 
         }
         
-        public async void LaunchJobAsync(Job job)
+        public async void LaunchJobAsync(Job job, BackupProcess backupProcess)
         {
-            await Task.Run(() => LaunchJob(job));
+            await Task.Run(() => LaunchJob(job, backupProcess));
         }
         
         

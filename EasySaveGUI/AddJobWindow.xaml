@@ -16,25 +16,28 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <Label Content="{DynamicResource StrJobNameLabel}" Margin="0,0,0,5"/>
-        <TextBox x:Name="txtJobName" Grid.Row="1" Margin="0,0,0,10"/>
+        <TextBlock Text="{DynamicResource StrJobNameLabel}" Grid.Row="1" Margin="0,0,0,5"/>
+        <TextBox x:Name="txtJobName" Grid.Row="2" Margin="0,0,0,10"/>
 
-        <TextBlock Text="{DynamicResource StrSourcePathLabel}" Grid.Row="2" Margin="0,0,0,5"/>
-        <TextBox x:Name="txtSourcePath" Grid.Row="3" Margin="0,0,0,10"/>
+        <TextBlock Text="{DynamicResource StrSourcePathLabel}" Grid.Row="3" Margin="0,0,0,5"/>
+        <TextBox x:Name="txtSourcePath" Grid.Row="4" Margin="0,0,0,10"/>
 
-        <TextBlock Text="{DynamicResource StrDestinationPathLabel}" Grid.Row="4" Margin="0,0,0,5"/>
-        <TextBox x:Name="txtDestinationPath" Grid.Row="5" Margin="0,0,0,10"/>
+        <TextBlock Text="{DynamicResource StrDestinationPathLabel}" Grid.Row="5" Margin="0,0,0,5"/>
+        <TextBox x:Name="txtDestinationPath" Grid.Row="6" Margin="0,0,0,10"/>
 
         <!-- ComboBox pour le type de sauvegarde -->
-        <TextBlock Text="{DynamicResource StrBackupTypeLabel}" Grid.Row="6" Margin="0,0,0,5"/>
-        <ComboBox x:Name="cmbBackupType" Grid.Row="7" Margin="0,0,0,5">
+        <TextBlock Text="{DynamicResource StrBackupTypeLabel}" Grid.Row="7" Margin="0,0,0,5"/>
+        <ComboBox x:Name="cmbBackupType" Grid.Row="8" Margin="0,0,0,10">
             <ComboBoxItem Content="{DynamicResource StrFullBackupType}" />
             <ComboBoxItem Content="{DynamicResource StrDifferentialBackupType}" />
         </ComboBox>  
 
-        <Button Content="{DynamicResource StrAddButtonLabel}" Click="btnAdd_Click" Grid.Row="8" HorizontalAlignment="Left" Margin="686,23,0,0" VerticalAlignment="Top" Height="42" Width="66"/>
-
+        <Button Content="{DynamicResource StrAddButtonLabel}" Click="btnAdd_Click" Grid.Row="9" HorizontalAlignment="Right" VerticalAlignment="Top" Height="42" Width="100"/>
     </Grid>
 </Window>
