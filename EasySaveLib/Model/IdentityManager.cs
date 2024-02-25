@@ -8,6 +8,10 @@ namespace EasySaveLib.Model
     public class IdentityManager
     {
         private readonly string _logDirPath = Logger.LogsDirectoryPath;
+        
+        /* Lock for hash saving because of multi threading */
+        private static readonly object Lock = new object();
+        
         public IdentityManager()
         {
             if (!Directory.Exists(_logDirPath))
@@ -29,7 +33,7 @@ namespace EasySaveLib.Model
         }
         public HashSet<string> LoadAllowedHashes(string jobName)
         {
-            string filePath = Path.Combine(_logDirPath, string.Format( @"\{0}-AlreadyCopiedHashes.json", jobName));
+            var filePath = _logDirPath + string.Format( @"\{0}-AlreadyCopiedHashes.json", jobName);
             
             // Créer un HashSet pour stocker les hachages
             HashSet<string> allowedHashes = new HashSet<string>();
@@ -51,16 +55,19 @@ namespace EasySaveLib.Model
 
             return allowedHashes;
         }
-        public void SaveAllowedHashes(HashSet<string> allowedHashes, string jobName)
+        public void SaveAllowedHashes(IEnumerable<string> allowedHashes, string jobName)
         {
             string filePath = _logDirPath + string.Format( @"\{0}-AlreadyCopiedHashes.json", jobName);
-            
-            // Écrire chaque hachage dans le fichier JSON
-            using (StreamWriter writer = new StreamWriter(filePath))
+
+            lock (Lock)
             {
-                foreach (string hash in allowedHashes)
+                // Écrire chaque hachage dans le fichier JSON
+                using (StreamWriter writer = new StreamWriter(filePath))
                 {
-                    writer.WriteLine(hash);
+                    foreach (string hash in allowedHashes)
+                    {
+                        writer.WriteLine(hash);
+                    }
                 }
             }
         }

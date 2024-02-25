@@ -39,7 +39,7 @@ namespace EasySaveLib.Model.CopyHelper
                     // Supprime tous les fichiers du dossier
                     foreach (string file in files)
                     {
-                        FileSystem.DeleteFile(file, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
+                        FileSystem.DeleteFile(file);
                     }
 
                     // Obtient tous les sous-dossiers dans le dossier
@@ -49,6 +49,9 @@ namespace EasySaveLib.Model.CopyHelper
                     foreach (string subdir in subdirectories)
                     {
                         CleanTarget(subdir);
+                        
+                        // Ddeleting subdirectories too (recursive)
+                        Directory.Delete(subdir, true);
                     }
                 }
             }
