@@ -36,8 +36,7 @@ namespace EasySaveGUI.Model
             }
             catch (Exception ex)
             {
-                // Gérer les autres erreurs de chargement de fichier JSON
-                MessageBox.Show($"Erreur lors du chargement du fichier JSON : {ex.Message}");
+                MessageBox.Show(ex.Message);
             }
         }
     }
