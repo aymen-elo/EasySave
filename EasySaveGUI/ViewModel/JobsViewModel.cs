@@ -47,7 +47,7 @@ namespace EasySaveGUI.ViewModel
                     if (jobInfo.State == JobState.Retired) { continue; }
                     
                     // Construct a new Job with the available data in the json and append it to the Jobs List
-                    var job = new Job(jobInfo.Name, jobInfo.State, jobInfo.SourceFilePath, jobInfo.TargetFilePath, 
+                    var job = new Job(jobInfo.Name, jobInfo.BackupType, jobInfo.State, jobInfo.SourceFilePath, jobInfo.TargetFilePath, 
                         jobInfo.TotalFilesToCopy, jobInfo.NbFilesLeftToDo, jobInfo.TotalFilesSize);
                     job.TotalFilesToCopy = 100;
                     job.NbSavedFiles = 50;
@@ -80,7 +80,7 @@ namespace EasySaveGUI.ViewModel
             if (job != null)
             {
                 job.State = JobState.Retired;
-                Logger.LogState(job.Name, job.SourceFilePath, job.TargetFilePath, job.State, job.TotalFilesToCopy, job.TotalFilesSize , (job.TotalFilesToCopy - job.NbSavedFiles), ((job.NbSavedFiles * 100) / job.TotalFilesToCopy), job.Name);
+                Logger.LogState(job.Name, job.BackupType, job.SourceFilePath, job.TargetFilePath, job.State, job.TotalFilesToCopy, job.TotalFilesSize , (job.TotalFilesToCopy - job.NbSavedFiles), ((job.NbSavedFiles * 100) / job.TotalFilesToCopy), job.Name);
                 _jobs.Remove(job);
             }
         }
@@ -134,7 +134,7 @@ namespace EasySaveGUI.ViewModel
             job.TotalFilesToCopy = totalFilesToCopy;
             job.NbSavedFiles = 0;
 
-            Logger.LogState(job.Name, job.SourceFilePath, job.TargetFilePath, job.State, job.TotalFilesToCopy, job.TotalFilesSize , (job.TotalFilesToCopy - job.NbSavedFiles), ((job.NbSavedFiles * 100) / job.TotalFilesToCopy), newName);
+            Logger.LogState(job.Name, job.BackupType, job.SourceFilePath, job.TargetFilePath, job.State, job.TotalFilesToCopy, job.TotalFilesSize , (job.TotalFilesToCopy - job.NbSavedFiles), ((job.NbSavedFiles * 100) / job.TotalFilesToCopy), newName);
         }
 
         bool ContainsDuplicates(Array array)

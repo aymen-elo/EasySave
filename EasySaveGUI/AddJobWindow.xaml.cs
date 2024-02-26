@@ -20,7 +20,7 @@ namespace EasySaveGUI
             string sourcePath = txtSourcePath.Text;
             string destinationPath = txtDestinationPath.Text;
             string backupType = cmbBackupType.SelectedItem.ToString();
-            BackupType typeSave = (backupType == "Full") ? BackupType.Full : BackupType.Diff;
+            BackupType typeSave = (backupType.Contains("Full")) ? BackupType.Full : BackupType.Diff;
             _jobsViewModel.AddJob( jobName, sourcePath, destinationPath, typeSave);
             
             this.Close();
