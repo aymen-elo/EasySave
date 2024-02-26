@@ -1,0 +1,159 @@
+﻿<Window x:Class="RemoteInterface.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:easySaveGui="clr-namespace:RemoteInterface"
+        xmlns:model="clr-namespace:EasySaveLib.Model;assembly=EasySaveLib"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="550" Width="1200">
+    <!-- <Window.Resources> -->
+    <!--     <model:LangueSettingsViewModels x:Key="LangueSettingsViewModelInstance" /> -->
+    <!-- </Window.Resources> -->
+    <Grid>
+        <Grid Background="#FFE9EEF3">
+            <DataGrid x:Name="dgJobList" ItemsSource="{Binding JobsViewModel.Jobs}" AutoGenerateColumns="False"
+                      Margin="38,142,38,142" SelectionChanged="dgJobList_SelectionChanged" IsReadOnly="True"
+                      CanUserReorderColumns="False">
+                <DataGrid.Columns>
+                    
+                    <DataGridTemplateColumn>
+                        <DataGridTemplateColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{DynamicResource StrJobNameLabel}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.HeaderTemplate>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    
+                    <DataGridTemplateColumn>
+                        <DataGridTemplateColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{DynamicResource StrBackupTypeLabel}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.HeaderTemplate>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding BackupType}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    
+                    <DataGridTemplateColumn>
+                        <DataGridTemplateColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{DynamicResource StrSourcePathLabel}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.HeaderTemplate>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding SourceFilePath}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    
+                    <DataGridTemplateColumn>
+                        <DataGridTemplateColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{DynamicResource StrDestinationPathLabel}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.HeaderTemplate>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding TargetFilePath}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    
+                    <DataGridTemplateColumn Header="Actions">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Button x:Name="btnRunJob" Content="{DynamicResource StrButtonRunJob}" Click="btnRunJob_Click" />
+                                    <Button x:Name="btnRemoveJob" Content="{DynamicResource StrButtonRemoveJob}" Click="btnRemoveJob_Click">
+                                        <Button.Style>
+                                            <Style TargetType="Button">
+                                                <Setter Property="IsEnabled" Value="False" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding SelectedItems.Count, ElementName=dgJobList}" Value="1">
+                                                        <Setter Property="IsEnabled" Value="True" />
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding SelectedItems.Count, ElementName=dgJobList}" Value="0">
+                                                        <Setter Property="IsEnabled" Value="True" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
+                    <!-- Colonne pour la barre de progression -->
+                    <DataGridTemplateColumn Header="Progression">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <ProgressBar Name="ProgressBar" Minimum="0" Maximum="100" Value="{Binding Percentage,Mode=OneWay}" Width="200"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <!-- Fin de la colonne pour la barre de progression -->
+
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+        <Grid>
+            <Label x:Name="labelEvents" Content="Events" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="30,0,0,80" />
+            <TextBlock x:Name="tboxEvent" HorizontalAlignment="Stretch" Height="60" Margin="30,0,30,20" TextWrapping="Wrap"
+                       Text="Ici event " VerticalAlignment="Bottom" Width="Auto" Background="White"
+                       ScrollViewer.VerticalScrollBarVisibility="Visible" />
+            <Label x:Name="lblVersion" Content="Version 2.0" HorizontalAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Bottom" FontSize="10"/>
+        </Grid>
+
+
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10,30,0,0">
+            <Button x:Name="btnNewJob" Content="{DynamicResource StrButtonNewJob}" Height="42" Width="90"
+                    Click="btnNewJob_Click" />
+            <Button x:Name="btnRunJob" Content="{DynamicResource StrButtonRunJob}" Height="42" Width="90"
+                    Click="btnRunJob_Click" />
+            <Button x:Name="btnRemoveJob" Content="{DynamicResource StrButtonRemoveJob}" Height="42" Width="90"
+                    Click="btnRemoveJob_Click" />
+            <Button x:Name="btnEditJob" Content="{DynamicResource StrButtonEditJob}" Height="42" Width="90"
+                    Click="btnEditJob_Click" />
+            <Button x:Name="btnPlayPause" Content="{DynamicResource StrButtonPlayPause}" Height="42" Width="90"
+                    Click="btnPlayPause_Click" />
+            <Button x:Name="btnStopJob" Content="{DynamicResource StrButtonStopJob}" Height="42" Width="90"
+                    Click="btnStopJob_Click" />
+            <Button x:Name="btnLogs" Content="{DynamicResource StrButtonLogs}" Height="42" Width="90"
+                    Click="btnLogs_Click" />
+            <Button x:Name="btnOption" Content="{DynamicResource StrButtonOption}" Height="42" Width="90"
+                    Click="btnOption_Click" />
+        </StackPanel>
+        <StackPanel>
+            <Menu>
+                <MenuItem Header="{DynamicResource StrMainLanguage}">
+                    <MenuItem Header="{DynamicResource StrMainEnglish}"
+                              Command="{Binding ChangeLanguageCommand, Source={StaticResource LangueSettingsViewModelInstance}}"
+                              CommandParameter="en" />
+                    <MenuItem Header="{DynamicResource StrMainFrench}"
+                              Command="{Binding ChangeLanguageCommand, Source={StaticResource LangueSettingsViewModelInstance}}"
+                              CommandParameter="fr" />
+            
+                    <MenuItem.Style>
+                        <Style TargetType="MenuItem">
+                            <Setter Property="Foreground" Value="Black" />
+                            <Setter Property="FontSize" Value="14" />
+                        </Style>
+                    </MenuItem.Style>
+                </MenuItem>
+            </Menu>
+        </StackPanel>
+    </Grid>
+</Window>
