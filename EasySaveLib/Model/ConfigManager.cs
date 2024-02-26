@@ -19,6 +19,7 @@ namespace EasySaveLib.Model
                 sw.WriteLine("encryptionkey:");
                 sw.WriteLine("cipherlist:");
                 sw.WriteLine("prioritylist:");
+                sw.WriteLine("bigfilesize:");
             }
         }
         
@@ -77,6 +78,17 @@ namespace EasySaveLib.Model
             var i = 0;
             while (i < lines.Length && !lines[i].Contains("prioritylist")) { i++; }
             lines[i] = $"prioritylist:{priorityList}";
+            
+            File.WriteAllLines(ConfigFilePath, lines);
+        }
+        
+        public static void SaveBigFileSize(string bigFileSize)
+        {
+            var lines = File.ReadAllLines(ConfigFilePath);
+            
+            var i = 0;
+            while (i < lines.Length && !lines[i].Contains("bigfilesize")) { i++; }
+            lines[i] = $"bigfilesize:{bigFileSize}";
             
             File.WriteAllLines(ConfigFilePath, lines);
         }
@@ -143,6 +155,19 @@ namespace EasySaveLib.Model
             
             var i = 0;
             while (i < lines.Length && !lines[i].Contains("prioritylist")) { i++; }
+            var priorityList = lines[i].Split(":")[1];
+
+            return priorityList;
+        }
+        
+        public static string? GetBigFileSize()
+        {
+            if (!File.Exists(ConfigFilePath)) { return null; }
+
+            var lines = File.ReadAllLines(ConfigFilePath);
+            
+            var i = 0;
+            while (i < lines.Length && !lines[i].Contains("bigfilesize")) { i++; }
             var priorityList = lines[i].Split(":")[1];
 
             return priorityList;
