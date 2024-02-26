@@ -60,9 +60,7 @@ namespace EasySaveGUI
                 j.TotalFilesToCopy = 100;
             }
             
-            
-
-            
+        
             Option optionWindow = new Option();
             optionWindow.ShowDialog();
         }
