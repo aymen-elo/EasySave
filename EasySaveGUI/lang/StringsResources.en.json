@@ -23,5 +23,6 @@
   "StrDgClName": "Name",
   "StrDgClBackupType": "Backup Type",
   "StrDgClSourceFilePath": "Source File Path",
-  "StrDgClTargetFilePath": "Target File Path"
+  "StrDgClTargetFilePath": "Target File Path",
+  "StrOpen": "Open"
 }

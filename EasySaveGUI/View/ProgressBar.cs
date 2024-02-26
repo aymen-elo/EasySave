@@ -4,7 +4,7 @@
     {
         public string UpdateProgress(int jobId, string jobName, long totalFilesToCopy, long filesCopied)
         {
-            const int progressBarWidth = 50;
+            const int progressBarWidth = 0;
 
             double progressPercentage = (double)filesCopied / totalFilesToCopy;
             int progressBarLength = (int)(progressPercentage * progressBarWidth);

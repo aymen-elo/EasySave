@@ -60,10 +60,8 @@ namespace EasySaveGUI
                 j.TotalFilesToCopy = 100;
             }
             
-            
-
-            
-            FormatLog optionWindow = new FormatLog();
+        
+            Option optionWindow = new Option();
             optionWindow.ShowDialog();
         }
         

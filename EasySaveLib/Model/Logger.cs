@@ -50,7 +50,7 @@ namespace EasySaveLib.Model
             {
                 LogActionXml(name, fileSource, fileTarget, fileSize, fileTransferTime);
             }
-            else if (LogFormat == "json") // Assurez-vous que cette condition est dans le bloc else
+            else if (LogFormat == "json") 
             {
                 LogActionJson(name, fileSource, fileTarget, fileSize, fileTransferTime);
             }
