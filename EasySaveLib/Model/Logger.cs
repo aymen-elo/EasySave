@@ -105,7 +105,7 @@ namespace EasySaveLib.Model
 
         
         /* Logging inside state.json, newName is for EditJob (search done by name, hence the need for both old & new names) */
-        public void LogState(string name, string sourcePath, string targetPath, JobState state, long nbFileToCopy,
+        public void LogState(string name, BackupType type, string sourcePath, string targetPath, JobState state, long nbFileToCopy,
             long fileSize, long nbFileLeftToDo, int progression, string newName)
         {
             string statePath = _dirPath + @"\state.json";
@@ -125,6 +125,7 @@ namespace EasySaveLib.Model
                         if (jobEntry != null)
                         {
                             jobEntry["Name"] = newName;
+                            jobEntry["BackupType"] = type.ToString();
                             jobEntry["SourceFilePath"] = sourcePath;
                             jobEntry["TargetFilePath"] = targetPath;
                             jobEntry["State"] = state.ToString();
@@ -135,7 +136,7 @@ namespace EasySaveLib.Model
                         }
                         else
                         {
-                            JObject newJob = CreateJobObject(name, sourcePath, targetPath, state, nbFileToCopy, fileSize,
+                            JObject newJob = CreateJobObject(name, type, sourcePath, targetPath, state, nbFileToCopy, fileSize,
                                 nbFileLeftToDo, progression);
                             jsonArray.Add(newJob);
                         }
@@ -145,7 +146,7 @@ namespace EasySaveLib.Model
                     else
                     {
                         JArray jsonArray = new JArray();
-                        JObject newJob = CreateJobObject(name, sourcePath, targetPath, state, nbFileToCopy, fileSize,
+                        JObject newJob = CreateJobObject(name, type, sourcePath, targetPath, state, nbFileToCopy, fileSize,
                             nbFileLeftToDo, progression);
                         jsonArray.Add(newJob);
                         File.WriteAllText(statePath, JsonConvert.SerializeObject(jsonArray, Formatting.Indented));
@@ -156,11 +157,12 @@ namespace EasySaveLib.Model
             }
         }
 
-        private JObject CreateJobObject(string name, string sourcePath, string targetPath, JobState state, long nbFileToCopy,
+        private JObject CreateJobObject(string name, BackupType type, string sourcePath, string targetPath, JobState state, long nbFileToCopy,
             long fileSize, long nbFileLeftToDo, int progression)
         {
             JObject jobObject = new JObject();
             jobObject["Name"] = name;
+            jobObject["BackupType"] = type.ToString();
             jobObject["SourceFilePath"] = sourcePath;
             jobObject["TargetFilePath"] = targetPath;
             jobObject["State"] = state.ToString();

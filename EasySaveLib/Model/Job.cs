@@ -91,7 +91,7 @@ namespace EasySaveLib.Model
         }
         
         /* Helper constructor for state.json */
-        public Job(string name, JobState jobState, string src, string dest, int totalFilesToCopy, long nbFilesLeftToDo, long totalFilesSize) 
+        public Job(string name, BackupType type, JobState jobState, string src, string dest, int totalFilesToCopy, long nbFilesLeftToDo, long totalFilesSize) 
         {
             Id = _nextId;
             Position = _nextPos;
@@ -99,6 +99,7 @@ namespace EasySaveLib.Model
             State = jobState;
             SourceFilePath = src;
             TargetFilePath = dest;
+            BackupType = type;
             
             TotalFilesToCopy = totalFilesToCopy;
             NbFilesLeftToDo = nbFilesLeftToDo;

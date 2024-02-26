@@ -26,6 +26,12 @@ namespace EasySaveGUI
             {
                 rbJson.IsChecked = true;
             }
+            
+            tboxEncryptionKey.Text = ConfigManager.GetEncryptionKey();
+            tboxCipherList.Text = ConfigManager.GetCipherList();
+            tboxPrioList.Text = ConfigManager.GetPriorityList();
+            tboxBigFile.Text = ConfigManager.GetBigFileSize();
+
             ConfigManager.SaveLogFormat("json");
             logger.LogFormat = "json";
         }
@@ -48,7 +54,9 @@ namespace EasySaveGUI
             
             ConfigManager.SaveEncryptionKey(tboxEncryptionKey.Text);
             ConfigManager.SaveCipherList(tboxCipherList.Text);
-            prioList = tboxPrioList.Text;
+            ConfigManager.SavePriorityList(tboxPrioList.Text);
+            ConfigManager.SaveBigFileSize(tboxBigFile.Text);
+            
 
 
             this.Close();

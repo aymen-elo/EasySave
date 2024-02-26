@@ -20,6 +20,9 @@ namespace EasySaveGUI.Controller
         private readonly object _loggerLock = new object();
         private readonly IdentityManager _identity;
         public FileGetter _fileGetter;
+        private static int cleanTargetCalled = 0;
+        private static ManualResetEvent cleanTargetDone = new ManualResetEvent(false);
+
         private readonly ProgressBar _progressBar;
         
         /* Multi threading
@@ -94,6 +97,7 @@ namespace EasySaveGUI.Controller
             job.Duration = stopWatch.Elapsed;
 
             job.EndTime = DateTime.Now;
+            job.NbFilesLeftToDo = 0;
             job.State = JobState.Finished;
             
         }
@@ -133,7 +137,7 @@ namespace EasySaveGUI.Controller
             }
 
             job.State = JobState.Finished;
-            _logger.LogState(job.Name, job.SourceFilePath, job.TargetFilePath, job.State, job.TotalFilesToCopy, totalFilesSize , (job.TotalFilesToCopy - job.NbSavedFiles), ((job.NbSavedFiles * 100) / job.TotalFilesToCopy), job.Name);
+            _logger.LogState(job.Name, job.BackupType, job.SourceFilePath, job.TargetFilePath, job.State, job.TotalFilesToCopy, totalFilesSize , (job.TotalFilesToCopy - job.NbSavedFiles), ((job.NbSavedFiles * 100) / job.TotalFilesToCopy), job.Name);
             
             _identity.DeleteAllowedHashes(job.Name);
             _identity.SaveAllowedHashes(allowedHashes.Keys, job.Name);
@@ -145,8 +149,17 @@ namespace EasySaveGUI.Controller
             DirectoryInfo diSource = new DirectoryInfo(job.SourceFilePath);
             long totalFilesSize = _fileGetter.DirSize(diSource);
             
-            // TODO : Warn about wiping off the Target
-            _fileGetter.CleanTarget(job.TargetFilePath);
+            // Clean target but only once by one thread
+            if (Interlocked.CompareExchange(ref cleanTargetCalled, 1, 0) == 0)
+            {
+                // TODO : Warn about wiping off the Target
+                _fileGetter.CleanTarget(job.TargetFilePath);
+                cleanTargetDone.Set();
+            }
+            else
+            {
+                cleanTargetDone.WaitOne();
+            }
 
             string encryptionKey = ConfigManager.GetEncryptionKey();
 
@@ -178,7 +191,7 @@ namespace EasySaveGUI.Controller
             chunk.Clear();
             
             job.State = JobState.Finished;
-            _logger.LogState(job.Name, job.SourceFilePath, job.TargetFilePath, job.State, job.TotalFilesToCopy, totalFilesSize , (job.TotalFilesToCopy - job.NbSavedFiles), ((job.NbSavedFiles * 100) / job.TotalFilesToCopy), job.Name);
+            _logger.LogState(job.Name, job.BackupType, job.SourceFilePath, job.TargetFilePath, job.State, job.TotalFilesToCopy, totalFilesSize , (job.TotalFilesToCopy - job.NbSavedFiles), ((job.NbSavedFiles * 100) / job.TotalFilesToCopy), job.Name);
             
             _identity.DeleteAllowedHashes(job.Name);
             _identity.SaveAllowedHashes(allowedHashes.Keys, job.Name);
@@ -205,7 +218,7 @@ namespace EasySaveGUI.Controller
 
             lock (_loggerLock)
             {
-                _logger.LogState(job.Name, job.SourceFilePath, job.TargetFilePath, job.State, job.TotalFilesToCopy, totalFilesSize , (job.TotalFilesToCopy - job.NbSavedFiles), ((job.NbSavedFiles * 100) / job.TotalFilesToCopy), job.Name);   
+                _logger.LogState(job.Name, job.BackupType, job.SourceFilePath, job.TargetFilePath, job.State, job.TotalFilesToCopy, totalFilesSize , (job.TotalFilesToCopy - job.NbSavedFiles), ((job.NbSavedFiles * 100) / job.TotalFilesToCopy), job.Name);   
             }
                     
             copyTime.Stop();

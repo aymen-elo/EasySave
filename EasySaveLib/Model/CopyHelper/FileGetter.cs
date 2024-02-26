@@ -39,7 +39,9 @@ namespace EasySaveLib.Model.CopyHelper
                     // Supprime tous les fichiers du dossier
                     foreach (string file in files)
                     {
-                        FileSystem.DeleteFile(file);
+                        if (!File.Exists(file)) { continue; }
+                        
+                        FileSystem.DeleteFile(file, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
                     }
 
                     // Obtient tous les sous-dossiers dans le dossier
@@ -49,7 +51,7 @@ namespace EasySaveLib.Model.CopyHelper
                     foreach (string subdir in subdirectories)
                     {
                         CleanTarget(subdir);
-                        
+
                         // Ddeleting subdirectories too (recursive)
                         Directory.Delete(subdir, true);
                     }
@@ -60,13 +62,15 @@ namespace EasySaveLib.Model.CopyHelper
                 // TODO : Log error
             }
         }
+
         public void CompareAndDeleteDirectories(string targetDir, string sourceDir)
         {
             string[] destinationItems = Directory.GetFileSystemEntries(targetDir, "*", SearchOption.AllDirectories);
             string[] sourceItems = Directory.GetFileSystemEntries(sourceDir, "*", SearchOption.AllDirectories);
 
             // Convertir les chemins en chemins relatifs par rapport au dossier racine
-            string[] relativeDestinationItems = Array.ConvertAll(destinationItems, item => GetRelativePath(targetDir, item));
+            string[] relativeDestinationItems =
+                Array.ConvertAll(destinationItems, item => GetRelativePath(targetDir, item));
             string[] relativeSourceItems = Array.ConvertAll(sourceItems, item => GetRelativePath(sourceDir, item));
 
             // Créer des ensembles pour une recherche rapide
@@ -116,12 +120,13 @@ namespace EasySaveLib.Model.CopyHelper
                     }
 
                     return size;
-                }                
+                }
             }
             catch (Exception ex)
             {
                 //TODO : Log error
             }
+
             return 0;
         }
     }
