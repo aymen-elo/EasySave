@@ -37,6 +37,8 @@ namespace EasySaveGUI.Controller
         /* Separation of a file list into
          ThreadCount number of chunks */
         private List<List<string>> _fileChunks;
+        private readonly object _jobLock = new object();
+        private readonly object _jobProgressionLock = new object();
         private const int ThreadCount = 5;
 
         public CopyController()
@@ -55,10 +57,8 @@ namespace EasySaveGUI.Controller
 
         public void CopyDirectory(Job job)
         {
-            job.StartTime = DateTime.Now;
-            job.State = JobState.Active;
-            job.NbSavedFiles = 0;
             
+            job.StartTime = DateTime.Now;
             
             List<string> ciphList = new List<string>();
             string stringCipherList = ConfigManager.GetCipherList();
@@ -100,6 +100,7 @@ namespace EasySaveGUI.Controller
             job.EndTime = DateTime.Now;
             job.NbFilesLeftToDo = 0;
             job.State = JobState.Finished;
+            _logger.LogState(job);
             
             cleanTargetCalled = 0;
             cleanTargetDone.Reset();
@@ -149,7 +150,7 @@ namespace EasySaveGUI.Controller
         {
             /************************ Priority Big + Priority ****************************/
             /* Priority files - Big and normal TODO : Allocate more threads where there are more files */
-            int priorityBigFileChunksCount = (int)Math.Ceiling((double)ThreadCount * priorityBigFile.Count / (priorityBigFile.Count + priorityFiles.Count));
+            int priorityBigFileChunksCount = (priorityBigFile.Count + priorityFiles.Count) != 0 ? (int)Math.Ceiling((double)ThreadCount * priorityBigFile.Count / (priorityBigFile.Count + priorityFiles.Count)) : 0;
             int priorityFileChunksCount = ThreadCount - priorityBigFileChunksCount;
             
             var priorityBigFileChunks = ChunkFiles(priorityBigFile, priorityBigFileChunksCount);
@@ -173,7 +174,7 @@ namespace EasySaveGUI.Controller
 
             /************************ Big + others (not on priority) ****************************/
             /* Others - Big and normal TODO : Allocate more threads where therae are more files */
-            int bigFileChunksCount = (int)Math.Ceiling((double)ThreadCount * bigFiles.Count / (bigFiles.Count + otherFiles.Count));
+            int bigFileChunksCount = (bigFiles.Count + otherFiles.Count) != 0 ? (int)Math.Ceiling((double)ThreadCount * bigFiles.Count / (bigFiles.Count + otherFiles.Count)) : 0;
             int otherFileChunksCount = ThreadCount - bigFileChunksCount;
 
             var bigFileChunks = ChunkFiles(bigFiles, bigFileChunksCount);
@@ -228,8 +229,7 @@ namespace EasySaveGUI.Controller
                     _logger.LogAction("Already exsits" + job.Name, file, "", 0, TimeSpan.Zero);
                 }
             }
-
-            job.State = JobState.Finished;
+            
             _logger.LogState(job.Name, job.BackupType, job.SourceFilePath, job.TargetFilePath, job.State, job.TotalFilesToCopy, totalFilesSize , (job.TotalFilesToCopy - job.NbSavedFiles), ((job.NbSavedFiles * 100) / job.TotalFilesToCopy), job.Name);
             
             _identity.DeleteAllowedHashes(job.Name);
@@ -274,13 +274,13 @@ namespace EasySaveGUI.Controller
                 }
 
                 File.Copy(file, targetFilePath, true);
+                
 
                 EndFileCopy(job, targetFilePath, file, copyTime, totalFilesSize);
                 
             }
             chunk.Clear();
             
-            job.State = JobState.Finished;
             _logger.LogState(job.Name, job.BackupType, job.SourceFilePath, job.TargetFilePath, job.State, job.TotalFilesToCopy, totalFilesSize , (job.TotalFilesToCopy - job.NbSavedFiles), ((job.NbSavedFiles * 100) / job.TotalFilesToCopy), job.Name);
             
             _identity.DeleteAllowedHashes(job.Name);
@@ -290,11 +290,15 @@ namespace EasySaveGUI.Controller
         private void EndFileCopy(Job job, string targetFilePath, string file, Stopwatch copyTime, long totalFilesSize)
         {
             
-            job.NbSavedFiles++;
+            lock (_jobLock)
+            {
+                job.NbSavedFiles++;
+                job.NbFilesLeftToDo--;
+            }
 
             // TODO : JobID /!\
             
-            //Console.WriteLine(_progressBar.UpdateProgress(0, job.Name, job.TotalFilesToCopy, job.NbSavedFiles));
+            Console.WriteLine(_progressBar.UpdateProgress(0, job.Name, job.TotalFilesToCopy, job.NbSavedFiles));
 
             long fileSize = new System.IO.FileInfo(targetFilePath).Length;
 
@@ -303,8 +307,10 @@ namespace EasySaveGUI.Controller
                 _logger.LogAction(job.Name, file, targetFilePath, fileSize, copyTime.Elapsed);    
             }
             
-            job.State = JobState.Active;
-            job.Progression = ((job.NbSavedFiles * 100) / job.TotalFilesToCopy);
+            lock (_jobProgressionLock)
+            {
+                job.Progression = ((job.NbSavedFiles * 100) / job.TotalFilesToCopy);
+            }
 
             lock (_loggerLock)
             {
