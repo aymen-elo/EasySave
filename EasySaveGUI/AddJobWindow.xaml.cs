@@ -2,6 +2,7 @@ using System.Windows;
 using EasySaveGUI.Controller;
 using EasySaveGUI.ViewModel;
 using EasySaveLib.Model;
+using System.Windows.Forms;
 
 namespace EasySaveGUI
 {
@@ -12,6 +13,30 @@ namespace EasySaveGUI
         {
             InitializeComponent();
             _jobsViewModel = jobsViewModel;
+
+            
+        }
+        private void btnOpenSource_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFolderBrowserDialog(txtSourcePath);
+        }
+
+        private void btnOpenDestination_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFolderBrowserDialog(txtDestinationPath);
+        }
+
+        private void OpenFolderBrowserDialog(System.Windows.Controls.TextBox textBox)
+        {
+            using (FolderBrowserDialog dialog = new FolderBrowserDialog())
+            {
+                
+                DialogResult result = dialog.ShowDialog();
+                if (result == System.Windows.Forms.DialogResult.OK)
+                {
+                    textBox.Text = dialog.SelectedPath;
+                }
+            }
         }
 
         public void btnAdd_Click(object sender, RoutedEventArgs e)

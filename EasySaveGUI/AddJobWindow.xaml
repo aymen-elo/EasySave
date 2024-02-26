@@ -26,12 +26,17 @@
         <TextBox x:Name="txtJobName" Grid.Row="2" Margin="0,0,0,10"/>
 
         <TextBlock Text="{DynamicResource StrSourcePathLabel}" Grid.Row="3" Margin="0,0,0,5"/>
-        <TextBox x:Name="txtSourcePath" Grid.Row="4" Margin="0,0,0,10"/>
+        <StackPanel Orientation="Horizontal" Grid.Row="4">
+            <TextBox x:Name="txtSourcePath" Margin="0,0,5,10" Width="500"/>
+            <Button Content="{DynamicResource StrOpen}" Click="btnOpenSource_Click"/>
+        </StackPanel>
 
         <TextBlock Text="{DynamicResource StrDestinationPathLabel}" Grid.Row="5" Margin="0,0,0,5"/>
-        <TextBox x:Name="txtDestinationPath" Grid.Row="6" Margin="0,0,0,10"/>
+        <StackPanel Orientation="Horizontal" Grid.Row="6">
+            <TextBox x:Name="txtDestinationPath" Margin="0,0,5,10" Width="500"/>
+            <Button Content="{DynamicResource StrOpen}" Click="btnOpenDestination_Click"/>
+        </StackPanel>
 
-        <!-- ComboBox pour le type de sauvegarde -->
         <TextBlock Text="{DynamicResource StrBackupTypeLabel}" Grid.Row="7" Margin="0,0,0,5"/>
         <ComboBox x:Name="cmbBackupType" Grid.Row="8" Margin="0,0,0,10">
             <ComboBoxItem Content="{DynamicResource StrFullBackupType}" />

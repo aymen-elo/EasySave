@@ -22,5 +22,6 @@
   "StrDgClName": "Nom",
   "StrDgClBackupType": "Type de sauvegarde",
   "StrDgClSourceFilePath": "Chemin source",
-  "StrDgClTargetFilePath": "Chemin destination"
+  "StrDgClTargetFilePath": "Chemin destination",
+  "StrOpen": "Ouvrir"
 }

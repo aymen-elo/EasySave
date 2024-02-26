@@ -5,7 +5,7 @@ using EasySaveLib.Model;
 
 namespace EasySaveGUI
 {
-    public partial class FormatLog : Window
+    public partial class Option : Window
     {
         private Logger logger = Logger.GetInstance();
 
@@ -14,7 +14,7 @@ namespace EasySaveGUI
         public string encryptionKey { get; private set; }
         public string prioList { get; private set; }
 
-        public FormatLog()
+        public Option()
         {
             InitializeComponent();
             string logFormat = ConfigManager.GetLogFormat();
@@ -26,7 +26,8 @@ namespace EasySaveGUI
             {
                 rbJson.IsChecked = true;
             }
-            
+            ConfigManager.SaveLogFormat("json");
+            logger.LogFormat = "json";
         }
 
         private void btnSave_Click(object sender, RoutedEventArgs e)

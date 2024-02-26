@@ -63,7 +63,7 @@ namespace EasySaveGUI
             
 
             
-            FormatLog optionWindow = new FormatLog();
+            Option optionWindow = new Option();
             optionWindow.ShowDialog();
         }
         
