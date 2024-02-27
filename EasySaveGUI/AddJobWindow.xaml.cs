@@ -1,53 +1,31 @@
 using System.Windows;
-using EasySaveGUI.Controller;
 using EasySaveGUI.ViewModel;
 using EasySaveLib.Model;
-using System.Windows.Forms;
 
 namespace EasySaveGUI
 {
     public partial class AddJobWindow : Window
     {
         private readonly JobsViewModel _jobsViewModel;
+        private readonly AddJobViewModel _viewModel;
+
         public AddJobWindow(JobsViewModel jobsViewModel)
         {
             InitializeComponent();
             _jobsViewModel = jobsViewModel;
-
-            
-        }
-        private void btnOpenSource_Click(object sender, RoutedEventArgs e)
-        {
-            OpenFolderBrowserDialog(txtSourcePath);
-        }
-
-        private void btnOpenDestination_Click(object sender, RoutedEventArgs e)
-        {
-            OpenFolderBrowserDialog(txtDestinationPath);
-        }
-
-        private void OpenFolderBrowserDialog(System.Windows.Controls.TextBox textBox)
-        {
-            using (FolderBrowserDialog dialog = new FolderBrowserDialog())
-            {
-                
-                DialogResult result = dialog.ShowDialog();
-                if (result == System.Windows.Forms.DialogResult.OK)
-                {
-                    textBox.Text = dialog.SelectedPath;
-                }
-            }
+            _viewModel = new AddJobViewModel();
+            DataContext = _viewModel;
         }
 
         public void btnAdd_Click(object sender, RoutedEventArgs e)
         {
             string jobName = txtJobName.Text;
-            string sourcePath = txtSourcePath.Text;
-            string destinationPath = txtDestinationPath.Text;
-            string backupType = cmbBackupType.SelectedItem.ToString();
-            BackupType typeSave = (backupType.Contains("Full")) ? BackupType.Full : BackupType.Diff;
-            _jobsViewModel.AddJob( jobName, sourcePath, destinationPath, typeSave);
-            
+            string sourcePath = _viewModel.SourcePath;
+            string destinationPath = _viewModel.DestinationPath;
+            string backupType = cmbBackupType.SelectedItem?.ToString(); // Check for null
+            BackupType typeSave = (backupType?.Contains("Full") == true) ? BackupType.Full : BackupType.Diff;
+            _jobsViewModel.AddJob(jobName, sourcePath, destinationPath, typeSave);
+
             this.Close();
         }
     }
