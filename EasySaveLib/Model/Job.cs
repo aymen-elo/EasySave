@@ -29,7 +29,18 @@ namespace EasySaveLib.Model
         public string SourceFilePath { get; set; }
         public string TargetFilePath { get; set; }
         private int Position { get; set; }
-        public JobState State { get; set; }
+        private JobState _state { get; set; }
+
+        public JobState State
+        {
+            get => _state;
+            set
+            {
+                _state = value;
+                OnPropertyChanged("State");
+                OnPropertyChanged("CanRunJob");
+            }
+        }
     
         public long TotalFilesSize { get; set; }
         private int _TotalFilesToCopy;
@@ -42,6 +53,12 @@ namespace EasySaveLib.Model
                 OnPropertyChanged("TotalFilesToCopy");
                 OnPropertyChanged("Percentage");
             }
+        }
+
+
+        public bool CanRunJob
+        {
+            get => _state is JobState.Pending or JobState.Paused or JobState.Finished;
         }
 
         public int _NbSavedFiles;
@@ -79,7 +96,7 @@ namespace EasySaveLib.Model
             Position = _nextPos;
             Name = name;
             BackupType = type;
-            State = JobState.Pending;
+            _state = JobState.Pending;
             SourceFilePath = src;
             TargetFilePath = dest;
             
@@ -96,7 +113,7 @@ namespace EasySaveLib.Model
             Id = _nextId;
             Position = _nextPos;
             Name = name;
-            State = jobState;
+            _state = jobState;
             SourceFilePath = src;
             TargetFilePath = dest;
             BackupType = type;

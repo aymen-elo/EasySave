@@ -49,8 +49,6 @@ namespace EasySaveGUI.ViewModel
                     // Construct a new Job with the available data in the json and append it to the Jobs List
                     var job = new Job(jobInfo.Name, jobInfo.BackupType, jobInfo.State, jobInfo.SourceFilePath, jobInfo.TargetFilePath, 
                         jobInfo.TotalFilesToCopy, jobInfo.NbFilesLeftToDo, jobInfo.TotalFilesSize);
-                    job.TotalFilesToCopy = 100;
-                    job.NbSavedFiles = 50;
                     
                     _jobs.Add(job);
                 }
@@ -94,26 +92,31 @@ namespace EasySaveGUI.ViewModel
 
         private void LaunchJob(Job job, BackupProcess backupProcess)
         {
-            if (job.State == JobState.Finished || job.State == JobState.Pending)
+            if (job.State == JobState.Paused)
+            {
+                ResumeJob(job);
+                return;
+            }
+            
+            if (job.State == JobState.Finished)
             {
                 job.Progression = 0;
-                job.State = JobState.Active;
+                job.NbSavedFiles = 0;
                 job.NbFilesLeftToDo = job.TotalFilesToCopy;
-                
-                backupProcess.StartBackup();
             }
+            
+            job.State = JobState.Active;
             
             Logger.LogAction(job.Name, job.SourceFilePath, job.TargetFilePath, 0, TimeSpan.Zero);
-            
+            Logger.LogState(job);
             _copyController.CopyDirectory(job);
-            
-            if (job.Progression >= 100)
-            {
-                job.State = JobState.Finished;
-            }
-
         }
-        
+
+        private void ResumeJob(Job job)
+        {
+            throw new NotImplementedException();
+        }
+
         public async void LaunchJobAsync(Job job, BackupProcess backupProcess)
         {
             await Task.Run(() => LaunchJob(job, backupProcess));

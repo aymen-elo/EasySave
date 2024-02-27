@@ -42,7 +42,7 @@
             <TextBox x:Name="txtDestinationPath" Margin="0,0,5,10" Width="500" Text="{Binding DestinationPath}"/>
             <Button Content="..." Command="{Binding OpenDestinationCommand}" CommandParameter="{Binding ElementName=txtDestinationPath}" Margin="0,0,5,10" Width="50"/>
         </StackPanel>
-        
+
         <TextBlock Text="{DynamicResource StrBackupTypeLabel}" Grid.Row="7" Margin="0,0,0,5"/>
         <ComboBox x:Name="cmbBackupType" Grid.Row="8" Margin="0,0,0,10">
             <ComboBoxItem Content="{DynamicResource StrFullBackupType}" />
