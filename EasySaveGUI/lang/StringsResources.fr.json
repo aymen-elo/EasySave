@@ -18,6 +18,7 @@
   "StrFullBackupType": "Complète",
   "StrDifferentialBackupType": "Différentielle",
   "StrAddButtonLabel": "Ajouter",
+  "StrEditButtonLabel" : "Modifier",
   "StrLogFormat":"Choisissez un format pour logguer",
   "StrDgClName": "Nom",
   "StrDgClBackupType": "Type de sauvegarde",

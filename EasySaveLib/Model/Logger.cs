@@ -163,6 +163,12 @@ namespace EasySaveLib.Model
                 job.TotalFilesSize, (job.TotalFilesToCopy - job.NbSavedFiles), ((job.NbSavedFiles * 100) / job.TotalFilesToCopy), job.Name);
         }
         
+        public void LogState(Job job, string newName)
+        {
+            LogState(job.Name, job.BackupType, job.SourceFilePath, job.TargetFilePath, job.State, job.TotalFilesToCopy,
+                job.TotalFilesSize, (job.TotalFilesToCopy - job.NbSavedFiles), ((job.NbSavedFiles * 100) / job.TotalFilesToCopy), newName);
+        }
+        
         private JObject CreateJobObject(string name, BackupType type, string sourcePath, string targetPath, JobState state, long nbFileToCopy,
             long fileSize, long nbFileLeftToDo, int progression)
         {

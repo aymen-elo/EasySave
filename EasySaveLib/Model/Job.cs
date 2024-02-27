@@ -24,10 +24,51 @@ namespace EasySaveLib.Model
         }
         
         private int Id { get; set; }
-        public string Name { get; set; }
-        public BackupType BackupType { get; set; }
-        public string SourceFilePath { get; set; }
-        public string TargetFilePath { get; set; }
+
+        public string Name
+        {
+            get => _name;
+            set
+            {
+                if (value == _name) return;
+                _name = value;
+                OnPropertyChanged(nameof(Name));
+            }
+        }
+
+        public BackupType BackupType
+        {
+            get => _backupType;
+            set
+            {
+                if (value == _backupType) return;
+                _backupType = value;
+                OnPropertyChanged(nameof(BackupType));
+            }
+        }
+
+        public string SourceFilePath
+        {
+            get => _sourceFilePath;
+            set
+            {
+                if (value == _sourceFilePath) return;
+                _sourceFilePath = value;
+                OnPropertyChanged(nameof(SourceFilePath));
+            }
+        }
+
+        public string TargetFilePath
+        {
+            get => _targetFilePath;
+            set
+            {
+                if (value == _targetFilePath) return;
+                _targetFilePath = value;
+                OnPropertyChanged(nameof(TargetFilePath));
+            }
+        }
+
         private int Position { get; set; }
         private JobState _state { get; set; }
 
@@ -37,12 +78,23 @@ namespace EasySaveLib.Model
             set
             {
                 _state = value;
+                OnPropertyChanged(nameof(State));
                 OnPropertyChanged("State");
                 OnPropertyChanged("CanRunJob");
             }
         }
-    
-        public long TotalFilesSize { get; set; }
+
+        public long TotalFilesSize
+        {
+            get => _totalFilesSize;
+            set
+            {
+                if (value == _totalFilesSize) return;
+                _totalFilesSize = value;
+                OnPropertyChanged(nameof(TotalFilesSize));
+            }
+        }
+
         private int _TotalFilesToCopy;
         public int TotalFilesToCopy
         {
@@ -50,6 +102,8 @@ namespace EasySaveLib.Model
             set
             {
                 _TotalFilesToCopy = value;
+                OnPropertyChanged(nameof(TotalFilesToCopy));
+                OnPropertyChanged(nameof(Percentage));
                 OnPropertyChanged("TotalFilesToCopy");
                 OnPropertyChanged("Percentage");
             }
@@ -62,6 +116,16 @@ namespace EasySaveLib.Model
         }
 
         public int _NbSavedFiles;
+        private string _name;
+        private BackupType _backupType;
+        private string _sourceFilePath;
+        private string _targetFilePath;
+        private long _totalFilesSize;
+        private long _nbFilesLeftToDo;
+        private TimeSpan _duration;
+        private DateTime _startTime;
+        private DateTime _endTime;
+        private int _progression;
 
         public int NbSavedFiles
         {
@@ -69,16 +133,67 @@ namespace EasySaveLib.Model
             set
             {
                 _NbSavedFiles = value;
+                OnPropertyChanged(nameof(NbSavedFiles));
+                OnPropertyChanged(nameof(Percentage));
                 OnPropertyChanged("NbSavedFiles");
                 OnPropertyChanged("Percentage");
             }
         }
 
-        public long NbFilesLeftToDo { get; set; }
-        public TimeSpan Duration { get; set; }
-        public DateTime StartTime { get; set; }
-        public DateTime EndTime { get; set; }
-        public int Progression { get; set; }
+        public long NbFilesLeftToDo
+        {
+            get => _nbFilesLeftToDo;
+            set
+            {
+                if (value == _nbFilesLeftToDo) return;
+                _nbFilesLeftToDo = value;
+                OnPropertyChanged(nameof(NbFilesLeftToDo));
+            }
+        }
+
+        public TimeSpan Duration
+        {
+            get => _duration;
+            set
+            {
+                if (value.Equals(_duration)) return;
+                _duration = value;
+                OnPropertyChanged(nameof(Duration));
+            }
+        }
+
+        public DateTime StartTime
+        {
+            get => _startTime;
+            set
+            {
+                if (value.Equals(_startTime)) return;
+                _startTime = value;
+                OnPropertyChanged(nameof(StartTime));
+            }
+        }
+
+        public DateTime EndTime
+        {
+            get => _endTime;
+            set
+            {
+                if (value.Equals(_endTime)) return;
+                _endTime = value;
+                OnPropertyChanged(nameof(EndTime));
+            }
+        }
+
+        public int Progression
+        {
+            get => _progression;
+            set
+            {
+                if (value == _progression) return;
+                _progression = value;
+                OnPropertyChanged(nameof(Progression));
+            }
+        }
 
         public double Percentage
         {

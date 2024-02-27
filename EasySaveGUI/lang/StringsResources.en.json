@@ -18,6 +18,7 @@
   "StrFullBackupType": "Full",
   "StrDifferentialBackupType": "Differential",
   "StrAddButtonLabel": "Save",
+  "StrEditButtonLabel" : "Edit",
   "StrLogFormat": "Choose a log format",
   "StrMainLanguage": "Language",
   "StrDgClName": "Name",
