@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using EasySaveLib.Model;
 
-namespace RemoteInterface
+namespace EasySaveRemote
 {
     public partial class FormatLog : Window
     {

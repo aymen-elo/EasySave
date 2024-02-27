@@ -114,7 +114,7 @@
             <TextBlock x:Name="tboxEvent" HorizontalAlignment="Stretch" Height="60" Margin="30,0,30,20" TextWrapping="Wrap"
                        Text="Ici event " VerticalAlignment="Bottom" Width="Auto" Background="White"
                        ScrollViewer.VerticalScrollBarVisibility="Visible" />
-            <Label x:Name="lblVersion" Content="Version 2.0" HorizontalAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Bottom" FontSize="10"/>
+            <Label x:Name="lblVersion" Content="Version 3.0" HorizontalAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Bottom" FontSize="10"/>
         </Grid>
 
 

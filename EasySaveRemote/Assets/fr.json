@@ -1,0 +1,90 @@
+﻿{
+  "Menu" : {
+    "PrincipalMenu": "Menu principal",
+    "Option": "Option",
+    "DisplayJobs": "Afficher les sauvegardes",
+    "BackupManage": "Menu de gestion des sauvegardes",
+    "DoBackup": "Effectuer des sauvegardes",
+    "Quit": "Quitter",
+    "AddBackupJob": "Ajouter un travail de sauvegarde",
+    "EditBackupJob": "Modifier un travail de sauvegarde",
+    "DeleteBackupJob": "Supprimer un travail de sauvegarde",
+    "ReturnToMainMenu": "Retour au Menu Principal",
+    "ChooseOption": "Choisir une option: ",
+    "LogFormatMenu" : "Log format Menu",
+    "ChangeLanguage": "Changer de langue",
+    "ChangeLogFormat": "Changer le format de log",
+    "OptionsMenu": "Menu des Options"
+
+
+
+
+  },
+
+  "Messages": {
+    "fileSaved": "Le fichier {0} a été sauvegardé.",
+    "backupDeleted": "Le travail de sauvegarde a été supprimé avec succès.",
+    "backupNotFound": "Le travail de sauvegarde spécifié n'existe pas.",
+    "FileSaved": "Le fichier {0} a été sauvegardé.",
+    "BackupDeleted": "Le travail de sauvegarde a été supprimé avec succès.",
+    "InvalidChoice": "Choix invalide. Veuillez réessayer.",
+    "InvalidTypeChoice": "Choix de type invalide. Veuillez saisir '1' pour complet ou '2' pour différentiel.",
+    "InvalidBackupDirectory": "Erreur : Veuillez écrire un chemin de sauvegarde correct.",
+    "BackupPathNotFound": "Erreur : Veuillez écrire un chemin de sauvegarde existant.",
+    "EnterBackupName": "Nom de sauvegarde : ",
+    "EnterSourceDirectory": "Répertoire source : ",
+    "EnterTargetDirectory": "Répertoire cible : ",
+    "ChooseBackupType": "Type de sauvegarde :",
+    "CompleteBackup": "Complet",
+    "DifferentialBackup": "Différentiel",
+    "ContinuePrompt": "Voulez-vous continuer ? (o/n): ",
+    "InvalidResponse": "Réponse invalide. Veuillez saisir 'o' pour Oui ou 'n' pour Non.",
+    "Choice": "Choix : ",
+    "ListBackupJobs" : "Liste des travaux de sauvegarde :",
+    "JobDetails": "Nom : {travail.BackupName}, Répertoire source : {travail.Source}, Répertoire cible : {travail.Destination}, Type : {travail.BackupType}",
+    "EnterJobNameToDelete": "Nom du travail de sauvegarde à supprimer : ",
+    "DestinationDirectory": "Répertoire Cible : ",
+    "SourceDirectory": "Répertoire Source : ",
+    "InvalidBackupNumber": "Erreur : Veuillez écrire l'ID de la sauvegarde",
+    "InvalidBackupName": "Erreur : Veuillez écrire un nom de sauvegarde composé de lettres et/ou de chiffre",
+    "EmptyJobsList" : "Aucun travail de sauvegarde disponible",
+    "LanguageUpdated": "La langue à été correctement mis à jour.",
+    "InvalidLanguage": "Choix de langue invalide.",
+    "ChooseLanguage":"Veuillez choisir une langue (en/fr): ",
+    "Error": "$\"Une erreur s'est produite :",
+    "NoJobSelected": "Veuillez sélécitonner une valeur valide.",
+    "JobDeleting": "Vous allez supprimer une sauvegarde.",
+    "NojobDeleted": "La sauvegarde n'a pas été supprimée.",
+    "LogFormatChangedJson": "Le format a changé en json",
+    "LogFormatChangedXml": "Le format a changé en Xml",
+    "SelectLanguage": "Séléctionner une langue",
+
+
+
+    "LaunchJobSpecific": "  X.   Lancer le travail numéro X",
+    "LaunchAllJobs": "  A.   Lancer tous les travaux existants",
+    "LaunchJobsRange": " P-D.  Lancer tous les travaux de P à D",
+    "LaunchJobsInterval": "X,Y,T. Lancer les travaux X, Y et T uniquement"
+
+  },
+  
+  "FileCopier": {
+    "WarningMessage": "Attention, les fichiers qui diffèrent dans la destination vont être supprimés.",
+    "InvalidResponseFileCopier": "Réponse invalide. Veuillez saisir 'y' pour Oui ou 'n' pour Non.",
+    "Continue": "Voulez-vous continuer ? (y/n): ",
+    "AlreadyExist": "Existe déjà"
+  },
+
+"JobsController": {
+    "AddJob": "Ajouter un travail",
+    "EditJob": "Modifier un travail",
+    "DeleteJob": "Supprimer un travail",
+    "JobAddedSuccessfully": "Le travail a été ajouté avec succès.",
+    "JobEditedSuccessfully": "Le travail a été modifié avec succès.",
+    "JobDeletedSuccessfully": "Le travail de sauvegarde a été supprimé avec succès.",
+    "JobNotFound": "Le travail de sauvegarde spécifié n'existe pas.",
+    "ReturnToMenu": "\nAppuyer sur une touche pour revenir au menu de sauvegarde...",
+    "BackupNameToDelete": "Nom du travail de sauvegarde à supprimer : ",
+    "BackupFull": "Vous avez déjà atteint le nombre maximal de travaux de sauvegarde !"
+}
+}

@@ -1,16 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Sockets;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
-
 using System.Windows.Controls;
 using System.Windows.Media;
+using EasySave.Controller;
 using EasySaveGUI;
 using EasySaveGUI.Controller;
 using EasySaveGUI.Model;
 using EasySaveGUI.ViewModel;
+using Newtonsoft.Json;
 using Job = EasySaveLib.Model.Job;
 using Logger = EasySaveLib.Model.Logger;
 using ConfigManager = EasySaveLib.Model.ConfigManager;
@@ -31,7 +38,10 @@ namespace EasySaveGUI
         public ConfigManager _configManager;
         private MainViewModel _mainViewModel;
         public static bool IsPaused;
-        public SolidColorBrush backgroundColor = new SolidColorBrush(Color.FromArgb(255, (byte)233, (byte)238, (byte)243));
+
+        public SolidColorBrush backgroundColor =
+            new SolidColorBrush(Color.FromArgb(255, (byte)233, (byte)238, (byte)243));
+
         public MainWindow()
         {
             _configManager = new ConfigManager();
@@ -59,20 +69,18 @@ namespace EasySaveGUI
                 j.NbSavedFiles = 100;
                 j.TotalFilesToCopy = 100;
             }
-            
-            
 
-            
+
             FormatLog optionWindow = new FormatLog();
             optionWindow.ShowDialog();
         }
-        
-        
+
+
         /* Language Management */
-        
+
         //private void menuItemLang_Click(object sender, RoutedEventArgs e) { }
-        
-        
+
+
         /* ******************* */
 
         private void btnRunJob_Click(object sender, RoutedEventArgs e)
@@ -83,7 +91,7 @@ namespace EasySaveGUI
                 int index = dgJobList.Items.IndexOf(selectedItem);
                 selectedIndexes.Add(index);
                 Job selectedJob = (Job)dgJobList.Items[index];
-                
+
                 BackupProcess backupProcess = new BackupProcess(selectedJob);
                 _jobsViewModel.LaunchJobAsync(selectedJob, backupProcess);
             }
@@ -125,6 +133,7 @@ namespace EasySaveGUI
 
         private void btnLogs_Click(object sender, RoutedEventArgs e)
         {
+            server();
         }
 
         private void dgJobList_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -142,27 +151,85 @@ namespace EasySaveGUI
             }
         }
 
-        public void cipherCryptoSoft(string sourcePath, string targetPath, string key)
+        private async void server()
         {
-            string arguments = sourcePath + " " + targetPath + " " + key;
-            Process process = new Process()
+            try
             {
-                StartInfo = new ProcessStartInfo()
+            IPEndPoint ipEndPoint = new(IPAddress.Parse("127.0.0.1"), 13);
+            using Socket listener = new(
+                ipEndPoint.AddressFamily,
+                SocketType.Stream,
+                ProtocolType.Tcp);
+
+            List<string> prefixes = new List<string>
+                { "<|GAJ|>", "<|RJ|>", "<|EJ|>", "<|DJ|>", "<|NJ|>", "<|PP|>", "<|Stop|>", "<|MO|>" };
+
+
+            listener.Bind(ipEndPoint);
+            listener.Listen(100);
+
+            var handler = await listener.AcceptAsync();
+            var buffer = new byte[4_096];
+
+            while (true)
+            {
+                // Receive message.
+                var received = await handler.ReceiveAsync(buffer, SocketFlags.None);
+                var response = Encoding.UTF8.GetString(buffer, 0, received);
+
+                var eom = prefixes.FirstOrDefault(prefix => response.StartsWith(prefix));
+                switch (eom)
                 {
-                    FileName = "../../../../CryptoSoft/bin/Debug/net5.0/CryptoSoft.exe",
-                    Arguments = arguments,
-                    UseShellExecute = false,
-                    RedirectStandardOutput = true,
-                    CreateNoWindow = true,
+                    case var str when str == "<|GAJ|>":
+                        /* Get All Jobs */
+                        string statePath = @"C:\Prosoft\EasySave\Logs\state.json";
+                        string stateContent = File.ReadAllText(statePath);
+                        stateContent = "<|GAJ|>" + stateContent;
+
+                        var echoBytes = Encoding.UTF8.GetBytes(stateContent);
+                        await handler.SendAsync(echoBytes, 0);
+                        Console.WriteLine(stateContent);
+                        break;
+                    
+                    case var str when str == "<|RJ|>":
+                        /* Run Jobs */
+                        var responseNoPrefix = response.Replace("<|RJ|>", "");
+                        var jobs = JsonConvert.DeserializeObject<ObservableCollection<Job>>(responseNoPrefix);
+                        foreach (var j in jobs)
+                        {
+                            
+                        }
+                        
+                        break;
+                    case var str when str == "<|EJ|>":
+                        /* Edit Jobs */
+                        break;
+                    case var str when str == "<|DJ|>":
+                        /* Delete Jobs */
+                        break;
+                    case var str when str == "<|NJ|>":
+                        /* New Job */
+                        break;
+                    case var str when str == "<|PP|>":
+                        /* Play/Pause a Job */
+                        break;
+                    case var str when str == "<|Stop|>":
+                        /* Stop Running Jobs */
+                        break;
+                    case var str when str == "<|MO|>":
+                        /* Modify Option */
+                        break;
+                    default:
+                        /* Type not recognized */
+                        break;
                 }
-            };
-            process.Start();
-            while (!process.StandardOutput.EndOfStream)
-            {
-                string line = process.StandardOutput.ReadLine();
-                Console.WriteLine(line);
             }
-            process.Close();
+            }
+            catch (SocketException e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
     }
 }

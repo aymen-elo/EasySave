@@ -1,4 +1,4 @@
-﻿<Window x:Class="RemoteInterface.FormatLog"
+﻿<Window x:Class="EasySaveRemote.FormatLog"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:materialDesign="http://materialdesignxaml.net/winfx/xaml/themes"

@@ -1,82 +1,75 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
+using System.Diagnostics;
+using System.Globalization;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+
 using System.Windows.Controls;
-using EasySaveLib.Model;
+using System.Windows.Media;
+using EasySaveRemote.Model;
+using EasySaveRemote.Packets;
+using EasySaveRemote.ViewModel;
+using Job = EasySaveLib.Model.Job;
+using Logger = EasySaveLib.Model.Logger;
+using ConfigManager = EasySaveLib.Model.ConfigManager;
 
-// using EasySave.Model.Remote;
-// using EasySave_RemoteClient.src;
-
-namespace RemoteInterface
+namespace EasySaveRemote
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
-        private int progress;
+        private readonly JobsViewModel _jobsViewModel;
+        private string _currentLanguageCode;
         private ResourceDictionary _languageDictionary;
-        
-        private async Task StartAsync()
-        {
-            
-        }
-        
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            clientSide();
-        }
-
-        private async Task clientSide()
-        {
-            Server server = new Server(); 
-            server.StartAsync(progress);
-            
-            Client client = new Client();
-            await client.ConnectAsync();
-        }
-        
+        private AddJobWindow addJobWindow;
+        public LangueSettingsViewModels _language = new();
+        private Logger _logger;
+        public ConfigManager _configManager;
+        private MainViewModel _mainViewModel;
+        public SolidColorBrush backgroundColor = new SolidColorBrush(Color.FromArgb(255, (byte)233, (byte)238, (byte)243));
+        private SendMessage _sendMessageInstance;
         
         public MainWindow()
         {
+            _configManager = new ConfigManager();
             InitializeComponent();
             btnRunJob.IsEnabled = false;
             btnRemoveJob.IsEnabled = false;
+            _logger = new Logger();
+            _jobsViewModel = new JobsViewModel(_logger);
+            _mainViewModel = new MainViewModel(_jobsViewModel);
+            string logsDirectoryPath = @"C:\Prosoft\EasySave\Logs";
             _languageDictionary = new ResourceDictionary();
+            _sendMessageInstance = new SendMessage();
+            DataContext = this;
+
         }
+        
 
         private void btnNewJob_Click(object sender, RoutedEventArgs e)
         {
-            AddJobWindow addJobWindow = new AddJobWindow();
+            AddJobWindow addJobWindow = new AddJobWindow(_jobsViewModel);
             addJobWindow.ShowDialog();
         }
 
         private void btnOption_Click(object sender, RoutedEventArgs e)
         {
-            // foreach (var j in _jobsViewModel.Jobs)
-            // {
-            //     j.NbSavedFiles = 100;
-            //     j.TotalFilesToCopy = 100;
-            // }
+            foreach (var j in _jobsViewModel.Jobs)
+            {
+                j.NbSavedFiles = 100;
+                j.TotalFilesToCopy = 100;
+            }
             
             FormatLog optionWindow = new FormatLog();
             optionWindow.ShowDialog();
         }
-        
-        
-        /* Language Management */
-        
-        //private void menuItemLang_Click(object sender, RoutedEventArgs e) { }
-        
-        
-        /* ******************* */
 
         private void btnRunJob_Click(object sender, RoutedEventArgs e)
         {
@@ -85,7 +78,6 @@ namespace RemoteInterface
 
         private void btnRemoveJob_Click(object sender, RoutedEventArgs e)
         {
-            
         }
 
         private void btnEditJob_Click(object sender, RoutedEventArgs e)
@@ -94,7 +86,8 @@ namespace RemoteInterface
 
         private void btnPlayPause_Click(object sender, RoutedEventArgs e)
         {
-            
+            SendMessage.SendMessageTo("127.0.0.1", 13, "hello mi friend", MessageType.GAJ);
+             
         }
 
         private void btnStopJob_Click(object sender, RoutedEventArgs e)
@@ -119,5 +112,6 @@ namespace RemoteInterface
                 btnRemoveJob.IsEnabled = false;
             }
         }
+        
     }
 }
