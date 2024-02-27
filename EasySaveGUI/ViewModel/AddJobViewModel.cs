@@ -5,10 +5,8 @@ using System.Windows.Forms;
 
 namespace EasySaveGUI.ViewModel
 {
-    public class AddJobViewModel : INotifyPropertyChanged
+    public class AddJobViewModel : ViewModelBase
     {
-        public event PropertyChangedEventHandler PropertyChanged;
-
         private string _sourcePath;
         public string SourcePath
         {
@@ -62,11 +60,6 @@ namespace EasySaveGUI.ViewModel
                     DestinationPath = dialog.SelectedPath;
                 }
             }
-        }
-
-        protected virtual void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

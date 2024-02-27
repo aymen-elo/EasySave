@@ -55,22 +55,6 @@ namespace EasySaveGUI.ViewModel
             }
         }
 
-        // Editing a job that exists -> used in another method EditJob(logger, translation)
-        public void EditJob(int index, string name, string source, string destination, BackupType backupType)
-        {
-            Job job = _jobs[index];
-            if (job != null)
-            {
-                job.SourceFilePath = source;
-                job.TargetFilePath = destination;
-                job.BackupType = backupType;
-                
-                UpdateJobData(name, job);                
-                // Renaming for the current job object (LogState Constaints)
-                job.Name = name;
-            }
-        }
-
         /* Job Deletion by Name method */
         public void DeleteJob(string name)
         {
