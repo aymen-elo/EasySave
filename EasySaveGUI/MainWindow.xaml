@@ -14,7 +14,7 @@
         <Grid Background="#FFE9EEF3">
             <DataGrid x:Name="dgJobList" ItemsSource="{Binding JobsViewModel.Jobs}" AutoGenerateColumns="False"
                       Margin="38,142,38,142" SelectionChanged="dgJobList_SelectionChanged" IsReadOnly="True"
-                      CanUserReorderColumns="False">
+                      CanUserReorderColumns="False" SelectedIndex="0">
                 <DataGrid.Columns>
                     
                     <DataGridTemplateColumn>
@@ -136,7 +136,9 @@
             <Button x:Name="btnRemoveJob" Content="{DynamicResource StrButtonRemoveJob}" Height="42" Width="90"
                     Click="btnRemoveJob_Click" />
             <Button x:Name="btnEditJob" Content="{DynamicResource StrButtonEditJob}" Height="42" Width="90"
-                    Click="btnEditJob_Click" />
+                    Command="{Binding EditJobShowCommand}" 
+                    CommandParameter="{Binding SelectedItem, ElementName=dgJobList}" />
+
             <Button x:Name="btnPlayPause" Content="{DynamicResource StrButtonPlayPause}" Height="42" Width="90"
                     Click="btnPlayPause_Click" />
             <Button x:Name="btnStopJob" Content="{DynamicResource StrButtonStopJob}" Height="42" Width="90"
