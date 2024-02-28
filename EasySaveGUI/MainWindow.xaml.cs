@@ -54,13 +54,6 @@ namespace EasySaveGUI
 
         private void btnOption_Click(object sender, RoutedEventArgs e)
         {
-            foreach (var j in _jobsViewModel.Jobs)
-            {
-                j.NbSavedFiles = 100;
-                j.TotalFilesToCopy = 100;
-            }
-            
-        
             Option optionWindow = new Option();
             optionWindow.ShowDialog();
         }

@@ -6,11 +6,13 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using EasySaveLib.Model;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using EasySaveGUI.Model;
 using EasySaveGUI.Controller;
 using EasySaveLib.Model;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace EasySaveGUI.ViewModel
 {
@@ -38,9 +40,19 @@ namespace EasySaveGUI.ViewModel
             var stateFile = Logger.LogsDirectoryPath + @"\state.json";
             if (File.Exists(stateFile) & new FileInfo(stateFile).Length != 0)
             {
-                string jsonContent = File.ReadAllText(stateFile);
+                var jsonContent = File.ReadAllText(stateFile);
                 var content = JsonConvert.DeserializeObject<ObservableCollection<Job>>(jsonContent);
 
+                // Regex matching a Retired Job element of the state.json
+                var regex = new Regex(@"\{[^}]*""State"":\s*""Retired""[^}]*\},?", RegexOptions.Singleline);
+                jsonContent = regex.Replace(jsonContent, "");
+                
+                var jsonArray = JArray.Parse(jsonContent);
+                var nullItems = jsonArray.Where(item => item.Type == JTokenType.Null).ToList();
+                
+                jsonContent = jsonArray.ToString(Formatting.Indented);
+                File.WriteAllText(stateFile, jsonContent);
+                
                 foreach (var jobInfo in content)
                 {
                     // When the job is not taken account of -> we ignore it because it's not a Job anymore 
