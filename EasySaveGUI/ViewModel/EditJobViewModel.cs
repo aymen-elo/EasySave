@@ -40,7 +40,7 @@ namespace EasySaveGUI.ViewModel
             var newName = JobName;
             try
             {
-                if (!File.Exists(JobSource) || !Directory.Exists(Path.GetDirectoryName(JobTarget)))
+                if (!Directory.Exists(JobSource) || !Directory.Exists(JobTarget))
                 {
                     throw new FileNotFoundException("Source file or target file doesn't exist.");
                 }
