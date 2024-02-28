@@ -11,7 +11,12 @@
         <model:LangueSettingsViewModels x:Key="LangueSettingsViewModelInstance" />
     </Window.Resources>
     <Grid>
+       
         <Grid Background="#FFE9EEF3">
+            <!-- Titre EasySave en haut à droite -->
+            <StackPanel HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,40,120,0">
+                <TextBlock Text="EasySave" FontSize="45" FontWeight="Bold" Foreground="Black"/>
+            </StackPanel>
             <DataGrid x:Name="dgJobList" ItemsSource="{Binding JobsViewModel.Jobs}" AutoGenerateColumns="False"
                       Margin="38,142,38,142" SelectionChanged="dgJobList_SelectionChanged" IsReadOnly="True"
                       CanUserReorderColumns="False" SelectedIndex="0">
