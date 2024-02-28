@@ -11,7 +11,8 @@ namespace EasySaveGUI.Packets
 {
     public class ExecuteCommand
     {
-        private JobsViewModel _jobsViewModel;
+        private static Logger _logger = new Logger();
+        private JobsViewModel _jobsViewModel = new JobsViewModel(_logger);
         private FormatLog formatLog;
 
         public void NJExecute(string response)
@@ -26,7 +27,7 @@ namespace EasySaveGUI.Packets
             _jobsViewModel.AddJob(jobName, sourcePath, destinationPath, typeSave);
         }
         
-        public void DJExecute(string response)
+        public void EJExecute(string response)
         {
                         
             List<Dictionary<string, object>>? dataList = JsonConvert.DeserializeObject<List<Dictionary<string, object>>>(response);
@@ -54,14 +55,14 @@ namespace EasySaveGUI.Packets
             // _jobsViewModel.EditJob(job);
         }
 
-        public void RJExecute(string response)
+        public async void RJExecute(string response)
         {
             var jobs = JsonConvert.DeserializeObject<ObservableCollection<Job>>(response);
                         
             foreach (var j in jobs)
             {
                 BackupProcess backupProcess = new BackupProcess(j);
-                _jobsViewModel.LaunchJobAsync(j, backupProcess);
+                await _jobsViewModel.LaunchJobAsync(j, backupProcess);
             }
         }
 

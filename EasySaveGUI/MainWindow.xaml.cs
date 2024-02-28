@@ -220,13 +220,14 @@ namespace EasySaveGUI
                             /* Run Jobs */
                             responseNoPrefix = response.Replace("<|RJ|>", "");
                             executeCommand.RJExecute(responseNoPrefix);
+                            await handler.ReceiveAsync(buffer, SocketFlags.None);
                             break;
 
 
                         case var str when str == "<|EJ|>":
                             /* Edit Jobs */
                             responseNoPrefix = response.Replace("<|EJ|>", "");
-                            executeCommand.DJExecute(responseNoPrefix);
+                            executeCommand.EJExecute(responseNoPrefix);
                             break;
 
 

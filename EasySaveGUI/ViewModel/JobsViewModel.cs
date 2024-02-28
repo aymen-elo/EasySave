@@ -114,7 +114,7 @@ namespace EasySaveGUI.ViewModel
 
         }
         
-        public async void LaunchJobAsync(Job job, BackupProcess backupProcess)
+        public async Task LaunchJobAsync(Job job, BackupProcess backupProcess)
         {
             await Task.Run(() => LaunchJob(job, backupProcess));
         }

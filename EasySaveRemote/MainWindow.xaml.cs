@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
@@ -13,6 +14,7 @@ using System.Windows.Media;
 using EasySaveRemote.Model;
 using EasySaveRemote.Packets;
 using EasySaveRemote.ViewModel;
+using Newtonsoft.Json;
 using Job = EasySaveLib.Model.Job;
 using Logger = EasySaveLib.Model.Logger;
 using ConfigManager = EasySaveLib.Model.ConfigManager;
@@ -64,8 +66,8 @@ namespace EasySaveRemote
             _languageDictionary = new ResourceDictionary();
             _sendMessageInstance = new SendMessage();
             DataContext = this;
-
-
+            SendMessage.JobsUpdated += JobsUpdatedHandler;
+            
         }
 
         public async void firstConnection(string ipAddress, int port)
@@ -90,6 +92,11 @@ namespace EasySaveRemote
             SendMessage.SendMessageTo(ipAddress, port,"", MessageType.GAJ, this);
         }
 
+        private void JobsUpdatedHandler(ObservableCollection<Job> jobs)
+        {
+            // Mettez à jour la DataGrid avec la nouvelle collection de jobs
+            dgJobList.ItemsSource = jobs;
+        }
 
         private void btnNewJob_Click(object sender, RoutedEventArgs e)
         {
@@ -106,7 +113,14 @@ namespace EasySaveRemote
         private void btnRunJob_Click(object sender, RoutedEventArgs e)
         {
             //TODO : Get selected job list -> message
-            SendMessage.SendMessageTo(ipAddress, port,"", MessageType.RJ);
+            List<Job> jobList = new List<Job>();
+            foreach (Job j in dgJobList.SelectedItems)
+            {
+                jobList.Add(j);
+            }
+            string jobListJson = JsonConvert.SerializeObject(jobList);
+            
+            SendMessage.SendMessageTo(ipAddress, port,jobListJson, MessageType.RJ, this);
         }
 
         private void btnRemoveJob_Click(object sender, RoutedEventArgs e)

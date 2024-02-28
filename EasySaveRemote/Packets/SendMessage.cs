@@ -35,9 +35,15 @@ namespace EasySaveRemote.Packets
         private static FormatLog _formatLog = new FormatLog();
         
         private static ObservableCollection<Job> _jobs = new ObservableCollection<Job>();
-
-        public ObservableCollection<Job> Jobs => _jobs;
-
+        public static ObservableCollection<Job> Jobs => _jobs;
+        public static event Action<ObservableCollection<Job>> JobsUpdated;
+        
+        private static void AddJob(Job job)
+        {
+            _jobs.Add(job);
+            JobsUpdated?.Invoke(_jobs);
+        }
+        
         public static async void SendMessageTo(string ipAddress, int port, string message, MessageType messageType, MainWindow _mainWindow = null)
         {
             try
@@ -68,11 +74,10 @@ namespace EasySaveRemote.Packets
 
                             foreach (var j in content)
                             {
-                                if (j.State == (JobState)JobState.Retired) { continue; }
+                                if (j.State == JobState.Retired) { continue; }
                                 var job = new Job(j.Name, j.BackupType, j.State, j.SourceFilePath, j.TargetFilePath, 
                                     j.TotalFilesToCopy, j.NbFilesLeftToDo, j.TotalFilesSize);
-                                
-                                _jobs.Add(job);
+                                    AddJob(job);
                             }
                             
                             /* Send Ack to server */
