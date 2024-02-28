@@ -10,11 +10,6 @@ namespace EasySaveRemote
 {
     public partial class FormatLog : Window
     {
-        private Logger logger = Logger.GetInstance();
-
-        public bool IsJsonSelected { get; private set; }
-        public bool IsXmlSelected { get; private set; }
-        public string prioList { get; private set; }
         public MainWindow _MainWindow { get; set; }
 
 
@@ -22,8 +17,6 @@ namespace EasySaveRemote
         public FormatLog()
         {
             InitializeComponent();
-            
-
         }
 
         public FormatLog(string logFormat, string encryptionKey, string cipherList, string prioList, string bigFileSize, MainWindow mainWindow = null)
@@ -61,7 +54,11 @@ namespace EasySaveRemote
             }
 
             newConf = $"{newConf};{tboxEncryptionKey.Text};{tboxCipherList.Text};{tboxPrioList.Text};{tboxBigFile.Text}";
-            SendMessage.SendMessageTo("127.0.0.1", 13, newConf, MessageType.MO, _MainWindow );
+            SendMessage.SendMessageTo(_MainWindow.ipAddress, _MainWindow.port, newConf, MessageType.MO, _MainWindow );
+            
+            //Refresh Job & Option
+            _MainWindow.refreshJO();
+
             
             this.Close();
         }

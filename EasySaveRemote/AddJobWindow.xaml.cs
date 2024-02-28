@@ -1,6 +1,8 @@
-using System.Windows;
+﻿using System.Windows;
 using EasySaveRemote.ViewModel;
 using EasySaveLib.Model;
+using EasySaveRemote.Packets;
+using Newtonsoft.Json;
 
 namespace EasySaveRemote
 {
@@ -15,12 +17,19 @@ namespace EasySaveRemote
 
         public void btnAdd_Click(object sender, RoutedEventArgs e)
         {
-            string jobName = txtJobName.Text;
-            string sourcePath = txtSourcePath.Text;
-            string destinationPath = txtDestinationPath.Text;
-            string backupType = cmbBackupType.SelectedItem.ToString();
-            BackupType typeSave = (backupType.Contains("Full")) ? BackupType.Full : BackupType.Diff;
-            _jobsViewModel.AddJob( jobName, sourcePath, destinationPath, typeSave);
+            
+            var jobData = new
+            {
+                JobName = txtJobName.Text,
+                SourcePath = txtSourcePath.Text,
+                DestinationPath = txtDestinationPath.Text,
+                BackupType = cmbBackupType.SelectedItem.ToString(),
+                TypeSave = (cmbBackupType.SelectedItem.ToString().Contains("Full")) ? "Full" : "Diff"
+            };
+
+            var jsonData = JsonConvert.SerializeObject(jobData);
+            
+            SendMessage.SendMessageTo("127.0.0.1", 13,jsonData, MessageType.NJ);
             
             this.Close();
         }

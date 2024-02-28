@@ -62,7 +62,6 @@ namespace EasySaveRemote.Packets
                     {
                         case var str when str.StartsWith("<|GAJ|>"):
                             /* Get All Jobs */
-                            Console.WriteLine($"Socket client received acknowledgment: \"{response}\"");
                             var responseNoPrefix = response.Replace("<|GAJ|>", "");
                             var content = JsonConvert.DeserializeObject<ObservableCollection<Job>>(responseNoPrefix);
                             
@@ -114,7 +113,6 @@ namespace EasySaveRemote.Packets
                         case var str when str.StartsWith("<|Opt|>"):
                             /* Received Option */
 
-                            Console.WriteLine($"Socket client received acknowledgment: \"{response}\"");
                             responseNoPrefix = response.Replace("<|Opt|>", "");
                             string[] dataArray = responseNoPrefix.Split(';');
                             

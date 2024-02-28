@@ -1,5 +1,5 @@
 ﻿{
-  "Menu" : {
+  "Menu": {
     "PrincipalMenu": "Main Menu",
     "Option": "Option",
     "DisplayJobs": "Display all Backup Jobs",
@@ -11,12 +11,11 @@
     "DeleteBackupJob": "Delete Backup Job",
     "ReturnToMainMenu": "Return to Main Menu",
     "ChooseOption": "Choose an option: ",
-    "LogFormatMenu" : "Log format Menu",
+    "LogFormatMenu": "Log format Menu",
     "ChangeLanguage": "Change language",
     "ChangeLogFormat": "Change log format",
     "OptionsMenu": "Menu Option"
   },
-
   "Messages": {
     "fileSaved": "The file {0} has been saved.",
     "backupDeleted": "The backup job has been deleted successfully.",
@@ -38,15 +37,15 @@
     "ContinuePrompt": "Do you want to continue? (y/n): ",
     "InvalidResponse": "Invalid response. Please enter 'y' for Yes or 'n' for No.",
     "Choice": "Choice : ",
-    "ListBackupJobs" : "List of backup jobs :",
+    "ListBackupJobs": "List of backup jobs :",
     "JobDetails": "Name: {travail.BackupName}, Source Directory: {travail.Source}, Target Directory: {travail.Destination}, Type: {travail.BackupType}",
     "EnterJobNameToDelete": "Enter the backup job name to delete: ",
     "DestinationDirectory": "Destination directory: ",
     "SourceDirectory": "Source directory: ",
-    "EmptyJobsList" : "There are no backup jobs available",
+    "EmptyJobsList": "There are no backup jobs available",
     "LanguageUpdated": "Language updated successfully.",
     "InvalidLanguage": "Invalid language choice.",
-    "ChooseLanguage":"Please choose a language (en/fr): ",
+    "ChooseLanguage": "Please choose a language (en/fr): ",
     "Error": "$\",An error has occured :",
     "NoJobSelected": "Please, select a valid value.",
     "JobDeleting": "You are about to delete a job.",
@@ -54,25 +53,17 @@
     "LogFormatChangedJson": "Format changed to json",
     "LogFormatChangedXml": "Format changed to Xml",
     "SelectLanguage": "Select a language",
-
-
-
-
-
     "LaunchJobSpecific": "  X.   Launch job number X",
     "LaunchAllJobs": "  A.   Launch all existing jobs",
     "LaunchJobsRange": " P-D.  Launch all jobs from P to D",
     "LaunchJobsInterval": "X,Y,T. Launch jobs X, Y, and T only"
-
   },
-
   "FileCopier": {
     "WarningMessage": "Warning, files that differ in the destination will be deleted.",
     "InvalidResponseFileCopier": "Invalid response. Please enter 'y' for Yes or 'n' for No.",
     "Continue": "Do you want to continue ? (y/n): ",
     "AlreadyExist": "Already Exists"
   },
-  
   "JobsController": {
     "AddJob": "Add Job",
     "EditJob": "Edit Job",

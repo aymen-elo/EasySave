@@ -77,14 +77,17 @@ namespace EasySaveRemote
                 ProtocolType.Tcp);
 
             await client.ConnectAsync(ipEndPoint);
-            
+
+            refreshJO();
+        }
+
+        public void refreshJO()
+        {
             /* Reception 1ere partie data */
             SendMessage.SendMessageTo(ipAddress, port,"", MessageType.GAJ, this);
             
             /* Reception 2e partie data */
             SendMessage.SendMessageTo(ipAddress, port,"", MessageType.GAJ, this);
-
-            
         }
 
 

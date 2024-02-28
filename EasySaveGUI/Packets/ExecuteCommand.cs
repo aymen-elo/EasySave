@@ -16,21 +16,16 @@ namespace EasySaveGUI.Packets
 
         public void NJExecute(string response)
         {
-            List<Dictionary<string, object>>? dataList = JsonConvert.DeserializeObject<List<Dictionary<string, object>>>(response);
+            dynamic jobData = JsonConvert.DeserializeObject(response);
 
-            if (dataList.Count > 0)
-            {
-                Dictionary<string, object> jobData = dataList[0];
-
-                string? name = jobData["Name"]?.ToString();
-                string? sourceFilePath = jobData["SourceFilePath"]?.ToString();
-                string? targetFilePath = jobData["TargetFilePath"]?.ToString();
-                BackupType backupType = (BackupType)Enum.Parse(typeof(BackupType), jobData["BackupType"]?.ToString());
-
-                // Ajouter le nouvel emploi à votre vue modèle de jobs
-                _jobsViewModel.AddJob(name, sourceFilePath, targetFilePath, backupType);
-            }
+            string jobName = jobData.JobName;
+            string sourcePath = jobData.SourcePath;
+            string destinationPath = jobData.DestinationPath;
+            BackupType typeSave = (jobData.TypeSave == "Full") ? BackupType.Full : BackupType.Diff;
+            
+            _jobsViewModel.AddJob(jobName, sourcePath, destinationPath, typeSave);
         }
+        
         public void DJExecute(string response)
         {
                         
