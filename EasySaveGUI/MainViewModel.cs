@@ -12,14 +12,25 @@ namespace EasySaveGUI
     public class MainViewModel : ViewModelBase
     {
         public JobsViewModel JobsViewModel { get; set; }
+        public ICommand AddJobShowCommand { get; set; }
         public ICommand EditJobShowCommand { get; set; }
         
         public MainViewModel(JobsViewModel jobsViewModel)
         {
             JobsViewModel = jobsViewModel;
+            AddJobShowCommand = new RelayCommand(AddJobShow);
+
             EditJobShowCommand = new RelayCommand(EditJobShow);
         }
 
+        private void AddJobShow(object param)
+        {
+            if (param is not ObservableCollection<Job> jobs) return;
+
+            
+            AddJobWindow addJobWindow = new AddJobWindow(jobs);
+            addJobWindow.ShowDialog();
+        }
         private void EditJobShow(object param)
         {
             if (param is not Job job) return;

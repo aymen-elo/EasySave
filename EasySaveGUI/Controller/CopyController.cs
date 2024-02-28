@@ -29,6 +29,8 @@ namespace EasySaveGUI.Controller
         private List<string>? priorityBigFile;
         private List<string>? bigFiles;
         private List<string>? otherFiles;
+        private List<string>? processList;
+
 
         private readonly ProgressBar _progressBar;
         
@@ -57,6 +59,7 @@ namespace EasySaveGUI.Controller
             priorityBigFile = new List<string>();
             bigFiles = new List<string>();
             otherFiles = new List<string>();
+            processList = ConfigManager.GetProcessList()?.Split(',').ToList();
         }
 
         public void CopyDirectory(Job job)
@@ -128,6 +131,7 @@ namespace EasySaveGUI.Controller
             {
                 string fileSize = ConfigManager.GetBigFileSize();
                 long.TryParse(fileSize, out long longFileSize);
+                longFileSize *= 1000;
                 
                 if (priorityExtensionList.Contains(Path.GetExtension(file)) &&
                     (longFileSize <= (new FileInfo(file)).Length))
@@ -352,19 +356,21 @@ namespace EasySaveGUI.Controller
             copyTime.Stop();
             copyTime.Reset();
             
-            List<string> processBlackList = new List<string>();
+            //List<string> processBlackList = new List<string>();
+
             
-            processBlackList.Add("calc");
-            processBlackList.Add("CalculatorApp");
+            //processBlackList.Add("calc");
+            //processBlackList.Add("CalculatorApp");
             
-            ProcessBL.IsProcessRunning(processBlackList);
+            ProcessBL.IsProcessRunning(processList);
             
             while (MainWindow.IsPaused || ProcessBL.IsDetected)
             {  
                 Thread.Sleep(100);
-                ProcessBL.IsProcessRunning(processBlackList);
+                ProcessBL.IsProcessRunning(processList);
             }
         }
+        
         
         private List<List<string>> ChunkFiles(List<string> files, int chunkCount)
         {

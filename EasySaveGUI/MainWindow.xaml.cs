@@ -48,8 +48,7 @@ namespace EasySaveGUI
 
         private void btnNewJob_Click(object sender, RoutedEventArgs e)
         {
-            AddJobWindow addJobWindow = new AddJobWindow(_jobsViewModel);
-            addJobWindow.ShowDialog();
+           
         }
 
         private void btnOption_Click(object sender, RoutedEventArgs e)

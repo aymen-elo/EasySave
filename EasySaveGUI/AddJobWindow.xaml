@@ -29,7 +29,7 @@
         </Grid.RowDefinitions>
 
         <TextBlock Text="{DynamicResource StrJobNameLabel}" Grid.Row="1" Margin="0,0,0,5"/>
-        <TextBox x:Name="txtJobName" Grid.Row="2" Margin="0,0,0,10"/>
+        <TextBox x:Name="txtJobName" Grid.Row="2" Margin="0,0,0,10" Text="{Binding JobName}"/>
 
         <TextBlock Text="{DynamicResource StrSourcePathLabel}" Grid.Row="3" Margin="0,0,0,5"/>
         <StackPanel Orientation="Horizontal" Grid.Row="4">
@@ -49,6 +49,11 @@
             <ComboBoxItem Content="{DynamicResource StrDifferentialBackupType}" />
         </ComboBox>  
 
-        <Button Content="{DynamicResource StrAddButtonLabel}" Click="btnAdd_Click" Grid.Row="9" HorizontalAlignment="Right" VerticalAlignment="Top" Height="42" Width="100"/>
-    </Grid>
+        <Button Content="{DynamicResource StrAddButtonLabel}" 
+                Command="{Binding AddJobCommand}" 
+                Grid.Row="9" 
+                HorizontalAlignment="Right" 
+                VerticalAlignment="Top" 
+                Height="42" 
+                Width="100"/>    </Grid>
 </Window>

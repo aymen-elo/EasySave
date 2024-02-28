@@ -20,6 +20,7 @@ namespace EasySaveLib.Model
                 sw.WriteLine("cipherlist:");
                 sw.WriteLine("prioritylist:");
                 sw.WriteLine("bigfilesize:");
+                sw.WriteLine("processlist:");
             }
         }
         
@@ -90,6 +91,15 @@ namespace EasySaveLib.Model
             while (i < lines.Length && !lines[i].Contains("bigfilesize")) { i++; }
             lines[i] = $"bigfilesize:{bigFileSize}";
             
+            File.WriteAllLines(ConfigFilePath, lines);
+        }
+        
+        public static void SaveProcessList(string processList)
+        {
+            var lines = File.ReadAllLines(ConfigFilePath);
+            var i = 0;
+            while (i < lines.Length && !lines[i].Contains("processlist")) { i++; }
+            lines[i] = $"processlist:{processList}";
             File.WriteAllLines(ConfigFilePath, lines);
         }
         
@@ -171,6 +181,16 @@ namespace EasySaveLib.Model
             var priorityList = lines[i].Split(":")[1];
 
             return priorityList;
+        }
+        
+        public static string? GetProcessList()
+        {
+            if (!File.Exists(ConfigFilePath)) { return null; }
+            var lines = File.ReadAllLines(ConfigFilePath);
+            var i = 0;
+            while (i < lines.Length && !lines[i].Contains("processlist")) { i++; }
+            var processList = lines[i].Split(":")[1];
+            return processList;
         }
 
         /****************************************/
