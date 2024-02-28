@@ -16,9 +16,9 @@ namespace EasySaveGUI
 
         public void btnAdd_Click(object sender, RoutedEventArgs e)
         {
-            string jobName = txtJobName.Text;
-            string sourcePath = txtSourcePath.Text;
-            string destinationPath = txtDestinationPath.Text;
+            string? jobName = txtJobName.Text;
+            string? sourcePath = txtSourcePath.Text;
+            string? destinationPath = txtDestinationPath.Text;
             string backupType = cmbBackupType.SelectedItem.ToString();
             BackupType typeSave = (backupType.Contains("Full")) ? BackupType.Full : BackupType.Diff;
             _jobsViewModel.AddJob( jobName, sourcePath, destinationPath, typeSave);

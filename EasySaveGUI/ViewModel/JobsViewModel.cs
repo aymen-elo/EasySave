@@ -58,7 +58,7 @@ namespace EasySaveGUI.ViewModel
         }
 
         // Editing a job that exists -> used in another method EditJob(logger, translation)
-        public void EditJob(int index, string name, string source, string destination, BackupType backupType)
+        public void EditJob(int index, string? name, string source, string destination, BackupType backupType)
         {
             Job job = _jobs[index];
             if (job != null)
@@ -85,7 +85,7 @@ namespace EasySaveGUI.ViewModel
             }
         }
         
-        public void AddJob(string name, string source, string destination, BackupType backupType)
+        public void AddJob(string? name, string? source, string? destination, BackupType backupType)
         {
             var job = new Job(name, backupType, source, destination);
             UpdateJobData(name, job);
@@ -122,7 +122,7 @@ namespace EasySaveGUI.ViewModel
         
         /* Update Job data in state.json -> Add()/Edit() */
         // TOFIX: Redundancy => Search for job by id instead of name
-        private void UpdateJobData(string newName, Job job)
+        private void UpdateJobData(string? newName, Job job)
         {
             // helpers to calculate the new directory's size info
             DirectoryInfo diSource = new DirectoryInfo(job.SourceFilePath);

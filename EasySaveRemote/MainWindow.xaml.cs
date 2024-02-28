@@ -8,7 +8,6 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-
 using System.Windows.Controls;
 using System.Windows.Media;
 using EasySaveRemote.Model;
@@ -33,9 +32,25 @@ namespace EasySaveRemote
         private Logger _logger;
         public ConfigManager _configManager;
         private MainViewModel _mainViewModel;
-        public SolidColorBrush backgroundColor = new SolidColorBrush(Color.FromArgb(255, (byte)233, (byte)238, (byte)243));
+        public FormatLog _formatLog = new FormatLog();
+
+
+        public SolidColorBrush backgroundColor =
+            new SolidColorBrush(Color.FromArgb(255, (byte)233, (byte)238, (byte)243));
+
         private SendMessage _sendMessageInstance;
+        public string ipAddress = "127.0.0.1";
+        public int port = 13;
         
+        public string language { get; set; }
+        public string logFormat { get; set; }
+        public string encryptionKey { get; set; }
+        public string cipherList { get; set; }
+        public string priorityList { get; set; }
+        public string bigFileSize { get; set; }
+        public Socket client;
+        
+
         public MainWindow()
         {
             _configManager = new ConfigManager();
@@ -50,8 +65,28 @@ namespace EasySaveRemote
             _sendMessageInstance = new SendMessage();
             DataContext = this;
 
+
         }
-        
+
+        public async void firstConnection(string ipAddress, int port)
+        {
+            IPEndPoint ipEndPoint = new(IPAddress.Parse(ipAddress), port);
+            client = new Socket(
+                ipEndPoint.AddressFamily,
+                SocketType.Stream,
+                ProtocolType.Tcp);
+
+            await client.ConnectAsync(ipEndPoint);
+            
+            /* Reception 1ere partie data */
+            SendMessage.SendMessageTo(ipAddress, port,"", MessageType.GAJ, this);
+            
+            /* Reception 2e partie data */
+            SendMessage.SendMessageTo(ipAddress, port,"", MessageType.GAJ, this);
+
+            
+        }
+
 
         private void btnNewJob_Click(object sender, RoutedEventArgs e)
         {
@@ -61,37 +96,36 @@ namespace EasySaveRemote
 
         private void btnOption_Click(object sender, RoutedEventArgs e)
         {
-            foreach (var j in _jobsViewModel.Jobs)
-            {
-                j.NbSavedFiles = 100;
-                j.TotalFilesToCopy = 100;
-            }
-            
-            FormatLog optionWindow = new FormatLog();
+            FormatLog optionWindow = new FormatLog(logFormat, encryptionKey, cipherList, priorityList, bigFileSize, this);
             optionWindow.ShowDialog();
         }
 
         private void btnRunJob_Click(object sender, RoutedEventArgs e)
         {
-            
+            //TODO : Get selected job list -> message
+            SendMessage.SendMessageTo(ipAddress, port,"", MessageType.RJ);
         }
 
         private void btnRemoveJob_Click(object sender, RoutedEventArgs e)
         {
+            //TODO : Get selected job.name -> message
+            SendMessage.SendMessageTo(ipAddress, port,"", MessageType.DJ);
         }
 
         private void btnEditJob_Click(object sender, RoutedEventArgs e)
         {
+            //TODO : Open edit
+
         }
 
         private void btnPlayPause_Click(object sender, RoutedEventArgs e)
         {
-            SendMessage.SendMessageTo("127.0.0.1", 13, "hello mi friend", MessageType.GAJ);
-             
+            SendMessage.SendMessageTo(ipAddress, port,"", MessageType.PP);
         }
 
         private void btnStopJob_Click(object sender, RoutedEventArgs e)
         {
+            SendMessage.SendMessageTo(ipAddress, port,"", MessageType.SJ);
         }
 
         private void btnLogs_Click(object sender, RoutedEventArgs e)
@@ -112,6 +146,5 @@ namespace EasySaveRemote
                 btnRemoveJob.IsEnabled = false;
             }
         }
-        
     }
 }

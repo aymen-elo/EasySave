@@ -7,6 +7,7 @@ using System.Text;
 using System.Text.Json;
 using System.Windows.Controls;
 using EasySave.Model;
+using EasySaveLib.Model;
 using EasySaveRemote;
 using Newtonsoft.Json;
 using Job = EasySaveLib.Model.Job;
@@ -23,29 +24,25 @@ namespace EasySaveRemote.Packets
         DJ,
         NJ,
         PP,
-        Stop,
+        SJ,
         MO
     }
 
     public class SendMessage
     {
         private MainViewModel _mainViewModel;
+        private ConfigManager _configManager;
+        private static FormatLog _formatLog = new FormatLog();
         
         private static ObservableCollection<Job> _jobs = new ObservableCollection<Job>();
 
         public ObservableCollection<Job> Jobs => _jobs;
 
-        public static async void SendMessageTo(string ipAddress, int port, string message, MessageType messageType)
+        public static async void SendMessageTo(string ipAddress, int port, string message, MessageType messageType, MainWindow _mainWindow = null)
         {
             try
             {
-                IPEndPoint ipEndPoint = new(IPAddress.Parse(ipAddress), port);
-                using Socket client = new(
-                    ipEndPoint.AddressFamily,
-                    SocketType.Stream,
-                    ProtocolType.Tcp);
-
-                await client.ConnectAsync(ipEndPoint);
+                
                 message = $"<|{messageType}|>" + message;
                 bool oneTime = false;
 
@@ -54,12 +51,12 @@ namespace EasySaveRemote.Packets
                 {
                     // Send message.
                     var messageBytes = Encoding.UTF8.GetBytes(message);
-                    _ = await client.SendAsync(messageBytes, SocketFlags.None);
+                    await _mainWindow.client.SendAsync(messageBytes, SocketFlags.None);
 
 
                     // Receive data. or ack
                     var buffer = new byte[4_096];
-                    var received = await client.ReceiveAsync(buffer, SocketFlags.None);
+                    var received = await _mainWindow.client.ReceiveAsync(buffer, SocketFlags.None);
                     var response = Encoding.UTF8.GetString(buffer, 0, received);
                     switch (response)
                     {
@@ -78,6 +75,10 @@ namespace EasySaveRemote.Packets
                                 
                                 _jobs.Add(job);
                             }
+                            
+                            /* Send Ack to server */
+                            await _mainWindow.client.SendAsync(new byte[1], SocketFlags.None);
+
                             
                             // ObservableCollection<Job> jobs = new ObservableCollection<Job>();
                             oneTime = true;
@@ -110,14 +111,28 @@ namespace EasySaveRemote.Packets
                             /* Modify Option */
                             oneTime = true;
                             break;
+                        case var str when str.StartsWith("<|Opt|>"):
+                            /* Received Option */
+
+                            Console.WriteLine($"Socket client received acknowledgment: \"{response}\"");
+                            responseNoPrefix = response.Replace("<|Opt|>", "");
+                            string[] dataArray = responseNoPrefix.Split(';');
+                            
+                            _mainWindow.language = dataArray[0];
+                            _mainWindow.logFormat = dataArray[1];
+                            _mainWindow.encryptionKey = dataArray[2];
+                            _mainWindow.cipherList = dataArray[3];
+                            _mainWindow.priorityList = dataArray[4];
+                            _mainWindow.bigFileSize = dataArray[5];
+                            
+                            oneTime = true;
+                            break;
                         default:
                             /* Type not recognized */
                             oneTime = false;
                             break;
                     }
                 }
-
-                client.Shutdown(SocketShutdown.Both);
             }
             catch (SocketException e)
             {

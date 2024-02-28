@@ -14,9 +14,12 @@ namespace EasySaveRemote
             InitializeComponent();
         }
 
-        private async void btnLogin_Click(object sender, RoutedEventArgs e)
+        private void btnLogin_Click(object sender, RoutedEventArgs e)
         {
             MainWindow mainWindow = new MainWindow();
+            string ipAddress = tboxIpAddress.Text;
+            int port = Int32.Parse(tboxPort.Text);
+            mainWindow.firstConnection(ipAddress, port);
             this.Close();
             mainWindow.ShowDialog();
         }
