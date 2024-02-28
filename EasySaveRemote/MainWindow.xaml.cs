@@ -125,8 +125,24 @@ namespace EasySaveRemote
 
         private void btnRemoveJob_Click(object sender, RoutedEventArgs e)
         {
-            //TODO : Get selected job.name -> message
-            SendMessage.SendMessageTo(ipAddress, port,"", MessageType.DJ);
+            var selectedJobs = dgJobList?.SelectedItems.Cast<Job>().ToList();
+            string listJobToDelete = String.Empty;
+            if (selectedJobs != null)
+            {
+                foreach (var job in selectedJobs)
+                {
+                    if (listJobToDelete == String.Empty)
+                    {
+                        listJobToDelete = job.Name;
+                    }
+                    else
+                    {
+                        listJobToDelete = string.Join(";", listJobToDelete, job.Name);
+                    }
+
+                }
+            }
+            SendMessage.SendMessageTo(ipAddress, port,listJobToDelete, MessageType.DJ, this);
         }
 
         private void btnEditJob_Click(object sender, RoutedEventArgs e)

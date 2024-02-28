@@ -48,11 +48,8 @@ namespace EasySaveRemote.Packets
         {
             try
             {
-                
                 message = $"<|{messageType}|>" + message;
                 bool oneTime = false;
-
-
                 while (!oneTime)
                 {
                     // Send message.
