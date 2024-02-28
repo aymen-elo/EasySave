@@ -73,7 +73,7 @@ namespace EasySaveLib.Model
         }
         public void DeleteAllowedHashes(string jobName)
         {
-            string filePath = Path.Combine(_logDirPath, string.Format( @"\{0}-AlreadyCopiedHashes.json", jobName));
+            string filePath = _logDirPath + string.Format( @"\{0}-AlreadyCopiedHashes.json", jobName);
             File.Delete(filePath);
         }
     }

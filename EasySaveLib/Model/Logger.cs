@@ -243,6 +243,26 @@ namespace EasySaveLib.Model
             }
         }
         
+        /// <summary>
+        /// Removes all jobs with the state "Retired" from the state.json file.
+        /// </summary>
+        public void RemoveRetiredJobs()
+        {
+            string stateFilePath = Path.Combine(LogsDirectoryPath, "state.json");
+
+            if (File.Exists(stateFilePath))
+            {
+                string jsonContent = File.ReadAllText(stateFilePath);
+                JArray jsonArray = JArray.Parse(jsonContent);
+
+                // Remove all retired jobs from the JSON array
+                jsonArray = new JArray(jsonArray.Where(job => job["State"]?.ToString() != "Retired"));
+
+                // Write the updated JSON array back to the state file
+                File.WriteAllText(stateFilePath, jsonArray.ToString(Formatting.Indented));
+            }
+        }
+        
         public void DisplayLog()
         {
             string logContents = File.ReadAllText(_dirPath);

@@ -74,8 +74,13 @@ namespace EasySaveGUI.ViewModel
             if (job != null)
             {
                 job.State = JobState.Retired;
-                Logger.LogState(job.Name, job.BackupType, job.SourceFilePath, job.TargetFilePath, job.State, job.TotalFilesToCopy, job.TotalFilesSize , (job.TotalFilesToCopy - job.NbSavedFiles), ((job.NbSavedFiles * 100) / job.TotalFilesToCopy), job.Name);
+                Logger.LogState(job);
                 _jobs.Remove(job);
+                
+                // Removal of Job hashes/log
+                Logger.RemoveRetiredJobs();
+                IdentityManager identityManager = new IdentityManager();
+                identityManager.DeleteAllowedHashes(job.Name);
             }
         }
         
