@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Windows.Input;
 using EasySaveGUI.Command;
 using System.Windows.Forms;
+using EasySaveGUI.Controller;
 using EasySaveLib.Model;
 
 
@@ -14,56 +16,16 @@ namespace EasySaveGUI.ViewModel
     {
         public event Action RequestClose;
         
-        public ICommand OpenSourceCommand { get; }
-        public ICommand OpenDestinationCommand { get; }
         public ICommand AddJobCommand { get; set; }
         private Logger _logger;
+        private CopyController _copyController = new CopyController();
         
-        private string _jobName;
+        public string JobName { get; set; }
+        public string JobSource { get; set; }
+        public string JobTarget { get; set; }
+        public int JobTypeIdx { get; set; }
+        
         private ObservableCollection<Job> _jobs;
-        
-        public string JobName
-        {
-            get { return _jobName; }
-            set
-            {
-                _jobName = value;
-                OnPropertyChanged(nameof(JobName));
-            }
-        }
-
-        private string _sourcePath;
-        public string SourcePath
-        {
-            get { return _sourcePath; }
-            set
-            {
-                _sourcePath = value;
-                OnPropertyChanged(nameof(SourcePath));
-            }
-        }
-
-        private string _destinationPath;
-        public string DestinationPath
-        {
-            get { return _destinationPath; }
-            set
-            {
-                _destinationPath = value;
-                OnPropertyChanged(nameof(DestinationPath));
-            }
-        }
-        
-        private BackupType _selectedBackupType = BackupType.Full;
-        public BackupType SelectedBackupType
-        {
-            get { return _selectedBackupType; }
-            set
-            {
-                _selectedBackupType = value;
-                OnPropertyChanged(nameof(SelectedBackupType));
-            }
-        }
         
         public AddJobViewModel(ObservableCollection<Job> jobs)
         {
@@ -71,44 +33,33 @@ namespace EasySaveGUI.ViewModel
             _jobs = jobs;
 
             AddJobCommand = new RelayCommand(AddJob);
-            OpenSourceCommand = new RelayCommand(OpenSource);
-            OpenDestinationCommand = new RelayCommand(OpenDestination);
             
             /* Job details from the Edit Window */
 
         }
         
-        private void AddJob(object parameter)
+        private void AddJob(object obj)
         {
-            //TODO 
-            //Job newJob = new Job(JobName, SourcePath, DestinationPath, SelectedBackupType);
-            //_jobs.Add(newJob);
+            Job j = new Job(JobName, JobTypeIdx == 0 ? BackupType.Full : BackupType.Diff, JobSource, JobTarget);
+            UpdateJobData(j.Name, j);
             
+            _jobs.Add(j);
             RequestClose?.Invoke();
         }
         
-        private void OpenSource(object parameter)
+        private void UpdateJobData(string newName, Job job)
         {
-            using (FolderBrowserDialog dialog = new FolderBrowserDialog())
-            {
-                DialogResult result = dialog.ShowDialog();
-                if (result == DialogResult.OK)
-                {
-                    SourcePath = dialog.SelectedPath;
-                }
-            }
-        }
+            // helpers to calculate the new directory's size info
+            DirectoryInfo diSource = new DirectoryInfo(job.SourceFilePath);
+            long totalFilesSize = _copyController._fileGetter.DirSize(diSource);
+            int totalFilesToCopy = _copyController._fileGetter.GetAllFiles(job.SourceFilePath).Count;
+                
+            job.TotalFilesSize = totalFilesSize;
+            job.NbFilesLeftToDo = totalFilesToCopy;
+            job.TotalFilesToCopy = totalFilesToCopy;
+            job.NbSavedFiles = 0;
 
-        private void OpenDestination(object parameter)
-        {
-            using (FolderBrowserDialog dialog = new FolderBrowserDialog())
-            {
-                DialogResult result = dialog.ShowDialog();
-                if (result == DialogResult.OK)
-                {
-                    DestinationPath = dialog.SelectedPath;
-                }
-            }
+            _logger.LogState(job.Name, job.BackupType, job.SourceFilePath, job.TargetFilePath, job.State, job.TotalFilesToCopy, job.TotalFilesSize , (job.TotalFilesToCopy - job.NbSavedFiles), ((job.NbSavedFiles * 100) / job.TotalFilesToCopy), newName);
         }
     }
 }

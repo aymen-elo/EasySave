@@ -4,14 +4,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="clr-namespace:EasySaveGUI"
-        xmlns:viewModel="clr-namespace:EasySaveGUI.ViewModel"
         mc:Ignorable="d"
         Title="AddJobWindow" Height="450" Width="800">
-    
-    <Window.DataContext>
-        <viewModel:AddJobViewModel/>
-    </Window.DataContext>
-
     
     <Grid Margin="10">
         <Grid.RowDefinitions>
@@ -33,18 +27,18 @@
 
         <TextBlock Text="{DynamicResource StrSourcePathLabel}" Grid.Row="3" Margin="0,0,0,5"/>
         <StackPanel Orientation="Horizontal" Grid.Row="4">
-            <TextBox x:Name="txtSourcePath" Margin="0,0,5,10" Width="500" Text="{Binding SourcePath}"/>
+            <TextBox x:Name="txtSourcePath" Margin="0,0,5,10" Width="500" Text="{Binding JobSource}"/>
             <Button Content="..." Command="{Binding OpenSourceCommand}" CommandParameter="{Binding ElementName=txtSourcePath}" Margin="0,0,5,10" Width="50"/>
         </StackPanel>
 
         <TextBlock Text="{DynamicResource StrDestinationPathLabel}" Grid.Row="5" Margin="0,0,0,5"/>
         <StackPanel Orientation="Horizontal" Grid.Row="6">
-            <TextBox x:Name="txtDestinationPath" Margin="0,0,5,10" Width="500" Text="{Binding DestinationPath}"/>
+            <TextBox x:Name="txtDestinationPath" Margin="0,0,5,10" Width="500" Text="{Binding JobTarget}"/>
             <Button Content="..." Command="{Binding OpenDestinationCommand}" CommandParameter="{Binding ElementName=txtDestinationPath}" Margin="0,0,5,10" Width="50"/>
         </StackPanel>
 
         <TextBlock Text="{DynamicResource StrBackupTypeLabel}" Grid.Row="7" Margin="0,0,0,5"/>
-        <ComboBox x:Name="cmbBackupType" Grid.Row="8" Margin="0,0,0,10">
+        <ComboBox x:Name="cmbBackupType" Grid.Row="8" Margin="0,0,0,10" SelectedIndex="{Binding JobTypeIdx}">
             <ComboBoxItem Content="{DynamicResource StrFullBackupType}" />
             <ComboBoxItem Content="{DynamicResource StrDifferentialBackupType}" />
         </ComboBox>  
@@ -55,5 +49,6 @@
                 HorizontalAlignment="Right" 
                 VerticalAlignment="Top" 
                 Height="42" 
-                Width="100"/>    </Grid>
+                Width="100"/>    
+    </Grid>
 </Window>
