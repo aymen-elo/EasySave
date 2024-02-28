@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Runtime.CompilerServices;
+﻿using System;
 using System.Windows;
 using EasySaveLib.Model;
 
@@ -11,57 +10,71 @@ namespace EasySaveGUI
 
         public bool IsJsonSelected { get; private set; }
         public bool IsXmlSelected { get; private set; }
-        public string encryptionKey { get; private set; }
-        public string prioList { get; private set; }
+        public string EncryptionKey { get; private set; }
+        public string CipherList { get; private set; }
+        public string PrioList { get; private set; }
         public string ProcessList { get; private set; }
 
         public Option()
         {
             InitializeComponent();
-            string logFormat = ConfigManager.GetLogFormat();
-            if (logFormat == "xml")
+            try
             {
-                rbXml.IsChecked = true;
+                string logFormat = ConfigManager.GetLogFormat();
+                if (logFormat == "xml")
+                {
+                    rbXml.IsChecked = true;
+                }
+                else if (logFormat == "json")
+                {
+                    rbJson.IsChecked = true;
+                }
+
+                tboxEncryptionKey.Text = ConfigManager.GetEncryptionKey();
+                tboxCipherList.Text = ConfigManager.GetCipherList();
+                tboxPrioList.Text = ConfigManager.GetPriorityList();
+                tboxBigFile.Text = ConfigManager.GetBigFileSize();
+                tboxProcessList.Text = ConfigManager.GetProcessList();
+
+                ConfigManager.SaveLogFormat("json");
+                logger.LogFormat = "json";
             }
-            else if (logFormat == "json")
+            catch (Exception ex)
             {
-                rbJson.IsChecked = true;
+                MessageBox.Show($"An error occurred while loading options: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-            
-            tboxEncryptionKey.Text = ConfigManager.GetEncryptionKey();
-            tboxCipherList.Text = ConfigManager.GetCipherList();
-            tboxPrioList.Text = ConfigManager.GetPriorityList();
-            tboxBigFile.Text = ConfigManager.GetBigFileSize();
-            tboxProcessList.Text = ConfigManager.GetProcessList();
-
-
-            ConfigManager.SaveLogFormat("json");
-            logger.LogFormat = "json";
         }
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
-            if (rbXml.IsChecked == true)
+            try
             {
-                ConfigManager.SaveLogFormat("xml");
-                logger.LogFormat = "xml";
-                
-            }
-            else if (rbJson.IsChecked == true)
-            {
-                ConfigManager.SaveLogFormat("json");
-                logger.LogFormat = "json";
-            }
+                if (rbXml.IsChecked == true)
+                {
+                    ConfigManager.SaveLogFormat("xml");
+                    logger.LogFormat = "xml";
 
-            string BigFileSize = tboxBigFile.Text;
-            
-            ConfigManager.SaveEncryptionKey(tboxEncryptionKey.Text);
-            ConfigManager.SaveCipherList(tboxCipherList.Text);
-            ConfigManager.SavePriorityList(tboxPrioList.Text);
-            ConfigManager.SaveBigFileSize(tboxBigFile.Text);
-            ConfigManager.SaveProcessList(tboxProcessList.Text);
-            
-            this.Close();
+                }
+                else if (rbJson.IsChecked == true)
+                {
+                    ConfigManager.SaveLogFormat("json");
+                    logger.LogFormat = "json";
+                }
+
+                string BigFileSize = tboxBigFile.Text;
+
+                ConfigManager.SaveEncryptionKey(tboxEncryptionKey.Text);
+                ConfigManager.SaveCipherList(tboxCipherList.Text);
+                ConfigManager.SavePriorityList(tboxPrioList.Text);
+                ConfigManager.SaveBigFileSize(tboxBigFile.Text);
+                ConfigManager.SaveProcessList(tboxProcessList.Text);
+
+                this.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An error occurred while saving options: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
     }
 }
