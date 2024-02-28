@@ -129,8 +129,9 @@
 
 
         <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10,30,0,0">
-            <Button x:Name="btnNewJob" Content="{DynamicResource StrButtonNewJob}" Height="42" Width="90"
-                    Click="btnNewJob_Click" />
+            <Button x:Name="btnAddJob" Content="{DynamicResource StrButtonNewJob}" Height="42" Width="90"
+                    Command="{Binding AddJobShowCommand}" 
+                    CommandParameter="{Binding ItemsSource,  ElementName=dgJobList}" />
             <Button x:Name="btnRunJob" Content="{DynamicResource StrButtonRunJob}" Height="42" Width="90"
                     Click="btnRunJob_Click" />
             <Button x:Name="btnRemoveJob" Content="{DynamicResource StrButtonRemoveJob}" Height="42" Width="90"

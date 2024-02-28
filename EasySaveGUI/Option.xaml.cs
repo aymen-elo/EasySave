@@ -13,6 +13,7 @@ namespace EasySaveGUI
         public bool IsXmlSelected { get; private set; }
         public string encryptionKey { get; private set; }
         public string prioList { get; private set; }
+        public string ProcessList { get; private set; }
 
         public Option()
         {
@@ -31,6 +32,8 @@ namespace EasySaveGUI
             tboxCipherList.Text = ConfigManager.GetCipherList();
             tboxPrioList.Text = ConfigManager.GetPriorityList();
             tboxBigFile.Text = ConfigManager.GetBigFileSize();
+            tboxProcessList.Text = ConfigManager.GetProcessList();
+
 
             ConfigManager.SaveLogFormat("json");
             logger.LogFormat = "json";
@@ -56,9 +59,8 @@ namespace EasySaveGUI
             ConfigManager.SaveCipherList(tboxCipherList.Text);
             ConfigManager.SavePriorityList(tboxPrioList.Text);
             ConfigManager.SaveBigFileSize(tboxBigFile.Text);
+            ConfigManager.SaveProcessList(tboxProcessList.Text);
             
-
-
             this.Close();
         }
     }
