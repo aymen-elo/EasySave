@@ -12,6 +12,8 @@ namespace EasySaveRemote
         public LoginPage()
         {
             InitializeComponent();
+            tboxIpAddress.Text = "127.0.0.1";
+            tboxPort.Text = "13";
         }
 
         private void btnLogin_Click(object sender, RoutedEventArgs e)

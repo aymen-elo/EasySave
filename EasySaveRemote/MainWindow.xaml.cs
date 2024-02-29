@@ -13,11 +13,14 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using EasySaveRemote.Model;
 using EasySaveRemote.Packets;
+using EasySaveGUI.ViewModel;
 using EasySaveRemote.ViewModel;
 using Newtonsoft.Json;
 using Job = EasySaveLib.Model.Job;
 using Logger = EasySaveLib.Model.Logger;
 using ConfigManager = EasySaveLib.Model.ConfigManager;
+using EditJobViewModel = EasySaveRemote.ViewModel.EditJobViewModel;
+using JobsViewModel = EasySaveRemote.ViewModel.JobsViewModel;
 
 namespace EasySaveRemote
 {
@@ -26,7 +29,7 @@ namespace EasySaveRemote
     /// </summary>
     public partial class MainWindow : Window
     {
-        private readonly JobsViewModel _jobsViewModel;
+        private readonly EasySaveGUI.ViewModel.JobsViewModel _jobsViewModel;
         private string _currentLanguageCode;
         private ResourceDictionary _languageDictionary;
         private AddJobWindow addJobWindow;
@@ -34,7 +37,7 @@ namespace EasySaveRemote
         private Logger _logger;
         public ConfigManager _configManager;
         private MainViewModel _mainViewModel;
-        public FormatLog _formatLog = new FormatLog();
+        public Option Option = new Option();
 
 
         public SolidColorBrush backgroundColor =
@@ -60,8 +63,8 @@ namespace EasySaveRemote
             btnRunJob.IsEnabled = false;
             btnRemoveJob.IsEnabled = false;
             _logger = new Logger();
-            _jobsViewModel = new JobsViewModel(_logger);
-            _mainViewModel = new MainViewModel(_jobsViewModel);
+            _jobsViewModel = new EasySaveGUI.ViewModel.JobsViewModel(_logger);
+            _mainViewModel = new MainViewModel(_jobsViewModel, this);
             string logsDirectoryPath = @"C:\Prosoft\EasySave\Logs";
             _languageDictionary = new ResourceDictionary();
             _sendMessageInstance = new SendMessage();
@@ -99,14 +102,19 @@ namespace EasySaveRemote
         }
 
         private void btnNewJob_Click(object sender, RoutedEventArgs e)
-        {
-            AddJobWindow addJobWindow = new AddJobWindow(_jobsViewModel);
-            addJobWindow.ShowDialog();
-        }
+         {
+             ObservableCollection<Job> jobList = new ObservableCollection<Job>();
+             foreach (Job j in dgJobList.SelectedItems)
+             {
+                 jobList.Add(j);
+             }
+             AddJobWindow addJobWindow = new AddJobWindow(jobList, this);
+             addJobWindow.ShowDialog();
+         }
 
         private void btnOption_Click(object sender, RoutedEventArgs e)
         {
-            FormatLog optionWindow = new FormatLog(logFormat, encryptionKey, cipherList, priorityList, bigFileSize, this);
+            Option optionWindow = new Option(logFormat, encryptionKey, cipherList, priorityList, bigFileSize, this);
             optionWindow.ShowDialog();
         }
 
@@ -147,8 +155,13 @@ namespace EasySaveRemote
 
         private void btnEditJob_Click(object sender, RoutedEventArgs e)
         {
-            //TODO : Open edit
-
+            List<Job> jobList = new List<Job>();
+            foreach (Job j in dgJobList.SelectedItems)
+            {
+                jobList.Add(j);
+            }
+            EditJobWindow editJobWindow = new EditJobWindow(jobList.First(), this);
+            editJobWindow.ShowDialog();
         }
 
         private void btnPlayPause_Click(object sender, RoutedEventArgs e)

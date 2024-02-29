@@ -11,10 +11,16 @@
         <model:LangueSettingsViewModels x:Key="LangueSettingsViewModelInstance" />
     </Window.Resources>
     <Grid>
+       
         <Grid Background="#FFE9EEF3">
-            <DataGrid x:Name="dgJobList" ItemsSource="{Binding _sendMessageInstance._jobs}" AutoGenerateColumns="False"
+            <!-- Titre EasySave en haut à droite -->
+            <StackPanel HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,40,120,0">
+                <TextBlock Text="EasySave" FontSize="45" FontWeight="Bold" Foreground="Black"/>
+                <TextBlock Text="Remote Interface" FontSize="26" FontWeight="Bold" Foreground="Black"/>
+            </StackPanel>
+            <DataGrid x:Name="dgJobList" ItemsSource="{Binding JobsViewModel.Jobs}" AutoGenerateColumns="False"
                       Margin="38,142,38,142" SelectionChanged="dgJobList_SelectionChanged" IsReadOnly="True"
-                      CanUserReorderColumns="False">
+                      CanUserReorderColumns="False" SelectedIndex="0">
                 <DataGrid.Columns>
                     
                     <DataGridTemplateColumn>
@@ -73,7 +79,17 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
-                                    <Button x:Name="btnRunJob" Content="{DynamicResource StrButtonRunJob}" Click="btnRunJob_Click" />
+                                    <Button x:Name="btnRunJob" Content="{DynamicResource StrButtonRunJob}" Click="btnRunJob_Click">
+                                        <Button.Style>
+                                            <Style TargetType="Button">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding CanRunJob}" Value="False">
+                                                        <Setter Property="IsEnabled" Value="False" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
                                     <Button x:Name="btnRemoveJob" Content="{DynamicResource StrButtonRemoveJob}" Click="btnRemoveJob_Click">
                                         <Button.Style>
                                             <Style TargetType="Button">
@@ -114,19 +130,24 @@
             <TextBlock x:Name="tboxEvent" HorizontalAlignment="Stretch" Height="60" Margin="30,0,30,20" TextWrapping="Wrap"
                        Text="Ici event " VerticalAlignment="Bottom" Width="Auto" Background="White"
                        ScrollViewer.VerticalScrollBarVisibility="Visible" />
-            <Label x:Name="lblVersion" Content="Version 2.0" HorizontalAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Bottom" FontSize="10"/>
+            <Label x:Name="lblVersion" Content="Version 3.0" HorizontalAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Bottom" FontSize="10"/>
         </Grid>
 
 
         <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10,30,0,0">
-            <Button x:Name="btnNewJob" Content="{DynamicResource StrButtonNewJob}" Height="42" Width="90"
-                    Click="btnNewJob_Click" />
+            <Button x:Name="btnAddJob" Content="{DynamicResource StrButtonNewJob}" Height="42" Width="90"
+                    Click="btnNewJob_Click"
+                    Command="{Binding AddJobShowCommand}" 
+                    CommandParameter="{Binding ItemsSource,  ElementName=dgJobList}" />
             <Button x:Name="btnRunJob" Content="{DynamicResource StrButtonRunJob}" Height="42" Width="90"
                     Click="btnRunJob_Click" />
             <Button x:Name="btnRemoveJob" Content="{DynamicResource StrButtonRemoveJob}" Height="42" Width="90"
                     Click="btnRemoveJob_Click" />
             <Button x:Name="btnEditJob" Content="{DynamicResource StrButtonEditJob}" Height="42" Width="90"
-                    Click="btnEditJob_Click" />
+                    Click="btnEditJob_Click"
+                    Command="{Binding EditJobShowCommand}" 
+                    CommandParameter="{Binding SelectedItem, ElementName=dgJobList}" />
+
             <Button x:Name="btnPlayPause" Content="{DynamicResource StrButtonPlayPause}" Height="42" Width="90"
                     Click="btnPlayPause_Click" />
             <Button x:Name="btnStopJob" Content="{DynamicResource StrButtonStopJob}" Height="42" Width="90"

@@ -14,51 +14,48 @@ namespace EasySaveGUI.Packets
         private static Logger _logger = new Logger();
         private JobsViewModel _jobsViewModel = new JobsViewModel(_logger);
         private Option _option;
+        private EditJobViewModel _editJobViewModel;
+        private AddJobViewModel _addJobWindow;
 
         public void NJExecute(string response)
         {
-            dynamic jobData = JsonConvert.DeserializeObject(response);
-
-            string jobName = jobData.JobName;
-            string sourcePath = jobData.SourcePath;
-            string destinationPath = jobData.DestinationPath;
-            BackupType typeSave = (jobData.TypeSave == "Full") ? BackupType.Full : BackupType.Diff;
+            string name = null;
+            string sourcePath = null;
+            string destinationPath = null;
+            BackupType jobType = BackupType.Full;
             
-            _jobsViewModel.AddJob(jobName, sourcePath, destinationPath, typeSave);
+            var job = JsonConvert.DeserializeObject<Job>(response);
+            name = job.Name;
+            sourcePath = job.SourceFilePath;
+            destinationPath = job.TargetFilePath;
+            jobType = job.BackupType;
+
+            Job newJob = new Job(name, jobType, sourcePath, destinationPath);
+            ObservableCollection<Job> jobs = new ObservableCollection<Job>();
+
+            jobs.Add(job);
+
+            _addJobWindow = new AddJobViewModel(jobs);
         }
-        
+
         public void EJExecute(string response)
         {
-                        
-            List<Dictionary<string, object>>? dataList = JsonConvert.DeserializeObject<List<Dictionary<string, object>>>(response);
-            Dictionary<string, object> firstEntry = dataList.FirstOrDefault();
-            string? name = firstEntry?["Name"]?.ToString();
-            if (dataList.Count > 1)
-            {
-                var jobData = dataList[1];
-                            
-                Job job = new Job
-                {
-                    Name = jobData["Name"]?.ToString(),
-                    BackupType = (BackupType)Enum.Parse(typeof(BackupType), jobData["BackupType"]?.ToString()),
-                    SourceFilePath = jobData["SourceFilePath"]?.ToString(),
-                    TargetFilePath = jobData["TargetFilePath"]?.ToString(),
-                    State = (JobState)Enum.Parse(typeof(JobState), jobData["State"]?.ToString()),
-                    TotalFilesToCopy = Convert.ToInt32(jobData["TotalFilesToCopy"]),
-                    TotalFilesSize = Convert.ToInt64(jobData["TotalFilesSize"]),
-                    NbFilesLeftToDo = Convert.ToInt64(jobData["NbFilesLeftToDo"]),
-                    Progression = Convert.ToInt32(jobData["Progression"])
-                };
-            }
+            List<object>? deserializedData = JsonConvert.DeserializeObject<List<object>>(response);
+            string jobJson = JsonConvert.SerializeObject(deserializedData?[1]);
+            Job? job = JsonConvert.DeserializeObject<Job>(jobJson);
 
-            // TODO : Edit Jobs
-            // _jobsViewModel.EditJob(job);
+            List<Dictionary<string, object>>? dataList =
+                JsonConvert.DeserializeObject<List<Dictionary<string, object>>>(response);
+            Dictionary<string, object> firstEntry = dataList.FirstOrDefault();
+            string? name = firstEntry?["OldName"]?.ToString();
+            
+            _editJobViewModel = new EditJobViewModel(job);
         }
 
         public async void RJExecute(string response)
         {
             var jobs = JsonConvert.DeserializeObject<ObservableCollection<Job>>(response);
-                        
+
             foreach (var j in jobs)
             {
                 BackupProcess backupProcess = new BackupProcess(j);
@@ -69,7 +66,7 @@ namespace EasySaveGUI.Packets
         public void MOExecute(string response)
         {
             string[] dataArray = response.Split(';');
-            
+
             ConfigManager.SaveLanguage(dataArray[0]);
             ConfigManager.SaveLogFormat(dataArray[1]);
             ConfigManager.SaveEncryptionKey(dataArray[2]);
