@@ -93,6 +93,8 @@ namespace EasySaveGUI.ViewModel
 
         private void LaunchJob(Job job, BackupProcess backupProcess)
         {
+            CopyController localCopyController = new CopyController();
+            
             if (job.State == JobState.Paused)
             {
                 ResumeJob(job);
@@ -110,7 +112,7 @@ namespace EasySaveGUI.ViewModel
             
             Logger.LogAction(job.Name, job.SourceFilePath, job.TargetFilePath, 0, TimeSpan.Zero);
             Logger.LogState(job);
-            _copyController.CopyDirectory(job);
+            localCopyController.CopyDirectory(job);
         }
 
         private void ResumeJob(Job job)

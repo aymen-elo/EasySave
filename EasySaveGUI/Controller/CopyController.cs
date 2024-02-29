@@ -115,6 +115,11 @@ namespace EasySaveGUI.Controller
 
         private void Categorize(List<string> allFiles)
         {
+            priorityFiles.Clear();
+            priorityBigFile.Clear();
+            otherFiles.Clear();
+            bigFiles.Clear();
+            
             string stringPriorityList = ConfigManager.GetPriorityList();
             if (!string.IsNullOrEmpty(stringPriorityList))
             {
@@ -232,7 +237,21 @@ namespace EasySaveGUI.Controller
                     if (!Directory.Exists(targetFileDir))
                         Directory.CreateDirectory(targetFileDir);
 
-                    File.Copy(file, targetFilePath, true);
+                    // Create a new Mutex for the file
+                    Mutex mutex = new Mutex(false, file.Replace('\\', '_'));
+
+                    // Wait until it is safe to enter (i.e., until no other thread is in the critical section).
+                    mutex.WaitOne();
+
+                    try
+                    {
+                        File.Copy(file, targetFilePath, true);
+                    }
+                    finally
+                    {
+                        // Release the Mutex.
+                        mutex.ReleaseMutex();
+                    }
 
                     EndFileCopy(job, targetFilePath, file, copyTime, totalFilesSize);
                 }
@@ -242,7 +261,10 @@ namespace EasySaveGUI.Controller
                 }
             }
 
-            _logger.LogState(job.Name, job.BackupType, job.SourceFilePath, job.TargetFilePath, job.State, job.TotalFilesToCopy, totalFilesSize , (job.TotalFilesToCopy - job.NbSavedFiles), ((job.NbSavedFiles * 100) / job.TotalFilesToCopy), job.Name);
+            chunk.Clear();
+            _logger.LogState(job.Name, job.BackupType, job.SourceFilePath, job.TargetFilePath, job.State,
+                job.TotalFilesToCopy, totalFilesSize, (job.TotalFilesToCopy - job.NbSavedFiles),
+                ((job.NbSavedFiles * 100) / job.TotalFilesToCopy), job.Name);
 
             _identity.DeleteAllowedHashes(job.Name);
             _identity.SaveAllowedHashes(allowedHashes.Keys, job.Name);
