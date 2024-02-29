@@ -49,7 +49,7 @@ namespace EasySaveGUI.ViewModel
                 if (result == DialogResult.OK)
                 {
                     JobSource = dialog.SelectedPath;
-                    OnPropertyChanged(nameof(JobSource)); // Notifier la vue du changement
+                    OnPropertyChanged(nameof(JobSource)); 
                 }
             }
         }
@@ -62,7 +62,7 @@ namespace EasySaveGUI.ViewModel
                 if (result == DialogResult.OK)
                 {
                     JobTarget = dialog.SelectedPath;
-                    OnPropertyChanged(nameof(JobTarget)); // Notifier la vue du changement
+                    OnPropertyChanged(nameof(JobTarget)); 
                 }
             }
         }
