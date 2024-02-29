@@ -1,11 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <TargetFramework>net5.0-windows</TargetFramework>
-    <RootNamespace>EasySaveGUI</RootNamespace>
-    <Nullable>enable</Nullable>
-    <UseWPF>true</UseWPF>
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>net5.0-windows</TargetFramework>
+        <RootNamespace>EasySaveGUI</RootNamespace>
+        <Nullable>enable</Nullable>
+        <UseWPF>true</UseWPF>
     <UseWindowsForms>true</UseWindowsForms>
     <ApplicationIcon />
     <Win32Resource />
@@ -24,11 +24,10 @@
     <ProjectReference Include="..\EasySave\EasySave.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Page Update="StringResources.fr.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <SubType>Designer</SubType>
-    </Page>
-  </ItemGroup>
-
+    <ItemGroup>
+        <Page Update="StringResources.fr.xaml">
+            <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+            <SubType>Designer</SubType>
+        </Page>
+    </ItemGroup>
 </Project>

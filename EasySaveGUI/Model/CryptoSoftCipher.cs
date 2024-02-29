@@ -30,7 +30,7 @@ namespace EasySaveGUI.Model
                 return line;
             }
             process.Close();
-            return "";
+            return "0";
         }
     }
 }

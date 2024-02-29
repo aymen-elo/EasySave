@@ -1,19 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Sockets;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
-
 using System.Windows.Controls;
 using System.Windows.Media;
+using EasySave.Controller;
+using EasySave.Model;
 using EasySaveGUI;
 using EasySaveGUI.Controller;
+using EasySaveLib.Model;
 using EasySaveGUI.Model;
+using EasySaveGUI.Packets;
 using EasySaveGUI.ViewModel;
+using Newtonsoft.Json;
+using BackupType = EasySaveLib.Model.BackupType;
 using Job = EasySaveLib.Model.Job;
 using Logger = EasySaveLib.Model.Logger;
 using ConfigManager = EasySaveLib.Model.ConfigManager;
+using JobState = EasySaveLib.Model.JobState;
 
 namespace EasySaveGUI
 {
@@ -44,6 +56,7 @@ namespace EasySaveGUI
             DataContext = _mainViewModel;
             string logsDirectoryPath = @"C:\Prosoft\EasySave\Logs";
             _languageDictionary = new ResourceDictionary();
+            LaunchServerAsync();
         }
 
         private void btnNewJob_Click(object sender, RoutedEventArgs e)
@@ -131,28 +144,128 @@ namespace EasySaveGUI
                 btnRemoveJob.IsEnabled = false;
             }
         }
-
-        public void cipherCryptoSoft(string sourcePath, string targetPath, string key)
+        
+        public async void LaunchServerAsync()
         {
-            string arguments = sourcePath + " " + targetPath + " " + key;
-            Process process = new Process()
+            await Task.Run(() => server());
+        }
+
+        private async void server()
+        {
+            ExecuteCommand executeCommand = new ExecuteCommand();
+            try
             {
-                StartInfo = new ProcessStartInfo()
+                IPEndPoint ipEndPoint = new(IPAddress.Parse("127.0.0.1"), 13);
+                using Socket listener = new(
+                    ipEndPoint.AddressFamily,
+                    SocketType.Stream,
+                    ProtocolType.Tcp);
+
+                List<string> prefixes = new List<string>
+                    { "<|GAJ|>", "<|RJ|>", "<|EJ|>", "<|DJ|>", "<|NJ|>", "<|PP|>", "<|SJ|>", "<|MO|>" };
+
+
+                listener.Bind(ipEndPoint);
+                listener.Listen(100);
+
+                var handler = await listener.AcceptAsync();
+                string responseNoPrefix;
+
+                while (true)
                 {
-                    FileName = "../../../../CryptoSoft/bin/Debug/net5.0/CryptoSoft.exe",
-                    Arguments = arguments,
-                    UseShellExecute = false,
-                    RedirectStandardOutput = true,
-                    CreateNoWindow = true,
+                    var buffer = new byte[4_096];
+                    // Receive message.
+                    var received = await handler.ReceiveAsync(buffer, SocketFlags.None);
+                    while (received == 0)
+                    {
+                        received = await handler.ReceiveAsync(buffer, SocketFlags.None);
+                    }
+                    
+                    var response = Encoding.UTF8.GetString(buffer, 0, received);
+
+                    var eom = prefixes.FirstOrDefault(prefix => response.StartsWith(prefix));
+                    switch (eom)
+                    {
+                        case var str when str == "<|GAJ|>":
+                            /* Get All Jobs */
+                            string statePath = @"C:\Prosoft\EasySave\Logs\state.json";
+                            string stateContent = File.ReadAllText(statePath);
+                            stateContent = "<|GAJ|>" + stateContent;
+                            
+                            var echoBytes = Encoding.UTF8.GetBytes(stateContent);
+                            await handler.SendAsync(echoBytes, 0);
+
+                            /* Wait until client ack */
+                            await handler.ReceiveAsync(buffer, SocketFlags.None);
+                            string conf =
+                                $"{ConfigManager.GetSavedLanguage()};{ConfigManager.GetLogFormat()};{ConfigManager.GetEncryptionKey()};{ConfigManager.GetCipherList()};{ConfigManager.GetPriorityList()};{ConfigManager.GetBigFileSize()}";
+                            conf = "<|Opt|>" + conf;
+                            echoBytes = Encoding.UTF8.GetBytes(conf);
+                            await handler.SendAsync(echoBytes, 0);
+                            
+                            break;
+
+                        case var str when str == "<|RJ|>":
+                            /* Run Jobs */
+                            responseNoPrefix = response.Replace("<|RJ|>", "");
+                            executeCommand.RJExecute(responseNoPrefix);
+                            await handler.ReceiveAsync(buffer, SocketFlags.None);
+                            break;
+
+
+                        case var str when str == "<|EJ|>":
+                            /* Edit Jobs */
+                            responseNoPrefix = response.Replace("<|EJ|>", "");
+                            executeCommand.EJExecute(responseNoPrefix);
+                            break;
+
+
+                        case var str when str == "<|DJ|>":
+                            /* Delete Jobs */
+                            responseNoPrefix = response.Replace("<|DJ|>", "");
+                            _jobsViewModel.DeleteJob(responseNoPrefix);
+                            break;
+
+                        case var str when str == "<|NJ|>":
+                            /* New Job */
+                            responseNoPrefix = response.Replace("<|NJ|>", "");
+                            executeCommand.NJExecute(responseNoPrefix);
+                            break;
+
+
+                        case var str when str == "<|PP|>":
+                            /* Play/Pause a Job */
+                            if (!IsPaused)
+                            {
+                                IsPaused = true;
+                                btnPlayPause.Background = Brushes.Red;
+                            }
+                            else
+                            {
+                                IsPaused = false;
+                                btnPlayPause.Background = backgroundColor;
+                            }
+                            break;
+                        case var str when str == "<|SJ|>":
+                            /* Stop Running Jobs */
+                            //TODO : Stop Jobs
+                            break;
+                        case var str when str == "<|MO|>":
+                            /* Modify Option */
+                            responseNoPrefix = response.Replace("<|MO|>", "");
+                            executeCommand.MOExecute(responseNoPrefix);
+                            break;
+                        default:
+                            /* Type not recognized */
+                            break;
+                    }
                 }
-            };
-            process.Start();
-            while (!process.StandardOutput.EndOfStream)
-            {
-                string line = process.StandardOutput.ReadLine();
-                Console.WriteLine(line);
             }
-            process.Close();
+            catch (SocketException e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
     }
 }
