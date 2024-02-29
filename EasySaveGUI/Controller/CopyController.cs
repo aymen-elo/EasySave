@@ -257,7 +257,12 @@ namespace EasySaveGUI.Controller
                 }
                 else
                 {
+                    var helperTargetFilePath = Path.Combine(job.TargetFilePath,
+                        _fileGetter.GetRelativePath(job.SourceFilePath, file));
+                    
                     _logger.LogAction("Already exists" + job.Name, file, "", 0, TimeSpan.Zero);
+                    
+                    EndFileCopy(job, helperTargetFilePath, file, copyTime, totalFilesSize);
                 }
             }
 
