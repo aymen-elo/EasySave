@@ -2,9 +2,11 @@
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Forms;
 using System.Windows.Input;
 using EasySaveGUI.Command;
 using EasySaveLib.Model;
+using MessageBox = System.Windows.MessageBox;
 
 namespace EasySaveGUI.ViewModel
 {
@@ -20,6 +22,9 @@ namespace EasySaveGUI.ViewModel
         public string JobSource { get; set; }
         public string JobTarget { get; set; }
         public int JobTypeIdx { get; set; }
+        
+        public ICommand OpenSourceCommand { get; private set; }
+        public ICommand OpenDestinationCommand { get; private set; }
 
         public EditJobViewModel(Job job)
         {
@@ -33,6 +38,42 @@ namespace EasySaveGUI.ViewModel
             JobTypeIdx = job.BackupType == BackupType.Full ? 0 : 1;
 
             EditJobCommand = new RelayCommand(EditJob);
+            OpenSourceCommand = new RelayCommand(OpenSourceDialog);
+            OpenDestinationCommand = new RelayCommand(OpenDestinationDialog);
+        }
+        
+        private void OpenSourceDialog(object obj)
+        {
+            string selectedPath = ShowFolderBrowserDialog(JobSource);
+            if (!string.IsNullOrEmpty(selectedPath))
+            {
+                JobSource = selectedPath;
+                OnPropertyChanged(nameof(JobSource));
+            }
+        }
+        private void OpenDestinationDialog(object obj)
+        {
+            string selectedPath = ShowFolderBrowserDialog(JobTarget);
+            if (!string.IsNullOrEmpty(selectedPath))
+            {
+                JobTarget = selectedPath;
+                OnPropertyChanged(nameof(JobTarget));
+            }
+        }
+        private string ShowFolderBrowserDialog(string initialPath)
+        {
+            using (var dialog = new FolderBrowserDialog())
+            {
+                dialog.SelectedPath = initialPath;
+
+                DialogResult result = dialog.ShowDialog();
+                if (result == DialogResult.OK)
+                {
+                    return dialog.SelectedPath;
+                }
+            }
+
+            return string.Empty;
         }
 
         private void EditJob(object parameter)

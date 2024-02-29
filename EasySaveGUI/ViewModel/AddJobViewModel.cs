@@ -27,6 +27,8 @@ namespace EasySaveGUI.ViewModel
         
         private ObservableCollection<Job> _jobs;
         
+        public ICommand OpenSourceCommand { get; private set; }
+        public ICommand OpenDestinationCommand { get; private set; }
         public AddJobViewModel(ObservableCollection<Job> jobs)
         {
             _logger = Logger.GetInstance();
@@ -34,8 +36,35 @@ namespace EasySaveGUI.ViewModel
 
             AddJobCommand = new RelayCommand(AddJob);
             
+            OpenSourceCommand = new RelayCommand(OpenSourceDialog);
+            OpenDestinationCommand = new RelayCommand(OpenDestinationDialog);
+            
             /* Job details from the Edit Window */
+        }
+        private void OpenSourceDialog(object obj)
+        {
+            using (var dialog = new FolderBrowserDialog())
+            {
+                DialogResult result = dialog.ShowDialog();
+                if (result == DialogResult.OK)
+                {
+                    JobSource = dialog.SelectedPath;
+                    OnPropertyChanged(nameof(JobSource)); // Notifier la vue du changement
+                }
+            }
+        }
 
+        private void OpenDestinationDialog(object obj)
+        {
+            using (var dialog = new FolderBrowserDialog())
+            {
+                DialogResult result = dialog.ShowDialog();
+                if (result == DialogResult.OK)
+                {
+                    JobTarget = dialog.SelectedPath;
+                    OnPropertyChanged(nameof(JobTarget)); // Notifier la vue du changement
+                }
+            }
         }
         
         private void AddJob(object obj)
