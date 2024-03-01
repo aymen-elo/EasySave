@@ -283,21 +283,22 @@ namespace EasySaveGUI.Controller
                 if (!Directory.Exists(targetFileDir))
                     Directory.CreateDirectory(targetFileDir);
 
+                int cipherTime = 0;
 
                 if (cipherList.Contains(Path.GetExtension(file)))
                 {
                     // Add the file to the dictionary before sending it to CryptoSoft.
                     var encryptionTask = Task.Run(() =>
                     {
-                        Console.WriteLine(
-                            _cryptoSoftCipher.sendToCryptoSoft(file, targetFileDir, encryptionKey));
+                        string cipheTimeString = _cryptoSoftCipher.sendToCryptoSoft(file, targetFileDir, encryptionKey);
+                        cipherTime = Int32.Parse(cipheTimeString);
                     });
                     _filesBeingProcessed.TryAdd(file, encryptionTask);
 
                     // Wait for the encryption to finish before calling EndFileCopy
                     encryptionTask.ContinueWith(t =>
                     {
-                        EndFileCopy(job, targetFilePath + ".cry", file, copyTime, totalFilesSize);
+                        EndFileCopy(job, targetFilePath + ".cry", file, copyTime, totalFilesSize, cipherTime);
                     });
 
                     continue;
@@ -308,6 +309,9 @@ namespace EasySaveGUI.Controller
 
                 EndFileCopy(job, targetFilePath, file, copyTime, totalFilesSize);
                 
+                if (MainWindow.IsStopped)
+                    break;
+                
             }
             chunk.Clear();
             
@@ -317,7 +321,7 @@ namespace EasySaveGUI.Controller
             _identity.SaveAllowedHashes(allowedHashes.Keys, job.Name);
         }
         
-        private void EndFileCopy(Job job, string targetFilePath, string file, Stopwatch copyTime, long totalFilesSize)
+        private void EndFileCopy(Job job, string targetFilePath, string file, Stopwatch copyTime, long totalFilesSize, int cipherTime = 0)
         {
             // Wait for CryptoSoft to finish processing the file, if necessary.
             if (_filesBeingProcessed.TryGetValue(file, out Task task))
@@ -340,7 +344,7 @@ namespace EasySaveGUI.Controller
 
             lock (_loggerLock)
             {
-                _logger.LogAction(job.Name, file, targetFilePath, fileSize, copyTime.Elapsed);
+                _logger.LogAction(job.Name, file, targetFilePath, fileSize, copyTime.Elapsed, cipherTime);
             }
             
             lock (_jobProgressionLock)

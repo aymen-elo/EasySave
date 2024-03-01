@@ -6,7 +6,7 @@
         xmlns:easySaveGui="clr-namespace:EasySaveRemote"
         xmlns:model="clr-namespace:EasySaveRemote.Model"
         mc:Ignorable="d"
-        Title="MainWindow" Height="550" Width="1200">
+        Title="EasySave Remote Interface" Height="550" Width="1200">
     <Window.Resources>
         <model:LangueSettingsViewModels x:Key="LangueSettingsViewModelInstance" />
     </Window.Resources>
