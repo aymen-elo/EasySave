@@ -8,18 +8,18 @@ using EasySaveRemote.Packets;
 
 namespace EasySaveRemote
 {
-    public partial class FormatLog : Window
+    public partial class Option : Window
     {
         public MainWindow _MainWindow { get; set; }
 
 
 
-        public FormatLog()
+        public Option()
         {
             InitializeComponent();
         }
 
-        public FormatLog(string logFormat, string encryptionKey, string cipherList, string prioList, string bigFileSize, MainWindow mainWindow = null)
+        public Option(string logFormat, string encryptionKey, string cipherList, string prioList, string bigFileSize, MainWindow mainWindow = null)
         {
             InitializeComponent();
             if (logFormat == "xml")

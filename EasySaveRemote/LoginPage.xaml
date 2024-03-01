@@ -11,10 +11,10 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         
-        <TextBlock Text="Nom d'utilisateur:" Margin="10" Grid.Row="0"/>
+        <TextBlock Text="Server IP:" Margin="10" Grid.Row="0"/>
         <TextBox x:Name="tboxIpAddress" Margin="10" Grid.Row="1"/>
         
-        <TextBlock Text="Mot de passe:" Margin="10" Grid.Row="2"/>
+        <TextBlock Text="Port:" Margin="10" Grid.Row="2"/>
         <TextBox x:Name="tboxPort" Margin="10" Grid.Row="3"/>
         
         <Button x:Name="btnLogin" Click="btnLogin_Click" Content="Se connecter" Margin="10" Grid.Row="4"/>

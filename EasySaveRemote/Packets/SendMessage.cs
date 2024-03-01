@@ -32,7 +32,7 @@ namespace EasySaveRemote.Packets
     {
         private MainViewModel _mainViewModel;
         private ConfigManager _configManager;
-        private static FormatLog _formatLog = new FormatLog();
+        private static Option _option = new Option();
         
         private static ObservableCollection<Job> _jobs = new ObservableCollection<Job>();
         public static ObservableCollection<Job> Jobs => _jobs;
@@ -65,6 +65,7 @@ namespace EasySaveRemote.Packets
                     {
                         case var str when str.StartsWith("<|GAJ|>"):
                             /* Get All Jobs */
+                            _jobs.Clear();
                             var responseNoPrefix = response.Replace("<|GAJ|>", "");
                             var content = JsonConvert.DeserializeObject<ObservableCollection<Job>>(responseNoPrefix);
                             

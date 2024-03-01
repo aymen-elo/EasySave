@@ -43,7 +43,8 @@ namespace EasySaveGUI
         public ConfigManager _configManager;
         private MainViewModel _mainViewModel;
         public static bool IsPaused;
-        public SolidColorBrush backgroundColor = new SolidColorBrush(Color.FromArgb(255, (byte)233, (byte)238, (byte)243));
+        public static bool IsStopped;
+        public SolidColorBrush backgroundColor = new SolidColorBrush(Color.FromArgb(255, (byte)221, (byte)221, (byte)221));
         public MainWindow()
         {
             _configManager = new ConfigManager();
@@ -124,6 +125,16 @@ namespace EasySaveGUI
 
         private void btnStopJob_Click(object sender, RoutedEventArgs e)
         {
+            if (!IsStopped)
+            {
+                IsStopped = true;
+                btnStopJob.Background = Brushes.Red;
+            }
+            else
+            {
+                IsStopped = false;
+                btnStopJob.Background = backgroundColor;
+            }
         }
 
         private void btnLogs_Click(object sender, RoutedEventArgs e)
@@ -248,7 +259,16 @@ namespace EasySaveGUI
                             break;
                         case var str when str == "<|SJ|>":
                             /* Stop Running Jobs */
-                            //TODO : Stop Jobs
+                            if (!IsStopped)
+                            {
+                                IsStopped = true;
+                                btnStopJob.Background = Brushes.Red;
+                            }
+                            else
+                            {
+                                IsStopped = false;
+                                btnStopJob.Background = backgroundColor;
+                            }
                             break;
                         case var str when str == "<|MO|>":
                             /* Modify Option */

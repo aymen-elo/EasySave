@@ -44,19 +44,19 @@ namespace EasySaveLib.Model
             return _instance;
         }
 
-        public void LogAction(string name, string fileSource, string fileTarget, long fileSize, TimeSpan fileTransferTime)
+        public void LogAction(string name, string fileSource, string fileTarget, long fileSize, TimeSpan fileTransferTime, int cipherTime = 0)
         {
             if (LogFormat == "xml")
             {
-                LogActionXml(name, fileSource, fileTarget, fileSize, fileTransferTime);
+                LogActionXml(name, fileSource, fileTarget, fileSize, fileTransferTime, cipherTime);
             }
             else if (LogFormat == "json") 
             {
-                LogActionJson(name, fileSource, fileTarget, fileSize, fileTransferTime);
+                LogActionJson(name, fileSource, fileTarget, fileSize, fileTransferTime, cipherTime);
             }
         }
         public void LogActionJson(string name, string fileSource, string fileTarget, long fileSize,
-            TimeSpan fileTransferTime)
+            TimeSpan fileTransferTime, int cipherTime = 0)
         {
             string logMessage = $"{{\n" +
                                 $" \"Name\": \"{name}\",\n" +
@@ -64,7 +64,8 @@ namespace EasySaveLib.Model
                                 $" \"FileTarget\": \"{fileTarget}\",\n" +
                                 $" \"FileSize\": {fileSize},\n" +
                                 $" \"FileTransferTime\": {fileTransferTime},\n" +
-                                $" \"Time\": \"{DateTime.Now:dd/MM/yyyy HH:mm:ss}\"\n" +
+                                $" \"Time\": \"{DateTime.Now:dd/MM/yyyy HH:mm:ss}\",\n" +
+                                $" \"CipherTime\": {cipherTime}\n" +
                                 $" }}";
             
             string jsonFilePath = Path.Combine(_dirPath, $"{DateTime.Now:yyyy-MM-dd}.json");
@@ -78,7 +79,7 @@ namespace EasySaveLib.Model
         }
         
         
-        public void LogActionXml(string name, string fileSource, string fileTarget, long fileSize, TimeSpan fileTransferTime)
+        public void LogActionXml(string name, string fileSource, string fileTarget, long fileSize, TimeSpan fileTransferTime, int cipherTime = 0)
         {
             string transferTimeString = fileTransferTime.ToString();
 
@@ -88,7 +89,8 @@ namespace EasySaveLib.Model
                 new XElement("FileTarget", fileTarget),
                 new XElement("FileSize", fileSize),
                 new XElement("FileTransferTime", transferTimeString),
-                new XElement("Time", DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss")));
+                new XElement("Time", DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss")),
+                new XElement("CipherTime", cipherTime));
 
             string xmlFilePath = Path.Combine(_dirPath, $"{DateTime.Now:yyyy-MM-dd}.xml");
 

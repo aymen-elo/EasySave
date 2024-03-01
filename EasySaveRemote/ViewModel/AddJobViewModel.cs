@@ -8,9 +8,11 @@ using EasySaveGUI.Command;
 using System.Windows.Forms;
 using EasySaveGUI.Controller;
 using EasySaveLib.Model;
+using EasySaveRemote.Packets;
+using Newtonsoft.Json;
 
 
-namespace EasySaveGUI.ViewModel
+namespace EasySaveRemote.ViewModel
 {
     public class AddJobViewModel : ViewModelBase
     {
@@ -19,6 +21,7 @@ namespace EasySaveGUI.ViewModel
         public ICommand AddJobCommand { get; set; }
         private Logger _logger;
         private CopyController _copyController = new CopyController();
+        private MainWindow _mainWindow;
         
         public string JobName { get; set; }
         public string JobSource { get; set; }
@@ -29,18 +32,22 @@ namespace EasySaveGUI.ViewModel
         
         public ICommand OpenSourceCommand { get; private set; }
         public ICommand OpenDestinationCommand { get; private set; }
-        public AddJobViewModel(ObservableCollection<Job> jobs)
+
+        
+        public AddJobViewModel(ObservableCollection<Job> jobs, MainWindow mainWindow)
         {
             _logger = Logger.GetInstance();
             _jobs = jobs;
+            _mainWindow = mainWindow;
 
             AddJobCommand = new RelayCommand(AddJob);
             
+            /* Job details from the Edit Window */
             OpenSourceCommand = new RelayCommand(OpenSourceDialog);
             OpenDestinationCommand = new RelayCommand(OpenDestinationDialog);
-            
-            /* Job details from the Edit Window */
+
         }
+        
         private void OpenSourceDialog(object obj)
         {
             using (var dialog = new FolderBrowserDialog())
@@ -69,10 +76,13 @@ namespace EasySaveGUI.ViewModel
         
         private void AddJob(object obj)
         {
-            Job j = new Job(JobName, JobTypeIdx == 0 ? BackupType.Full : BackupType.Diff, JobSource, JobTarget);
-            UpdateJobData(j.Name, j);
+            Job _job = new Job(JobName, JobTypeIdx == 0 ? BackupType.Full : BackupType.Diff, JobSource, JobTarget);
             
-            _jobs.Add(j);
+            string jobJson = JsonConvert.SerializeObject(_job);
+
+            
+            SendMessage.SendMessageTo("127.0.0.1", 13,jobJson , MessageType.NJ, _mainWindow);
+
             RequestClose?.Invoke();
         }
         

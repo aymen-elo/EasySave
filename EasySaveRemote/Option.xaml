@@ -1,8 +1,8 @@
-﻿<Window x:Class="EasySaveRemote.FormatLog"
+﻿<Window x:Class="EasySaveRemote.Option"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:materialDesign="http://materialdesignxaml.net/winfx/xaml/themes"
-        Title="Options" Height="300" Width="400">
+        Title="Options" Height="315" Width="400">
 
     <!--<Window.Style>
         <Style TargetType="Window">
@@ -17,16 +17,19 @@
         <RadioButton Content="JSON" x:Name="rbJson" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="96,21,0,0"/>
         <RadioButton Content="XML" x:Name="rbXml" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="160,21,0,0"/>
 
-        <Label x:Name="lblBigFile" Content="Big File Size:" HorizontalAlignment="Left" Margin="20,58,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="lblBigFile" Content="Big File Size (Ko):" HorizontalAlignment="Left" Margin="20,58,0,0" VerticalAlignment="Top"/>
         <Label x:Name="lblPrioList" Content="Priority Extension List:" HorizontalAlignment="Left" Margin="20,98,0,0" VerticalAlignment="Top"/>
         <Label x:Name="lblCipherList" Content="Encrypted Extension List:" HorizontalAlignment="Left" Margin="20,138,0,0" VerticalAlignment="Top"/>
         <Label x:Name="lblEncryptionKey" Content="Encryption Key:" HorizontalAlignment="Left" Margin="20,178,0,0" VerticalAlignment="Top"/>
-
+        <Label x:Name="lblProcessList" Content="Process List:" HorizontalAlignment="Left" Margin="20,218,0,0" VerticalAlignment="Top"/>
+        
         <TextBox x:Name="tboxBigFile" HorizontalAlignment="Left" Margin="160,58,0,0" VerticalAlignment="Top" Width="100"/>
         <TextBox x:Name="tboxPrioList" HorizontalAlignment="Left" Margin="160,98,0,0" VerticalAlignment="Top" Width="200"/>
         <TextBox x:Name="tboxCipherList" HorizontalAlignment="Left" Margin="160,138,0,0" VerticalAlignment="Top" Width="200"/>
         <TextBox x:Name="tboxEncryptionKey" HorizontalAlignment="Left" Margin="160,178,0,0" VerticalAlignment="Top" Width="200"/>
+        <TextBox x:Name="tboxProcessList" HorizontalAlignment="Left" Margin="160,218,0,0" VerticalAlignment="Top" Width="200"/>
 
-        <Button Content="Save" Click="btnSave_Click" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,226,0,0" Width="80"/>
+        <Button Content="Save" Click="btnSave_Click" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,246,0,0" Width="80"/>
     </Grid>
 </Window>
+ 
