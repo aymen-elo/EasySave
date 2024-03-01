@@ -45,7 +45,7 @@ namespace EasySaveGUI.Controller
         private readonly object _cipherLock = new object();
         private readonly object _md5Lock = new object();
         private ConcurrentDictionary<string, Task> _filesBeingProcessed = new ConcurrentDictionary<string, Task>();
-        private const int ThreadCount = 5;
+        private const int ThreadCount = 1;
 
         public CopyController()
         {
@@ -257,12 +257,14 @@ namespace EasySaveGUI.Controller
                 }
                 else
                 {
+                    // Log that the file already exists in the target (no need to copy)
                     var helperTargetFilePath = Path.Combine(job.TargetFilePath,
                         _fileGetter.GetRelativePath(job.SourceFilePath, file));
-                    
                     _logger.LogAction("Already exists" + job.Name, file, "", 0, TimeSpan.Zero);
-                    
-                    EndFileCopy(job, helperTargetFilePath, file, copyTime, totalFilesSize);
+                    lock (_loggerLock)
+                    {
+                        EndFileCopy(job, helperTargetFilePath, file, copyTime, totalFilesSize);
+                    }
                 }
             }
 
@@ -363,8 +365,12 @@ namespace EasySaveGUI.Controller
             
             Console.WriteLine(_progressBar.UpdateProgress(0, job.Name, job.TotalFilesToCopy, job.NbSavedFiles));
             
-            long fileSize = new System.IO.FileInfo(targetFilePath).Length;
-
+            long fileSize = 0;
+            if (File.Exists(targetFilePath))
+            {
+                fileSize = new FileInfo(targetFilePath).Length;
+            }
+            
             lock (_loggerLock)
             {
                 _logger.LogAction(job.Name, file, targetFilePath, fileSize, copyTime.Elapsed);
