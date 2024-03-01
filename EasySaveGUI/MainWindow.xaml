@@ -149,8 +149,6 @@
                     Click="btnPlayPause_Click" />
             <Button x:Name="btnStopJob" Content="{DynamicResource StrButtonStopJob}" Height="42" Width="90"
                     Click="btnStopJob_Click" />
-            <Button x:Name="btnLogs" Content="{DynamicResource StrButtonLogs}" Height="42" Width="90"
-                    Click="btnLogs_Click" />
             <Button x:Name="btnOption" Content="{DynamicResource StrButtonOption}" Height="42" Width="90"
                     Click="btnOption_Click" />
         </StackPanel>
