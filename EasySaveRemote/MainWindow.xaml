@@ -125,13 +125,13 @@
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>
-        <Grid>
-            <Label x:Name="labelEvents" Content="Events" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="30,0,0,80" />
-            <TextBlock x:Name="tboxEvent" HorizontalAlignment="Stretch" Height="60" Margin="30,0,30,20" TextWrapping="Wrap"
-                       Text="Ici event " VerticalAlignment="Bottom" Width="Auto" Background="White"
-                       ScrollViewer.VerticalScrollBarVisibility="Visible" />
-            <Label x:Name="lblVersion" Content="Version 3.0" HorizontalAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Bottom" FontSize="10"/>
-        </Grid>
+        <!-- <Grid> -->
+        <!--     <Label x:Name="labelEvents" Content="Events" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="30,0,0,80" /> -->
+        <!--     <TextBlock x:Name="tboxEvent" HorizontalAlignment="Stretch" Height="60" Margin="30,0,30,20" TextWrapping="Wrap" -->
+        <!--                Text="Ici event " VerticalAlignment="Bottom" Width="Auto" Background="White" -->
+        <!--                ScrollViewer.VerticalScrollBarVisibility="Visible" /> -->
+        <!--     <Label x:Name="lblVersion" Content="Version 3.0" HorizontalAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Bottom" FontSize="10"/> -->
+        <!-- </Grid> -->
 
 
         <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10,30,0,0">
@@ -152,8 +152,6 @@
                     Click="btnPlayPause_Click" />
             <Button x:Name="btnStopJob" Content="{DynamicResource StrButtonStopJob}" Height="42" Width="90"
                     Click="btnStopJob_Click" />
-            <Button x:Name="btnLogs" Content="{DynamicResource StrButtonLogs}" Height="42" Width="90"
-                    Click="btnLogs_Click" />
             <Button x:Name="btnOption" Content="{DynamicResource StrButtonOption}" Height="42" Width="90"
                     Click="btnOption_Click" />
         </StackPanel>

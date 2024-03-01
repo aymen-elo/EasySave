@@ -42,8 +42,8 @@ namespace EasySaveGUI
         private Logger _logger;
         public ConfigManager _configManager;
         private MainViewModel _mainViewModel;
-        public static bool IsPaused;
-        public static bool IsStopped;
+        public static bool IsPaused = false;
+        public static bool IsStopped = false;
         public SolidColorBrush backgroundColor = new SolidColorBrush(Color.FromArgb(255, (byte)221, (byte)221, (byte)221));
         public MainWindow()
         {
@@ -220,7 +220,6 @@ namespace EasySaveGUI
                             /* Run Jobs */
                             responseNoPrefix = response.Replace("<|RJ|>", "");
                             executeCommand.RJExecute(responseNoPrefix);
-                            await handler.ReceiveAsync(buffer, SocketFlags.None);
                             break;
 
 
@@ -249,12 +248,10 @@ namespace EasySaveGUI
                             if (!IsPaused)
                             {
                                 IsPaused = true;
-                                btnPlayPause.Background = Brushes.Red;
                             }
                             else
                             {
                                 IsPaused = false;
-                                btnPlayPause.Background = backgroundColor;
                             }
                             break;
                         case var str when str == "<|SJ|>":

@@ -45,7 +45,7 @@ namespace EasySaveGUI.Controller
         private readonly object _cipherLock = new object();
         private readonly object _md5Lock = new object();
         private ConcurrentDictionary<string, Task> _filesBeingProcessed = new ConcurrentDictionary<string, Task>();
-        private const int ThreadCount = 1;
+        private int ThreadCount = 1;
 
         public CopyController()
         {
@@ -147,7 +147,7 @@ namespace EasySaveGUI.Controller
                 {
                     priorityFiles.Add(file);
                 }
-                else if (longFileSize >= (new FileInfo(file)).Length)
+                else if (longFileSize <= (new FileInfo(file)).Length)
                 {
                     bigFiles.Add(file);
                 }
@@ -190,6 +190,14 @@ namespace EasySaveGUI.Controller
             int bigFileChunksCount = (bigFiles.Count + otherFiles.Count) != 0 ? (int)Math.Ceiling((double)ThreadCount * bigFiles.Count / (bigFiles.Count + otherFiles.Count)) : 0;
             int otherFileChunksCount = ThreadCount - bigFileChunksCount;
 
+            if (otherFileChunksCount == 0 && otherFiles.Count != 0)
+            {
+                ThreadCount = 2;
+                otherFileChunksCount = 1;
+            }
+                
+            
+            
             var bigFileChunks = ChunkFiles(bigFiles, bigFileChunksCount);
             var otherFileChunks = ChunkFiles(otherFiles, otherFileChunksCount);
 
@@ -364,6 +372,14 @@ namespace EasySaveGUI.Controller
                 job.NbSavedFiles++;
                 job.NbFilesLeftToDo--;
             }
+            
+            ProcessBL.IsProcessRunning(processList);
+            
+            while (MainWindow.IsPaused || ProcessBL.IsDetected)
+            {  
+                Thread.Sleep(100);
+                ProcessBL.IsProcessRunning(processList);
+            }
 
             // TODO : JobID /!\
             
@@ -393,19 +409,6 @@ namespace EasySaveGUI.Controller
             copyTime.Stop();
             copyTime.Reset();
             
-            //List<string> processBlackList = new List<string>();
-
-            
-            //processBlackList.Add("calc");
-            //processBlackList.Add("CalculatorApp");
-            
-            ProcessBL.IsProcessRunning(processList);
-            
-            while (MainWindow.IsPaused || ProcessBL.IsDetected)
-            {  
-                Thread.Sleep(100);
-                ProcessBL.IsProcessRunning(processList);
-            }
         }
         
         
