@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using EasySave.Controller;
 using EasySave.Model.Translation;
 
@@ -23,6 +24,29 @@ namespace EasySave.Model
 
         public void Run()
         {
+            
+            // Menu to choose between CLI and GUI : if CLI, run CLI, if GUI, run GUI
+            while (true) {
+                Console.WriteLine("Choose between CLI and GUI : ");
+                Console.WriteLine("1. CLI");
+                Console.WriteLine("2. GUI");
+                Console.Write("Choice : ");
+                string versionChoice = Console.ReadLine();
+                Console.Clear();
+
+                if (versionChoice == "1")
+                {
+                    break;
+                }
+                else if (versionChoice == "2")
+                {
+                    Process.Start(@"C:\Users\admin.aelouagouti\Documents\ecole\ProgSys\EasySave\EasySaveGUI\bin\Debug\net5.0-windows\EasySaveGUI.exe");
+                    // end the current process
+                    Environment.Exit(0);
+                }
+            }
+            
+            
             _translationController.Run();
             _translation = _translationManager.LoadTranslation(_translationController.Language); // Assigner la traduction au champ de classe
 

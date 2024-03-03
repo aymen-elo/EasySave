@@ -6,7 +6,7 @@ using System.IO;
 using System.Windows.Input;
 using EasySaveGUI.Command;
 using System.Windows.Forms;
-using EasySaveGUI.Controller;
+using EasySaveGUI.Helper;
 using EasySaveLib.Model;
 using EasySaveRemote.Packets;
 using Newtonsoft.Json;

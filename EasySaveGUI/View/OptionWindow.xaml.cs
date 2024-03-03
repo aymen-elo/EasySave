@@ -2,11 +2,17 @@
 using System.Windows;
 using EasySaveLib.Model;
 
-namespace EasySaveGUI
+namespace EasySaveGUI.View
 {
-    public partial class Option : Window
+    /// <summary>
+    /// Window for managing application options.
+    /// </summary>
+    public partial class OptionWindow : Window
     {
-        private Logger logger = Logger.GetInstance();
+        /// <summary>
+        /// Logger instance for logging application events.
+        /// </summary>
+        private readonly Logger _logger = Logger.GetInstance();
 
         public bool IsJsonSelected { get; private set; }
         public bool IsXmlSelected { get; private set; }
@@ -15,20 +21,19 @@ namespace EasySaveGUI
         public string PrioList { get; private set; }
         public string ProcessList { get; private set; }
 
-        public Option()
+        /// <summary>
+        /// Constructor for OptionWindow.
+        /// Initializes the window and loads the current options.
+        /// </summary>
+        public OptionWindow()
         {
             InitializeComponent();
             try
             {
-                string logFormat = ConfigManager.GetLogFormat();
+                var logFormat = ConfigManager.GetLogFormat();
                 if (logFormat == "xml")
-                {
                     rbXml.IsChecked = true;
-                }
-                else if (logFormat == "json")
-                {
-                    rbJson.IsChecked = true;
-                }
+                else if (logFormat == "json") rbJson.IsChecked = true;
 
                 tboxEncryptionKey.Text = ConfigManager.GetEncryptionKey();
                 tboxCipherList.Text = ConfigManager.GetCipherList();
@@ -37,14 +42,21 @@ namespace EasySaveGUI
                 tboxProcessList.Text = ConfigManager.GetProcessList();
 
                 ConfigManager.SaveLogFormat("json");
-                logger.LogFormat = "json";
+                _logger.LogFormat = "json";
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"An error occurred while loading options: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"An error occurred while loading options: {ex.Message}", "Error", MessageBoxButton.OK,
+                    MessageBoxImage.Error);
             }
         }
 
+        /// <summary>
+        /// Event handler for the save button click event.
+        /// Saves the current options and closes the window.
+        /// </summary>
+        /// <param name="sender">The object that triggered the event.</param>
+        /// <param name="e">The event arguments.</param>
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -52,16 +64,15 @@ namespace EasySaveGUI
                 if (rbXml.IsChecked == true)
                 {
                     ConfigManager.SaveLogFormat("xml");
-                    logger.LogFormat = "xml";
-
+                    _logger.LogFormat = "xml";
                 }
                 else if (rbJson.IsChecked == true)
                 {
                     ConfigManager.SaveLogFormat("json");
-                    logger.LogFormat = "json";
+                    _logger.LogFormat = "json";
                 }
 
-                string BigFileSize = tboxBigFile.Text;
+                var bigFileSize = tboxBigFile.Text;
 
                 ConfigManager.SaveEncryptionKey(tboxEncryptionKey.Text);
                 ConfigManager.SaveCipherList(tboxCipherList.Text);
@@ -69,11 +80,12 @@ namespace EasySaveGUI
                 ConfigManager.SaveBigFileSize(tboxBigFile.Text);
                 ConfigManager.SaveProcessList(tboxProcessList.Text);
 
-                this.Close();
+                Close();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"An error occurred while saving options: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"An error occurred while saving options: {ex.Message}", "Error", MessageBoxButton.OK,
+                    MessageBoxImage.Error);
             }
         }
     }

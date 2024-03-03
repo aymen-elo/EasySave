@@ -1,22 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using EasySaveGUI.Model;
+using EasySaveGUI.View;
 using EasySaveGUI.ViewModel;
 using EasySaveLib.Model;
 using Newtonsoft.Json;
 
-namespace EasySaveGUI.Packets
+namespace EasySaveGUI.Server
 {
+    /// <summary>
+    /// Methods to execute Job commands received from the server
+    /// </summary>
     public class ExecuteCommand
     {
         private static Logger _logger = new Logger();
         private JobsViewModel _jobsViewModel = new JobsViewModel(_logger);
-        private Option _option;
+        private OptionWindow _option;
         private EditJobViewModel _editJobViewModel;
         private AddJobViewModel _addJobWindow;
 
+        /// <summary>
+        /// New Job => Send Job data to AddJobViewModel
+        /// </summary>
+        /// <param name="response"></param>
         public void NJExecute(string response)
         {
             string name = null;
@@ -38,6 +44,10 @@ namespace EasySaveGUI.Packets
             _addJobWindow = new AddJobViewModel(jobs);
         }
 
+        /// <summary>
+        /// Edit Job => Send Job data to EditJobViewModel
+        /// </summary>
+        /// <param name="response"></param>
         public void EJExecute(string response)
         {
             List<object>? deserializedData = JsonConvert.DeserializeObject<List<object>>(response);
@@ -52,17 +62,24 @@ namespace EasySaveGUI.Packets
             _editJobViewModel = new EditJobViewModel(job);
         }
 
+        /// <summary>
+        /// Run Job => Launch selected Job
+        /// </summary>
+        /// <param name="response"></param>
         public async void RJExecute(string response)
         {
             var jobs = JsonConvert.DeserializeObject<ObservableCollection<Job>>(response);
 
             foreach (var j in jobs)
             {
-                BackupProcess backupProcess = new BackupProcess(j);
-                await _jobsViewModel.LaunchJobAsync(j, backupProcess);
+                await _jobsViewModel.LaunchJobAsync(j);
             }
         }
 
+        /// <summary>
+        /// Modify Options => Save new Options
+        /// </summary>
+        /// <param name="response"></param>
         public void MOExecute(string response)
         {
             string[] dataArray = response.Split(';');

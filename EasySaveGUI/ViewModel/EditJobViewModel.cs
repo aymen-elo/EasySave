@@ -10,11 +10,21 @@ using MessageBox = System.Windows.MessageBox;
 
 namespace EasySaveGUI.ViewModel
 {
+    /// <summary>
+    /// ViewModel for the logic of editing a backup job.
+    /// </summary>
     public class EditJobViewModel : ViewModelBase
     {
+        /// <summary>
+        /// Event that is triggered when the job editing is completed.
+        /// </summary>
         public event Action RequestClose;
 
+        /// <summary>
+        /// Command to edit the job.
+        /// </summary>
         public ICommand EditJobCommand { get; set; }
+
         private Job _job;
         private Logger _logger;
 
@@ -26,6 +36,11 @@ namespace EasySaveGUI.ViewModel
         public ICommand OpenSourceCommand { get; private set; }
         public ICommand OpenDestinationCommand { get; private set; }
 
+        /// <summary>
+        /// Constructor for EditJobViewModel.
+        /// Initializes the job details and sets up the commands for editing the job and opening the source and destination dialogs.
+        /// </summary>
+        /// <param name="job">The job to edit.</param>
         public EditJobViewModel(Job job)
         {
             _job = job;
@@ -42,6 +57,10 @@ namespace EasySaveGUI.ViewModel
             OpenDestinationCommand = new RelayCommand(OpenDestinationDialog);
         }
         
+        /// <summary>
+        /// Opens the source dialog to select the source path for the job.
+        /// </summary>
+        /// <param name="obj">Not used.</param>
         private void OpenSourceDialog(object obj)
         {
             string selectedPath = ShowFolderBrowserDialog(JobSource);
@@ -51,6 +70,11 @@ namespace EasySaveGUI.ViewModel
                 OnPropertyChanged(nameof(JobSource));
             }
         }
+
+        /// <summary>
+        /// Opens the destination dialog to select the destination path for the job.
+        /// </summary>
+        /// <param name="obj">Not used.</param>
         private void OpenDestinationDialog(object obj)
         {
             string selectedPath = ShowFolderBrowserDialog(JobTarget);
@@ -60,6 +84,12 @@ namespace EasySaveGUI.ViewModel
                 OnPropertyChanged(nameof(JobTarget));
             }
         }
+
+        /// <summary>
+        /// Shows a folder browser dialog with the specified initial path.
+        /// </summary>
+        /// <param name="initialPath">The initial path for the folder browser dialog.</param>
+        /// <returns>The selected path from the folder browser dialog.</returns>
         private string ShowFolderBrowserDialog(string initialPath)
         {
             using (var dialog = new FolderBrowserDialog())
@@ -76,6 +106,10 @@ namespace EasySaveGUI.ViewModel
             return string.Empty;
         }
 
+        /// <summary>
+        /// Edits the job with the details from the edit window.
+        /// </summary>
+        /// <param name="parameter">Not used.</param>
         private void EditJob(object parameter)
         {
             var newName = JobName;

@@ -2,7 +2,7 @@
 using EasySaveGUI.ViewModel;
 using EasySaveLib.Model;
 
-namespace EasySaveGUI
+namespace EasySaveGUI.View
 {
     public partial class EditJobWindow : Window
     {

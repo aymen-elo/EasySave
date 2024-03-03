@@ -1,15 +1,10 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 
-namespace EasySaveGUI.Model
+namespace EasySaveGUI.Helper
 {
     public class CryptoSoftCipher
     {
-        public CryptoSoftCipher()
-        {
-        }
-
-        public string sendToCryptoSoft(string sourcePath, string targetPath, string encryptionKey)
+        public string SendToCryptoSoft(string sourcePath, string targetPath, string encryptionKey)
         {
             string arguments = sourcePath + " " + targetPath + " " + encryptionKey;
             Process process = new Process()

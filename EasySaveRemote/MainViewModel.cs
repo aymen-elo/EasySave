@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using EasySaveGUI.Command;
-using EasySaveGUI.Controller;
 using EasySaveGUI.ViewModel;
 using EasySaveLib.Model;
 

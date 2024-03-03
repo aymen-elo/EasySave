@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace EasySaveGUI.Model
+namespace EasySaveGUI.Helper
 {
     public class ProcessBL
     {

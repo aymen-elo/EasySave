@@ -1,12 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Windows;
-using System.Windows.Input;
-using EasySaveGUI.Command;
-using EasySaveGUI.Model;
 using Newtonsoft.Json.Linq;
 
-namespace EasySaveGUI.Model
+namespace EasySaveGUI.Helper
 {
     public class JsonResourceDictionary : ResourceDictionary
     {

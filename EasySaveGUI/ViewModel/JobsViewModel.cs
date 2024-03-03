@@ -1,64 +1,55 @@
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using EasySaveLib.Model;
-using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using EasySaveGUI.Model;
-using EasySaveGUI.Controller;
-using EasySaveLib.Model;
+using EasySaveGUI.Helper;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace EasySaveGUI.ViewModel
 {
+    /// <summary>
+    /// ViewModel for handling backup Jobs (Launch/Delete/Resume).
+    /// This class contains the List of Jobs and some of the methods to handle them.
+    /// </summary>
     public class JobsViewModel : ViewModelBase
     {
-        /* Instead of a Jobs list for data binding purposes */
+        /// <summary>
+        /// the List representing backup Jobs.
+        /// </summary>
         private readonly ObservableCollection<Job> _jobs;
         public ObservableCollection<Job> Jobs => _jobs;
         
+        /// <summary>
+        /// Logger for logging job states and actions.
+        /// </summary>
         private Logger Logger { get; }
-        private readonly CopyController _copyController;
         
+        /// <summary>
+        /// Constructor for JobsViewModel.
+        /// Initializes the jobs collection, logger and copy controller.
+        /// </summary>
         public JobsViewModel(Logger logger)
         {
             _jobs = new ObservableCollection<Job>();
             Logger = logger;
-            _copyController = new CopyController();
             Initialize();
         }
 
+        /// <summary>
+        /// Initializes the jobs collection by retrieving existing backup jobs from the state file.
+        /// </summary>
         private void Initialize()
         {
-            /* Handling the already existing backup jobs (if they exist) */
-            // Checking if the State logging file exists
             var stateFile = Logger.LogsDirectoryPath + @"\state.json";
             if (File.Exists(stateFile) & new FileInfo(stateFile).Length != 0)
             {
                 var jsonContent = File.ReadAllText(stateFile);
                 var content = JsonConvert.DeserializeObject<ObservableCollection<Job>>(jsonContent);
 
-                // Regex matching a Retired Job element of the state.json
-                var regex = new Regex(@"\{[^}]*""State"":\s*""Retired""[^}]*\},?", RegexOptions.Singleline);
-                jsonContent = regex.Replace(jsonContent, "");
-                
-                var jsonArray = JArray.Parse(jsonContent);
-                var nullItems = jsonArray.Where(item => item.Type == JTokenType.Null).ToList();
-                
-                jsonContent = jsonArray.ToString(Formatting.Indented);
-                File.WriteAllText(stateFile, jsonContent);
-                
                 foreach (var jobInfo in content)
                 {
-                    // When the job is not taken account of -> we ignore it because it's not a Job anymore 
-                    if (jobInfo.State == JobState.Retired) { continue; }
-                    
-                    // Construct a new Job with the available data in the json and append it to the Jobs List
                     var job = new Job(jobInfo.Name, jobInfo.BackupType, jobInfo.State, jobInfo.SourceFilePath, jobInfo.TargetFilePath, 
                         jobInfo.TotalFilesToCopy, jobInfo.NbFilesLeftToDo, jobInfo.TotalFilesSize);
                     
@@ -67,7 +58,10 @@ namespace EasySaveGUI.ViewModel
             }
         }
 
-        /* Job Deletion by Name method */
+        /// <summary>
+        /// Deletes a job by its name.
+        /// </summary>
+        /// <param name="name">The name of the job to delete.</param>
         public void DeleteJob(string name)
         {
             var job = _jobs.FirstOrDefault(j => j.Name == name);
@@ -77,21 +71,17 @@ namespace EasySaveGUI.ViewModel
                 Logger.LogState(job);
                 _jobs.Remove(job);
                 
-                // Removal of Job hashes/log
                 Logger.RemoveRetiredJobs();
                 IdentityManager identityManager = new IdentityManager();
                 identityManager.DeleteAllowedHashes(job.Name);
             }
         }
-        
-        public void AddJob(string? name, string? source, string? destination, BackupType backupType)
-        {
-            var job = new Job(name, backupType, source, destination);
-            UpdateJobData(name, job);
-            _jobs.Add(job);
-        }
 
-        private void LaunchJob(Job job, BackupProcess backupProcess)
+        /// <summary>
+        /// Launches a job.
+        /// </summary>
+        /// <param name="job">The job to launch.</param>
+        private void LaunchJob(Job job)
         {
             CopyController localCopyController = new CopyController();
             
@@ -115,58 +105,22 @@ namespace EasySaveGUI.ViewModel
             localCopyController.CopyDirectory(job);
         }
 
+        /// <summary>
+        /// Resumes a paused job.
+        /// </summary>
+        /// <param name="job">The job to resume.</param>
         private void ResumeJob(Job job)
         {
             throw new NotImplementedException();
         }
 
-        public async Task LaunchJobAsync(Job job, BackupProcess backupProcess)
+        /// <summary>
+        /// Asynchronously launches a job.
+        /// </summary>
+        /// <param name="job">The job to launch.</param>
+        public async Task LaunchJobAsync(Job job)
         {
-            await Task.Run(() => LaunchJob(job, backupProcess));
+            await Task.Run(() => LaunchJob(job));
         }
-        
-        
-        /* Update Job data in state.json -> Add()/Edit() */
-        // TOFIX: Redundancy => Search for job by id instead of name
-        private void UpdateJobData(string? newName, Job job)
-        {
-            // helpers to calculate the new directory's size info
-            DirectoryInfo diSource = new DirectoryInfo(job.SourceFilePath);
-            long totalFilesSize = _copyController._fileGetter.DirSize(diSource);
-            int totalFilesToCopy = _copyController._fileGetter.GetAllFiles(job.SourceFilePath).Count;
-                
-            job.TotalFilesSize = totalFilesSize;
-            job.NbFilesLeftToDo = totalFilesToCopy;
-            job.TotalFilesToCopy = totalFilesToCopy;
-            job.NbSavedFiles = 0;
-
-            Logger.LogState(job.Name, job.BackupType, job.SourceFilePath, job.TargetFilePath, job.State, job.TotalFilesToCopy, job.TotalFilesSize , (job.TotalFilesToCopy - job.NbSavedFiles), ((job.NbSavedFiles * 100) / job.TotalFilesToCopy), newName);
-        }
-
-        bool ContainsDuplicates(Array array)
-        {
-            HashSet<object> set = new HashSet<object>();
-            foreach (var item in array)
-            {
-                if (!set.Add(item))
-                {
-                    return true; 
-                }
-            }
-            return false;
-        }
-        private bool JobExists(string name)
-        {
-            foreach (var job in _jobs)
-            {
-                if (job.Name == name)
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-        
     }
 }

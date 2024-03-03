@@ -1,11 +1,20 @@
-﻿using System;
+﻿/* @Authors
+ * Theo WATTIER
+ * Perujan KOKILATHASAN
+ * Aymen EL OUAGOUTI
+ ******************************************
+ * EasySave : Backup Management Application
+ * (A3 FISA - 2023/2024 - CESI)
+ */
+
+using System;
 using System.Threading;
 using System.Windows;
 
 namespace EasySaveGUI
 {
     /// <summary>
-    /// Interaction logic for App.xaml
+    /// App General Configuration 
     /// </summary>
     public partial class App : Application
     {
@@ -17,7 +26,7 @@ namespace EasySaveGUI
             
             if (!mutex.WaitOne(TimeSpan.Zero, true))
             {
-                MessageBox.Show("Une instance de l'application est déjà en cours d'exécution.");
+                MessageBox.Show("An instance of EasySave is already running.");
                 Current.Shutdown();
                 return;
             }

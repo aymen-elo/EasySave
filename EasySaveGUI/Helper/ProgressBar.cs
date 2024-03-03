@@ -1,5 +1,6 @@
-﻿namespace EasySaveGUI.View
+﻿namespace EasySaveGUI.Helper
 {
+    /* CLI Progress bar for debugging and better visualization */
     public class ProgressBar
     {
         public string UpdateProgress(int jobId, string jobName, long totalFilesToCopy, long filesCopied)

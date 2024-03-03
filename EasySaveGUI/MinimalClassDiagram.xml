@@ -1,0 +1,372 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" GroupingSetting="Access" MembersFormat="FullSignature">
+  <Comment CommentText="Server Helper">
+    <Position X="2.536" Y="3.146" Height="0.365" Width="0.971" />
+  </Comment>
+  <Comment CommentText="CopyController">
+    <Position X="8.09" Y="4.199" Height="0.365" Width="1.065" />
+  </Comment>
+  <Comment CommentText="Add/Edit Commands">
+    <Position X="5.141" Y="8.524" Height="0.458" Width="0.971" />
+  </Comment>
+  <Class Name="EasySaveGUI.Command.RelayCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="4.25" Y="8.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAEACAAQAAECAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Command\RelayCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="EasySaveGUI.Controller.CopyController" Collapsed="true">
+    <Position X="8.25" Y="3" Width="1.5" />
+    <AssociationLine Name="_identity" Type="EasySaveLib.Model.IdentityManager" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="8.25" Y="3.25" />
+        <Point X="6.58" Y="3.25" />
+        <Point X="6.58" Y="3.938" />
+        <Point X="6.25" Y="3.938" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true" ManuallySized="true">
+        <Position X="0.027" Y="-0.388" Height="0.182" Width="0.5" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <AssociationLine Name="_logger" Type="EasySaveLib.Model.Logger" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="8.25" Y="3.375" />
+        <Point X="6.817" Y="3.375" />
+        <Point X="6.817" Y="4.5" />
+        <Point X="4.271" Y="4.5" />
+        <Point X="4.271" Y="4.75" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true" ManuallySized="true">
+        <Position X="0.06" Y="-0.014" Height="0.182" Width="0.5" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <AssociationLine Name="_progressBar" Type="EasySaveGUI.View.ProgressBar" FixedFromPoint="true">
+      <Path>
+        <Point X="8.25" Y="3.125" />
+        <Point X="6.25" Y="3.125" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true" ManuallySized="true">
+        <Position X="0.06" Y="0.11" Height="0.182" Width="0.5" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>EThAgAAAABAAIJAAAADgAABAIAUAAAAAkkAAAAAQEjE=</HashCode>
+      <FileName>Helper\CopyController.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="_identity" />
+      <Field Name="_logger" />
+      <Field Name="_progressBar" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="EasySaveGUI.Model.CryptoSoftCipher" Collapsed="true">
+    <Position X="7" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Helper\CryptoSoftCipher.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EasySaveGUI.Model.JsonResourceDictionary" Collapsed="true">
+    <Position X="7.75" Y="9.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Helper\JsonResourceDictionary.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EasySaveGUI.Model.ProcessBL" Collapsed="true">
+    <Position X="8.75" Y="3.75" Width="1.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEABAAAA=</HashCode>
+      <FileName>Helper\ProcessBL.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EasySaveGUI.Model.LanguagueSettingsViewModel" Collapsed="true">
+    <Position X="6.25" Y="6.25" Width="1.25" />
+    <InheritanceLine Type="EasySaveGUI.ViewModel.ViewModelBase" FixedToPoint="true">
+      <Path>
+        <Point X="6.75" Y="5.812" />
+        <Point X="6.75" Y="6.25" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>QggAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAA=</HashCode>
+      <FileName>ViewModel\LanguagueSettingsViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EasySaveGUI.View.ProgressBar" Collapsed="true">
+    <Position X="4.75" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Helper\ProgressBar.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EasySaveGUI.Packets.ExecuteCommand" Collapsed="true">
+    <Position X="1.5" Y="2.75" Width="1.5" />
+    <AssociationLine Name="_logger" Type="EasySaveLib.Model.Logger">
+      <MemberNameLabel ManuallyPlaced="true" ManuallySized="true">
+        <Position X="-0.104" Y="0.06" Height="0.182" Width="0.5" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <AssociationLine Name="_jobsViewModel" Type="EasySaveGUI.ViewModel.JobsViewModel">
+      <MemberNameLabel ManuallyPlaced="true" ManuallySized="true">
+        <Position X="-0.557" Y="0.112" Height="0.182" Width="0.5" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAEEAAAAAAAAAAAAAAgIgAAAAEoEAAAAAAAAAA=</HashCode>
+      <FileName>Packets\ExecuteCommand.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="_option" />
+      <Field Name="_logger" />
+      <Field Name="_jobsViewModel" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="EasySaveGUI.AddJobWindow" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="3.25" Y="7.5" Width="1.5" />
+    <AssociationLine Name="_addJobViewModel" Type="EasySaveGUI.ViewModel.AddJobViewModel">
+      <MemberNameLabel ManuallyPlaced="true" ManuallySized="true">
+        <Position X="0.033" Y="0.044" Height="0.182" Width="0.5" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>View\AddJobWindow.xaml.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="_addJobViewModel" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="EasySaveGUI.EditJobWindow" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="5.25" Y="7.5" Width="1.5" />
+    <AssociationLine Name="_editJobViewModel" Type="EasySaveGUI.ViewModel.EditJobViewModel">
+      <MemberNameLabel ManuallyPlaced="true" ManuallySized="true">
+        <Position X="0.038" Y="0.06" Height="0.182" Width="0.5" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>View\EditJobWindow.xaml.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="_editJobViewModel" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="EasySaveGUI.MainWindow" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="7.75" Y="7.5" Width="1.5" />
+    <AssociationLine Name="_languageDictionary" Type="System.Windows.ResourceDictionary">
+      <MemberNameLabel ManuallyPlaced="true" ManuallySized="true">
+        <Position X="0.034" Y="0.11" Height="0.182" Width="0.5" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <AssociationLine Name="_language" Type="EasySaveGUI.Model.LanguagueSettingsViewModel" FixedToPoint="true">
+      <Path>
+        <Point X="7.75" Y="7.846" />
+        <Point X="7.25" Y="7.846" />
+        <Point X="7.25" Y="6.941" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="_jobsViewModel" Type="EasySaveGUI.ViewModel.JobsViewModel" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="9.25" Y="7.642" />
+        <Point X="10.594" Y="7.642" />
+        <Point X="10.594" Y="6.941" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true" ManuallySized="true">
+        <Position X="0.002" Y="0.11" Height="0.182" Width="0.5" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <AssociationLine Name="_mainViewModel" Type="EasySaveGUI.MainViewModel">
+      <MemberNameLabel ManuallyPlaced="true" ManuallySized="true">
+        <Position X="0.11" Y="0.06" Height="0.182" Width="0.525" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <AssociationLine Name="_configManager" Type="EasySaveLib.Model.ConfigManager" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="9.25" Y="7.75" />
+        <Point X="9.875" Y="7.75" />
+        <Point X="9.875" Y="8.5" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true" ManuallySized="true">
+        <Position X="0.11" Y="0.023" Height="0.182" Width="0.5" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAAQAAAAABAQAAAAQAAIAkAIAAIEAgIAQAgAAQABAI=</HashCode>
+      <FileName>View\MainWindow.xaml.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="_jobsViewModel" />
+      <Field Name="_languageDictionary" />
+      <Field Name="_mainViewModel" />
+      <Field Name="_configManager" />
+      <Field Name="_language" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.169" Collapsed="true" />
+  </Class>
+  <Class Name="EasySaveGUI.OptionWindow" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="1.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAAQAQAIAAAAACAAAAAAAgAAAAABgAAAAAAAAAAAA=</HashCode>
+      <FileName>View\Option.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="EasySaveGUI.MainViewModel" Collapsed="true">
+    <Position X="7.75" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAAACAAAAAAAAAAACCAAAAAAAAAAAAAAAQAAAAA=</HashCode>
+      <FileName>ViewModel\MainViewModel.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="JobsViewModel" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="EasySaveGUI.App" Collapsed="true">
+    <Position X="8" Y="5.25" Width="1.25" />
+    <TypeIdentifier>
+      <HashCode>IAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAIAA=</HashCode>
+      <FileName>App.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EasySaveGUI.ViewModel.AddJobViewModel" Collapsed="true">
+    <Position X="2.25" Y="6.25" Width="1.75" />
+    <AssociationLine Name="_logger" Type="EasySaveLib.Model.Logger" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="2.75" Y="6.25" />
+        <Point X="2.75" Y="5.125" />
+        <Point X="3.75" Y="5.125" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true" ManuallySized="true">
+        <Position X="-0.081" Y="0.06" Height="0.182" Width="0.5" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>IAAAEZAAAAAEABBABAIIAAAAIAAAAAgABBAAAAAAAAA=</HashCode>
+      <FileName>ViewModel\AddJobViewModel.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="_logger" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="EasySaveGUI.ViewModel.EditJobViewModel" Collapsed="true">
+    <Position X="4.25" Y="6.25" Width="1.75" />
+    <AssociationLine Name="_logger" Type="EasySaveLib.Model.Logger" ManuallyRouted="true" FixedFromPoint="true">
+      <Path>
+        <Point X="4.625" Y="6.25" />
+        <Point X="4.625" Y="5.312" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true" ManuallySized="true">
+        <Position X="0.018" Y="0.06" Height="0.182" Width="0.5" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>KAAIAYAAAAAEABBEAAAIAAAAIAIAAAgABAAAAAAAAAA=</HashCode>
+      <FileName>ViewModel\EditJobViewModel.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="_logger" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="EasySaveGUI.ViewModel.JobsViewModel" Collapsed="true">
+    <Position X="9.5" Y="6.25" Width="1.75" />
+    <InheritanceLine Type="EasySaveGUI.ViewModel.ViewModelBase" FixedToPoint="true">
+      <Path>
+        <Point X="6.75" Y="5.812" />
+        <Point X="6.75" Y="6.096" />
+        <Point X="9.828" Y="6.096" />
+        <Point X="9.828" Y="6.25" />
+      </Path>
+    </InheritanceLine>
+    <AssociationLine Name="Logger" Type="EasySaveLib.Model.Logger" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="10.047" Y="6.25" />
+        <Point X="10.047" Y="4.875" />
+        <Point X="5" Y="4.875" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="_copyController" Type="EasySaveGUI.Controller.CopyController" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="10.43" Y="6.25" />
+        <Point X="10.43" Y="3.281" />
+        <Point X="9.75" Y="3.281" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true" ManuallySized="true">
+        <Position X="0.11" Y="0.06" Height="0.182" Width="0.5" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAkABAAAAIAAQAABEoABAAAAAAAAAAAABCAAEAAAAA=</HashCode>
+      <FileName>ViewModel\JobsViewModel.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="_copyController" />
+      <Property Name="Logger" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="EasySaveGUI.ViewModel.ViewModelBase" Collapsed="true">
+    <Position X="6" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAIAAAAAAAgAEAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModel\ViewModelBase.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="EasySaveLib.Model.ConfigManager" Collapsed="true">
+    <Position X="9.5" Y="8.5" Width="1.25" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="EasySaveLib.Model.IdentityManager" Collapsed="true">
+    <Position X="4.75" Y="3.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="EasySaveLib.Model.Job" Collapsed="true">
+    <Position X="1.5" Y="9.25" Width="1.5" />
+    <AssociationLine Name="State" Type="EasySaveLib.Model.JobState" FixedToPoint="true">
+      <Path>
+        <Point X="3" Y="9.625" />
+        <Point X="4" Y="9.625" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="0.31" Y="-0.296" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <AssociationLine Name="BackupType" Type="EasySaveLib.Model.BackupType" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="3" Y="9.375" />
+        <Point X="6.812" Y="9.375" />
+        <Point X="6.812" Y="9.5" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="2.738" Y="0.173" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier />
+    <ShowAsAssociation>
+      <Property Name="State" />
+      <Property Name="BackupType" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="EasySaveLib.Model.Logger" Collapsed="true">
+    <Position X="3.75" Y="4.75" Width="1.25" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="EasySaveLib.Model.JobState" Collapsed="true">
+    <Position X="4" Y="9.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="EasySaveLib.Model.BackupType" Collapsed="true">
+    <Position X="6" Y="9.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.Windows.ResourceDictionary" Collapsed="true">
+    <Position X="7.75" Y="8.5" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
