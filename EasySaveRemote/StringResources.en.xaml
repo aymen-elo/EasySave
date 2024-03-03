@@ -1,0 +1,27 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+                    xmlns:system="clr-namespace:System;assembly=System.Runtime">
+
+    <system:String x:Key="StrButtonNewJob">New Job</system:String>
+    <system:String x:Key="StrButtonRunJob">Run Job</system:String>
+    <system:String x:Key="StrButtonRemoveJob">Remove Job</system:String>
+    <system:String x:Key="StrButtonEditJob">Edit Job</system:String>
+    <system:String x:Key="StrButtonPlayPause">Play/Pause</system:String>
+    <system:String x:Key="StrButtonStopJob">Stop Job</system:String>
+    <system:String x:Key="StrButtonLogs">Logs</system:String>
+    <system:String x:Key="StrSearchJob">Search Job</system:String>
+    <system:String x:Key="StrButtonOption">Option</system:String>
+
+    <system:String x:Key="StrMainMenu">FRMenu</system:String>
+    <system:String x:Key="StrMainEnglish">English</system:String>
+    <system:String x:Key="StrMainFrench">French</system:String>
+    
+    <system:String x:Key="StrJobNameLabel">Job Name</system:String>
+    <system:String x:Key="StrSourcePathLabel">Source Path</system:String>
+    <system:String x:Key="StrDestinationPathLabel">Destination Path</system:String>
+    <system:String x:Key="StrBackupTypeLabel">Backup Type</system:String>
+    <system:String x:Key="StrFullBackupType">Full</system:String>
+    <system:String x:Key="StrDifferentialBackupType">Differential</system:String>
+
+
+</ResourceDictionary>
